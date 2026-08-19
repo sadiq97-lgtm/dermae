@@ -285,17 +285,11 @@ const [customerAddress, setCustomerAddress] = useState("");
   {language === "en" ? "العربية" : "English"}
 </button>
   <button
+    style={{ marginLeft: "15px" }}
     onClick={async () => {
-  const password = prompt("Enter Admin Password");
-
-  if (password !== "sadiq") {
-    alert("Wrong Password");
-    return;
-  }
-
-  await loadOrders();
-  setAdminOpen(true);
-}}
+      await loadOrders();
+      setAdminOpen(true);
+    }}
   >
     Admin
   </button>
@@ -952,17 +946,11 @@ setCartOpen(false);
   <div className="modal-overlay">
     <div className="product-modal">
       <button
-  onClick={() => setAdminOpen(false)}
-  style={{
-    position: "sticky",
-    top: "10px",
-    zIndex: 9999,
-    float: "right"
-  }}
->
-  ✕ Close Dashboard
-</button>
+        className="modal-close"
         onClick={() => setAdminOpen(false)}
+      >
+        ✕
+      </button>
 {orders.length === 0 ? (
   <p>No orders found</p>
 ) : (
