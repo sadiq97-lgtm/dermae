@@ -144,6 +144,7 @@ function App() {
   const [adminOpen, setAdminOpen] = useState(false);
 const [orders, setOrders] = useState([]);
 const [dbProducts, setDbProducts] = useState([]);
+const [language, setLanguage] = useState("en");
 const loadOrders = async () => {
   const { data, error } = await supabase
     .from("orders")
@@ -268,10 +269,21 @@ const [customerAddress, setCustomerAddress] = useState("");
   
       {/* TOP BAR */}
       <div className="top-bar">
-        <span>Free delivery on orders over 100,000 IQD</span>
+        <span>
+  {language === "en"
+    ? "Free delivery on orders over 100,000 IQD"
+    : "توصيل مجاني للطلبات فوق 100,000 دينار"}
+</span>
         <span className="top-bar-right">
   Care That Shows™
-
+<button
+  style={{ marginLeft: "10px" }}
+  onClick={() =>
+    setLanguage(language === "en" ? "ar" : "en")
+  }
+>
+  {language === "en" ? "العربية" : "English"}
+</button>
   <button
     style={{ marginLeft: "15px" }}
     onClick={async () => {
@@ -612,19 +624,27 @@ const [customerAddress, setCustomerAddress] = useState("");
             <span className="logo-sub">SKINCARE</span>
           </div>
 
-          <p>Care That Shows.</p>
+          <p>
+  {language === "en"
+    ? "Care That Shows."
+    : "عناية تظهر نتائجها."}
+</p>
         </div>
 
         <div className="footer-links">
           <div>
-            <h4>Shop</h4>
+            <h4>
+  {language === "en" ? "Shop" : "المتجر"}
+</h4>
             <a href="#shop">All Products</a>
             <a href="#shop">Best Sellers</a>
             <a href="#shop">New Arrivals</a>
           </div>
 
           <div>
-            <h4>Help</h4>
+            <h4>
+  {language === "en" ? "Help" : "المساعدة"}
+</h4>
             <a href="#contact">Contact Us</a>
             <a href="#contact">Shipping</a>
             <a href="#contact">Returns</a>
