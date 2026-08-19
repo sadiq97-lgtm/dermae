@@ -312,8 +312,8 @@ const [customerAddress, setCustomerAddress] = useState("");
         </button>
 
         <div className="logo">
-          <span className="logo-main">Dermæ</span>
-          <span className="logo-sub">SKINCARE</span>
+          <span className="logo-main">Dermaé</span>
+          <span className="logo-sub">CARE THAT SHOWS</span>
         </div>
 
         <nav className={`nav ${mobileMenu ? "nav-open" : ""}`}>
