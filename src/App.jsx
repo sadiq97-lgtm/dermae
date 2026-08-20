@@ -348,14 +348,26 @@ const [customerAddress, setCustomerAddress] = useState("");
         <div className="hero-content">
           <span className="eyebrow">
             <Sparkles size={15} />
-            PREMIUM SKINCARE
+            {language === "en" ? "PREMIUM SKINCARE" : "عناية فائقة بالبشرة"}
           </span>
 
           <h1>
-            Care
-            <br />
-            <em>That Shows.</em>
-          </h1>
+  <h1>
+  {language === "en" ? (
+    <>
+      Care
+      <br />
+      <em>That Shows.</em>
+    </>
+  ) : (
+    <>
+      عناية
+      <br />
+      <em>تظهر نتائجها.</em>
+    </>
+  )}
+</h1>
+</h1>
 
           <p>
             Thoughtfully crafted skincare for every kind of skin.
