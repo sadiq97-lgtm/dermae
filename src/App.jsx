@@ -376,12 +376,16 @@ const [customerAddress, setCustomerAddress] = useState("");
 
           <div className="hero-buttons">
             <a href="#shop" className="primary-button">
-              Shop Collection
+              {language === "en"
+  ? "Shop Collection"
+  : "تسوق المنتجات"}
               <ChevronRight size={18} />
             </a>
 
             <a href="#about" className="secondary-button">
-              Discover Dermæ
+              {language === "en"
+  ? "Discover Dermaé"
+  : "اكتشف Dermaé"}
             </a>
           </div>
 
