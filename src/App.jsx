@@ -288,23 +288,15 @@ const [customerAddress, setCustomerAddress] = useState("");
   {language === "en" ? "العربية" : "English"}
 </button>
   <button
-    onClick={async () => {
-  const email = prompt("Enter Admin Email");
-  const password = prompt("Enter Admin Password");
+   const password = prompt("Enter Admin Password");
 
-  if (!email || !password) {
-    return;
-  }
+if (password !== "sadiq") {
+  alert("Wrong Password");
+  return;
+}
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-
-  if (error) {
-    console.error("Admin login error:", error);
-    alert(error.message || "Admin login failed");
-    return;
+await loadOrders();
+setAdminOpen(true);
   }
 
   await loadOrders();
