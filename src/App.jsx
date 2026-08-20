@@ -352,7 +352,7 @@ const [customerAddress, setCustomerAddress] = useState("");
           </span>
 
           <h1>
-  <h1>
+  
   {language === "en" ? (
     <>
       Care
@@ -367,13 +367,12 @@ const [customerAddress, setCustomerAddress] = useState("");
     </>
   )}
 </h1>
-</h1>
-
-          <p>
-            Thoughtfully crafted skincare for every kind of skin.
-            Discover a simple ritual designed to make your natural beauty
-            visible.
-          </p>
+<p>
+  {language === "en"
+    ? "Thoughtfully crafted skincare for every kind of skin. Discover a simple ritual designed to make your natural beauty visible."
+    : "عناية بالبشرة مصممة بعناية لكل أنواع البشرة. اكتشف روتيناً بسيطاً يساعد على إبراز جمالك الطبيعي."}
+</p>
+          
 
           <div className="hero-buttons">
             <a href="#shop" className="primary-button">
