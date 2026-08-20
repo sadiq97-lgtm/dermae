@@ -145,9 +145,6 @@ function App() {
 const [orders, setOrders] = useState([]);
 const [dbProducts, setDbProducts] = useState([]);
 const [language, setLanguage] = useState("en");
-const [productName, setProductName] = useState("");
-const [productNameAr, setProductNameAr] = useState("");
-const [productPrice, setProductPrice] = useState("");
 const loadOrders = async () => {
   const { data, error } = await supabase
     .from("orders")
@@ -289,21 +286,10 @@ const [customerAddress, setCustomerAddress] = useState("");
 </button>
   <button
     onClick={async () => {
-  const email = prompt("Enter Admin Email");
   const password = prompt("Enter Admin Password");
 
-  if (!email || !password) {
-    return;
-  }
-
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-
-  if (error) {
-    console.error("Admin login error:", error);
-    alert(error.message || "Admin login failed");
+  if (password !== "sadiq") {
+    alert("Wrong Password");
     return;
   }
 
@@ -991,13 +977,7 @@ setCartOpen(false);
 )}
 {adminOpen && (
   <div className="modal-overlay">
-    <div
-  className="product-modal"
-  style={{
-    maxHeight: "90vh",
-    overflowY: "auto"
-  }}
->
+    <div className="product-modal">
       <button
   onClick={() => setAdminOpen(false)}
   style={{
@@ -1008,64 +988,21 @@ setCartOpen(false);
   }}
 >
   ✕ Close Dashboard
-</button>
-<hr style={{ margin: "20px 0" }} />
+  <hr style={{ margin: "20px 0" }} />
 
 <h2>Products Management</h2>
-  <div style={{ marginBottom: "20px" }}>
-    <button
-  onClick={async () => {
-   const { error } = await supabase
-  .from("products")
-  .insert([
-    {
-      name_en: productName,
-      name_ar: productNameAr,
-      price_iqd: Number(productPrice),
-    },
-  ]);
 
-if (error) {
-  console.error(error);
-  alert("Error saving product");
-  return;
-}
-
-alert("Product saved successfully");
-  }}
+<button
   style={{
-    padding: "10px 20px",
-    marginBottom: "20px",
+    padding: "10px 15px",
+    marginBottom: "15px",
     cursor: "pointer",
   }}
 >
-  Save Product
+  + Add Product
 </button>
-  <input
-  type="text"
-  placeholder="Product Name Arabic"
-  value={productNameAr}
-  onChange={(e) => setProductNameAr(e.target.value)}
-  style={{ marginRight: "10px", padding: "8px" }}
-/>
-   <input
-  type="text"
-  placeholder="Product Name"
-  value={productName}
-  onChange={(e) => setProductName(e.target.value)}
-  style={{ marginRight: "10px", padding: "8px" }}
-/>
-``
-
-  <input
-    type="number"
-    placeholder="Price"
-    value={productPrice}
-    onChange={(e) => setProductPrice(e.target.value)}
-    style={{ padding: "8px" }}
-  />
-</div>
-
+</button>
+        onClick={() => setAdminOpen(false)}
 {orders.length === 0 ? (
   <p>No orders found</p>
 ) : (
