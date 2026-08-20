@@ -872,19 +872,19 @@ const [customerAddress, setCustomerAddress] = useState("");
         ✕
       </button>
 
-      <h2>Checkout</h2>
+      <h2>{language === "en" ? "Checkout" : "إكمال الطلب"}</h2>
       
 
 <input
   type="text"
-  placeholder="Full Name"
+  placeholder={language === "en" ? "Full Name" : "الاسم الكامل"}
   value={customerName}
   onChange={(e) => setCustomerName(e.target.value)}
   style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
 />
 <input
   type="text"
-  placeholder="Phone Number"
+  placeholder={language === "en" ? "Phone Number" : "رقم الهاتف"}
   value={customerPhone}
   onChange={(e) => setCustomerPhone(e.target.value)}
   style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
@@ -892,14 +892,14 @@ const [customerAddress, setCustomerAddress] = useState("");
 
 <input
   type="text"
-  placeholder="Governorate"
+  placeholder={language === "en" ? "Governorate" : "المحافظة"}
   value={customerGovernorate}
   onChange={(e) => setCustomerGovernorate(e.target.value)}
   style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
 />
 
 <textarea
-  placeholder="Address"
+  placeholder={language === "en" ? "Address" : "العنوان"}
   value={customerAddress}
   onChange={(e) => setCustomerAddress(e.target.value)}
   style={{
@@ -955,7 +955,7 @@ setCheckoutOpen(false);
 setCartOpen(false);
 }}
 >
-  Place Order
+  {language === "en" ? "Place Order" : "إرسال الطلب"}
 </button>
     </div>
   </div>
