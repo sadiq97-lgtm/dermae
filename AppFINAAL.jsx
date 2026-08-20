@@ -198,7 +198,7 @@ const [customerAddress, setCustomerAddress] = useState("");
   const [cartOpen, setCartOpen] = useState(false);
 
   const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
+    return (dbProducts.length > 0 ? dbProducts : products).filter((product) => {
       const categoryMatch =
         activeCategory === "All" || product.category === activeCategory;
 
@@ -561,36 +561,24 @@ const [customerAddress, setCustomerAddress] = useState("");
           <span className="eyebrow">OUR PHILOSOPHY</span>
 
           <h2>
-  {language === "en" ? (
-    <>
-      Beautiful skin
-      <br />
-      starts with <em>care.</em>
-    </>
-  ) : (
-    <>
-      بشرة جميلة
-      <br />
-      تبدأ مع <em>العناية.</em>
-    </>
-  )}
-</h2>
+            Beautiful skin
+            <br />
+            starts with <em>care.</em>
+          </h2>
 
-         <p>
-  {language === "en"
-    ? "Dermae was created around one simple idea: skincare should feel considered, effective and beautiful."
-    : "تم إنشاء Dermaé حول فكرة بسيطة: يجب أن تكون العناية بالبشرة فعالة وجميلة ومصممة بعناية."}
-</p>
+          <p>
+            Dermæ was created around one simple idea: skincare should feel
+            considered, effective and beautiful.
+          </p>
 
-
-<p>
-  {language === "en"
-    ? "We create modern formulas that fit naturally into your everyday routine because the best skincare is the skincare you actually enjoy using."
-    : "نحن نصنع تركيبات حديثة تندمج بشكل طبيعي مع روتينك اليومي، لأن أفضل عناية بالبشرة هي التي تستمتع باستخدامها فعلاً."}
-</p>
+          <p>
+            We create modern formulas that fit naturally into your everyday
+            routine — because the best skincare is the skincare you actually
+            enjoy using.
+          </p>
 
           <a href="#shop" className="text-link">
-            {language === "en" ? "Explore our products" : "استكشف منتجاتنا"} <ChevronRight size={17} />
+            Explore our products <ChevronRight size={17} />
           </a>
         </div>
       </section>
