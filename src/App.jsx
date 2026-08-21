@@ -150,6 +150,8 @@ const [productNameAr, setProductNameAr] = useState("");
 const [productPrice, setProductPrice] = useState("");
 const [descriptionAr, setDescriptionAr] = useState("");
 const [descriptionEn, setDescriptionEn] = useState("");
+const [imageUrl, setImageUrl] = useState("");
+``
 const loadOrders = async () => {
   const { data, error } = await supabase
     .from("orders")
@@ -1006,6 +1008,7 @@ setCartOpen(false);
       description_ar: descriptionAr,
 description_en: descriptionEn,
       price_iqd: Number(productPrice),
+      image_urls: [imageUrl],
     },
   ]);
 
@@ -1062,6 +1065,13 @@ alert("Product saved successfully");
     onChange={(e) => setProductPrice(e.target.value)}
     style={{ padding: "8px" }}
   />
+  <input
+  type="text"
+  placeholder="Image URL"
+  value={imageUrl}
+  onChange={(e) => setImageUrl(e.target.value)}
+  style={{ marginRight: "10px", padding: "8px" }}
+/>
 </div>
 
 {orders.length === 0 ? (
