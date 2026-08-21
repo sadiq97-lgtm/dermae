@@ -1018,6 +1018,12 @@ if (error) {
 }
 
 alert("Product saved successfully");
+setProductName("");
+setProductNameAr("");
+setDescriptionAr("");
+setDescriptionEn("");
+setProductPrice("");
+setImageUrl("");
   }}
   style={{
     padding: "10px 20px",
