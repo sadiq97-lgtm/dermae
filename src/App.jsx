@@ -151,7 +151,6 @@ const [productPrice, setProductPrice] = useState("");
 const [descriptionAr, setDescriptionAr] = useState("");
 const [descriptionEn, setDescriptionEn] = useState("");
 const [imageUrl, setImageUrl] = useState("");
-``
 const loadOrders = async () => {
   const { data, error } = await supabase
     .from("orders")
@@ -184,7 +183,7 @@ const loadProducts = async () => {
     rating: 5,
     reviews: 0,
     badge: "NEW",
-    image: "",
+    image: item.image_urls?.[0] || "",
   }));
 
   console.log("Products:", mappedProducts);
@@ -205,7 +204,7 @@ const [customerAddress, setCustomerAddress] = useState("");
   const [cartOpen, setCartOpen] = useState(false);
 
   const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
+    return [...products, ...dbProducts].filter((product) => {
       const categoryMatch =
         activeCategory === "All" || product.category === activeCategory;
 
