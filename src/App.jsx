@@ -287,36 +287,24 @@ const [customerAddress, setCustomerAddress] = useState("");
 >
   {language === "en" ? "العربية" : "English"}
 </button>
-  <button
-   const password = prompt("Enter Admin Password");
+<button
+  onClick={async () => {
+    const password = prompt("Enter Admin Password");
 
-if (password !== "sadiq") {
-  alert("Wrong Password");
-  return;
-}
+    if (password !== "sadiq") {
+      alert("Wrong Password");
+      return;
+    }
 
-await loadOrders();
-setAdminOpen(true);
-  }
-
-  await loadOrders();
-  setAdminOpen(true);
-}}
-  >
-    Admin
-  </button>
+    await loadOrders();
+    setAdminOpen(true);
+  }}
+>
+  Admin
+</button>
 </span>
-      </div>
-
-      {/* HEADER */}
-      <header className="header">
-        <button
-          className="mobile-menu-button"
-          onClick={() => setMobileMenu(!mobileMenu)}
-        >
-          {mobileMenu ? <X size={23} /> : <Menu size={23} />}
-        </button>
-
+</div>
+<header className="header">
         <div className="logo">
           <span className="logo-main">Dermaé</span>
           <span className="logo-sub">CARE THAT SHOWS</span>
