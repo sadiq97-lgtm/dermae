@@ -148,6 +148,8 @@ const [language, setLanguage] = useState("en");
 const [productName, setProductName] = useState("");
 const [productNameAr, setProductNameAr] = useState("");
 const [productPrice, setProductPrice] = useState("");
+const [descriptionAr, setDescriptionAr] = useState("");
+const [descriptionEn, setDescriptionEn] = useState("");
 const loadOrders = async () => {
   const { data, error } = await supabase
     .from("orders")
@@ -1001,6 +1003,8 @@ setCartOpen(false);
     {
       name_en: productName,
       name_ar: productNameAr,
+      description_ar: descriptionAr,
+description_en: descriptionEn,
       price_iqd: Number(productPrice),
     },
   ]);
@@ -1036,7 +1040,21 @@ alert("Product saved successfully");
   style={{ marginRight: "10px", padding: "8px" }}
 />
 ``
+<input
+  type="text"
+  placeholder="Description Arabic"
+  value={descriptionAr}
+  onChange={(e) => setDescriptionAr(e.target.value)}
+  style={{ marginRight: "10px", padding: "8px" }}
+/>
 
+<input
+  type="text"
+  placeholder="Description English"
+  value={descriptionEn}
+  onChange={(e) => setDescriptionEn(e.target.value)}
+  style={{ marginRight: "10px", padding: "8px" }}
+/>
   <input
     type="number"
     placeholder="Price"
