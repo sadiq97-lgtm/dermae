@@ -144,6 +144,20 @@ function App() {
   const [adminOpen, setAdminOpen] = useState(false);
 const [orders, setOrders] = useState([]);
 const [dbProducts, setDbProducts] = useState([]);
+const deleteProduct = async (id) => {
+  const { error } = await supabase
+    .from("products")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    alert("Delete failed");
+    return;
+  }
+
+  await loadProducts();
+  alert("Product deleted");
+};
 const [language, setLanguage] = useState("en");
 const [productName, setProductName] = useState("");
 const [productNameAr, setProductNameAr] = useState("");
@@ -177,6 +191,7 @@ const loadProducts = async () => {
   const mappedProducts = (data || []).map((item) => ({
     id: item.id,
     name: item.name_en || item.name_ar || "Unnamed Product",
+    id: item.id,
     brand: "Dermaé",
     category: "Skincare",
     price: item.price_iqd || 0,
@@ -1078,6 +1093,36 @@ setImageUrl("");
   style={{ marginRight: "10px", padding: "8px" }}
 />
 </div>
+<h3>Existing Products</h3>
+
+{dbProducts.map((product) => (
+  <div
+    key={product.id}
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: "10px",
+      borderBottom: "1px solid #ccc",
+      paddingBottom: "10px",
+    }}
+  >
+    <span>{product.name}</span>
+
+    <button
+      onClick={() => deleteProduct(product.id)}
+      style={{
+        background: "red",
+        color: "white",
+        border: "none",
+        padding: "6px 12px",
+        cursor: "pointer",
+      }}
+    >
+      Delete
+    </button>
+  </div>
+))}
 
 {orders.length === 0 ? (
   <p>No orders found</p>
