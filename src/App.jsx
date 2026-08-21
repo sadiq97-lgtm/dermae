@@ -144,6 +144,29 @@ function App() {
   const [adminOpen, setAdminOpen] = useState(false);
 const [orders, setOrders] = useState([]);
 const [dbProducts, setDbProducts] = useState([]);
+const updateProduct = async () => {
+  const { error } = await supabase
+    .from("products")
+    .update({
+      name_en: productName,
+      name_ar: productNameAr,
+      description_ar: descriptionAr,
+      description_en: descriptionEn,
+      price_iqd: Number(productPrice),
+      image_urls: [imageUrl],
+    })
+    .eq("id", editingProductId);
+
+  if (error) {
+    alert("Update failed");
+    return;
+  }
+
+  await loadProducts();
+  alert("Product updated");
+
+  setEditingProductId(null);
+};
 const deleteProduct = async (id) => {
   const { error } = await supabase
     .from("products")
@@ -165,6 +188,8 @@ const [productPrice, setProductPrice] = useState("");
 const [descriptionAr, setDescriptionAr] = useState("");
 const [descriptionEn, setDescriptionEn] = useState("");
 const [imageUrl, setImageUrl] = useState("");
+const [productCategory, setProductCategory] = useState("Serums");
+const [editingProductId, setEditingProductId] = useState(null);
 const loadOrders = async () => {
   const { data, error } = await supabase
     .from("orders")
@@ -189,6 +214,10 @@ const loadProducts = async () => {
   }
 
   const mappedProducts = (data || []).map((item) => ({
+    name_en: item.name_en,
+name_ar: item.name_ar,
+description_en: item.description_en,
+description_ar: item.description_ar,
     id: item.id,
     name: item.name_en || item.name_ar || "Unnamed Product",
     id: item.id,
@@ -329,11 +358,21 @@ const [customerAddress, setCustomerAddress] = useState("");
         </div>
 
         <nav className={`nav ${mobileMenu ? "nav-open" : ""}`}>
-          <a href="#home">Home</a>
-          <a href="#shop">Shop</a>
-          <a href="#about">Our Story</a>
-          <a href="#bestsellers">Bestsellers</a>
-          <a href="#contact">Contact</a>
+          <a href="#home">
+            {language === "en" ? "Home" : "الرئيسية"}
+          </a>
+          <a href="#shop">
+            {language === "en" ? "Shop" : "المتجر"}
+          </a>
+          <a href="#about">
+            {language === "en" ? "Our Story" : "قصتنا"}
+          </a>
+          <a href="#bestsellers">
+            {language === "en" ? "Bestsellers" : "الأكثر مبيعاً"}
+          </a>
+          <a href="#contact">
+            {language === "en" ? "Contact" : "تواصل معنا"}
+          </a>
         </nav>
 
         <div className="header-actions">
@@ -439,22 +478,41 @@ const [customerAddress, setCustomerAddress] = useState("");
 
       {/* BRAND STRIP */}
       <section className="brand-strip">
-        <span>CLINICALLY MINDED</span>
-        <span>THOUGHTFULLY FORMULATED</span>
-        <span>CRUELTY FREE</span>
-        <span>MADE FOR EVERYONE</span>
+        <span>
+  {language === "en"
+    ? "CLINICALLY MINDED"
+    : "مدعوم سريرياً"}
+</span>
+        <span>
+  {language === "en" ? "THOUGHTFULLY FORMULATED" : "مُصمم بعناية"}
+</span>
+        <span>
+  {language === "en" ? "CRUELTY FREE" : "غير مختبر على الحيوانات"}
+</span>
+        <span>
+  {language === "en" ? "MADE FOR EVERYONE" : "مُصمم لجميع الأشخاص"}
+</span>
       </section>
 
       {/* SHOP */}
       <section className="shop-section" id="shop">
         <div className="section-heading">
           <div>
-            <span className="eyebrow">THE COLLECTION</span>
-            <h2>Find your ritual.</h2>
+            <span className="eyebrow">
+  {language === "en" ? "THE COLLECTION" : "المجموعة"}
+</span>
+            <h2>
+  {language === "en"
+    ? "Find your ritual."
+    : "اكتشف روتينك المثالي"}
+</h2>
           </div>
 
           <p>
-            High-performance essentials designed to work beautifully together.
+            {language === "en"
+  ? "High-performance essentials designed to work beautifully together."
+  : "منتجات أساسية عالية الأداء مصممة لتعمل بتناغم تام معاً."}
+``
           </p>
         </div>
 
@@ -464,14 +522,22 @@ const [customerAddress, setCustomerAddress] = useState("");
             <Search size={18} />
             <input
               type="text"
-              placeholder="Search products..."
+              placeholder={
+  language === "en"
+    ? "Search products..."
+    : "ابحث عن المنتجات..."
+}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
 
           <div className="gender-buttons">
-            {["All", "Women", "Men"].map((item) => (
+            {[
+  language === "en" ? "All" : "الكل",
+  language === "en" ? "Women" : "نساء",
+  language === "en" ? "Men" : "رجال",
+].map((item) => (
               <button
                 key={item}
                 className={gender === item ? "active" : ""}
@@ -491,7 +557,23 @@ const [customerAddress, setCustomerAddress] = useState("");
               className={activeCategory === category ? "active" : ""}
               onClick={() => setActiveCategory(category)}
             >
-              {category}
+              {
+  language === "en"
+    ? category
+    : category === "All"
+    ? "الكل"
+    : category === "Serums"
+    ? "سيرومات"
+    : category === "Cleansers"
+    ? "منظفات"
+    : category === "Moisturizers"
+    ? "مرطبات"
+    : category === "Sun Care"
+    ? "عناية شمسية"
+    : category === "Treatments"
+    ? "علاجات"
+    : category
+}
             </button>
           ))}
         </div>
@@ -528,7 +610,7 @@ const [customerAddress, setCustomerAddress] = useState("");
                     className="quick-view"
                     onClick={() => setSelectedProduct(product)}
                   >
-                    Quick view
+                   {language === "en" ? "Quick View" : "عرض سريع"}
                   </button>
                 </div>
 
@@ -666,7 +748,9 @@ const [customerAddress, setCustomerAddress] = useState("");
         <div className="footer-brand">
           <div className="logo">
             <span className="logo-main">Dermæ</span>
-            <span className="logo-sub">SKINCARE</span>
+            <span className="logo-sub">
+  {language === "en" ? "SKINCARE" : "العناية بالبشرة"}
+</span>
           </div>
 
           <p>
@@ -681,9 +765,15 @@ const [customerAddress, setCustomerAddress] = useState("");
             <h4>
   {language === "en" ? "Shop" : "المتجر"}
 </h4>
-            <a href="#shop">All Products</a>
-            <a href="#shop">Best Sellers</a>
-            <a href="#shop">New Arrivals</a>
+            <a href="#shop">
+              {language === "en" ? "All Products" : "جميع المنتجات"}
+            </a>
+            <a href="#shop">
+              {language === "en" ? "Best Sellers" : "الأكثر مبيعاً"}
+            </a>
+            <a href="#shop">
+              {language === "en" ? "New Arrivals" : "الواردون جدد"}
+            </a>
           </div>
 
           <div>
@@ -780,8 +870,8 @@ const [customerAddress, setCustomerAddress] = useState("");
                   setSelectedProduct(null);
                 }}
               >
-                Add to bag
-                <ShoppingBag size={18} />
+               {language === "en" ? "Add to bag" : "أضف إلى السلة"}
+                <h2>{language === "en" ? "Shopping Bag" : "سلة التسوق"}</h2>
               </button>
             </div>
           </div>
@@ -797,7 +887,9 @@ const [customerAddress, setCustomerAddress] = useState("");
           >
             <div className="cart-header">
               <div>
-                <span className="eyebrow">YOUR BAG</span>
+                <span className="eyebrow">
+  {language === "en" ? "YOUR BAG" : "سلتك"}
+</span>
                 <h2>Shopping Bag</h2>
               </div>
 
@@ -1013,6 +1105,10 @@ setCartOpen(false);
   <div style={{ marginBottom: "20px" }}>
     <button
   onClick={async () => {
+    if (editingProductId) {
+  await updateProduct();
+  return;
+}
    const { error } = await supabase
   .from("products")
   .insert([
@@ -1109,18 +1205,41 @@ setImageUrl("");
   >
     <span>{product.name}</span>
 
-    <button
-      onClick={() => deleteProduct(product.id)}
-      style={{
-        background: "red",
-        color: "white",
-        border: "none",
-        padding: "6px 12px",
-        cursor: "pointer",
-      }}
-    >
-      Delete
-    </button>
+    
+  <button
+  onClick={() => {
+  
+    setEditingProductId(product.id);
+    setProductName(product.name_en || "");
+    setProductNameAr(product.name_ar || "");
+    setDescriptionAr(product.description_ar || "");
+    setDescriptionEn(product.description_en || "");
+    setProductPrice(product.price || "");
+  }}
+  style={{
+    background: "#2563eb",
+    color: "white",
+    border: "none",
+    padding: "6px 12px",
+    cursor: "pointer",
+    marginRight: "8px",
+  }}
+>
+  Edit
+</button>
+
+<button
+  onClick={() => deleteProduct(product.id)}
+  style={{
+    background: "red",
+    color: "white",
+    border: "none",
+    padding: "6px 12px",
+    cursor: "pointer",
+  }}
+>
+  Delete
+</button>
   </div>
 ))}
 
