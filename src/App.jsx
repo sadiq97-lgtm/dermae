@@ -337,17 +337,9 @@ const [customerAddress, setCustomerAddress] = useState("");
   {language === "en" ? "العربية" : "English"}
 </button>
 <button
-  onClick={async () => {
-    const password = prompt("Enter Admin Password");
-
-    if (password !== "sadiq") {
-      alert("Wrong Password");
-      return;
-    }
-
-    await loadOrders();
-    setAdminOpen(true);
-  }}
+  onClick={() => {
+  window.location.href = "/admin";
+}}
 >
   Admin
 </button>
