@@ -517,7 +517,7 @@ const [customerAddress, setCustomerAddress] = useState("");
             {language === "en"
   ? "High-performance essentials designed to work beautifully together."
   : "منتجات أساسية عالية الأداء مصممة لتعمل بتناغم تام معاً."}
-``
+
           </p>
         </div>
 
@@ -677,7 +677,7 @@ const [customerAddress, setCustomerAddress] = useState("");
 
         <div className="about-content">
           {language === "en" ? "OUR PHILOSOPHY" : "فلسفتنا"}
-``
+
 
           <h2>
   {language === "en" ? (
@@ -1261,7 +1261,7 @@ setImageUrl("");
   onChange={(e) => setProductName(e.target.value)}
   style={{ marginRight: "10px", padding: "8px" }}
 />
-``
+
 <input
   type="text"
   placeholder="Description Arabic"

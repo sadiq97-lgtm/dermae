@@ -520,7 +520,6 @@ const [customerAddress, setCustomerAddress] = useState("");
             {language === "en"
   ? "High-performance essentials designed to work beautifully together."
   : "منتجات أساسية عالية الأداء مصممة لتعمل بتناغم تام معاً."}
-``
           </p>
         </div>
 
@@ -557,7 +556,6 @@ const [customerAddress, setCustomerAddress] = useState("");
     </option>
   </select>
 </div>
-``
           <div className="gender-buttons">
             {[
   language === "en" ? "All" : "الكل",
@@ -648,11 +646,14 @@ const [customerAddress, setCustomerAddress] = useState("");
                   <span className="product-badge">{product.badge}</span>
 
                   <button
-                    className={`wishlist-button ${isLiked ? "liked" : ""}`}
-                    onClick={() => toggleWishlist(product.id)}
-                  >
+  className={`wishlist-button ${isLiked ? "liked" : ""}`}
+  onClick={(e) => {
+    e.stopPropagation();
+    toggleWishlist(product.id);
+  }}
+>
                     <Heart
-                      size={19}
+                      size={13}
                       fill={isLiked ? "currentColor" : "none"}
                     />
                   </button>
@@ -730,7 +731,6 @@ const [customerAddress, setCustomerAddress] = useState("");
 
         <div className="about-content">
           {language === "en" ? "OUR PHILOSOPHY" : "فلسفتنا"}
-``
 
           <h2>
   {language === "en" ? (
@@ -978,8 +978,10 @@ const [customerAddress, setCustomerAddress] = useState("");
                   setSelectedProduct(null);
                 }}
               >
-               {language === "en" ? "Add to bag" : "أضف إلى السلة"}
-                <h2>{language === "en" ? "Shopping Bag" : "سلة التسوق"}</h2>
+               {language === "en"
+  ? "Add to Shopping Bag"
+  : "أضف إلى سلة التسوق"}
+                
               </button>
             </div>
           </div>
