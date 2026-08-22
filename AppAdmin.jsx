@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Search,
   Heart,
@@ -18,6 +18,9 @@ import {
 } from "lucide-react";
 import "./App.css";
 import { supabase } from "./lib/supabase";
+import { Routes, Route } from "react-router-dom";
+import Admin from "./Admin";
+
 
 const products = [
   {
@@ -143,6 +146,53 @@ function App() {
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [adminOpen, setAdminOpen] = useState(false);
 const [orders, setOrders] = useState([]);
+const [dbProducts, setDbProducts] = useState([]);
+const updateProduct = async () => {
+  const { error } = await supabase
+    .from("products")
+    .update({
+      name_en: productName,
+      name_ar: productNameAr,
+      description_ar: descriptionAr,
+      description_en: descriptionEn,
+      price_iqd: Number(productPrice),
+      image_urls: [imageUrl],
+    })
+    .eq("id", editingProductId);
+
+  if (error) {
+    alert("Update failed");
+    return;
+  }
+
+  await loadProducts();
+  alert("Product updated");
+
+  setEditingProductId(null);
+};
+const deleteProduct = async (id) => {
+  const { error } = await supabase
+    .from("products")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    alert("Delete failed");
+    return;
+  }
+
+  await loadProducts();
+  alert("Product deleted");
+};
+const [language, setLanguage] = useState("en");
+const [productName, setProductName] = useState("");
+const [productNameAr, setProductNameAr] = useState("");
+const [productPrice, setProductPrice] = useState("");
+const [descriptionAr, setDescriptionAr] = useState("");
+const [descriptionEn, setDescriptionEn] = useState("");
+const [imageUrl, setImageUrl] = useState("");
+const [productCategory, setProductCategory] = useState("Serums");
+const [editingProductId, setEditingProductId] = useState(null);
 const loadOrders = async () => {
   const { data, error } = await supabase
     .from("orders")
@@ -156,7 +206,41 @@ const loadOrders = async () => {
 console.log("Orders:", data);
   setOrders(data || []);
 };
+const loadProducts = async () => {
+  const { data, error } = await supabase
+    .from("products")
+    .select("*");
 
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  const mappedProducts = (data || []).map((item) => ({
+    name_en: item.name_en,
+name_ar: item.name_ar,
+description_en: item.description_en,
+description_ar: item.description_ar,
+    id: item.id,
+    name: item.name_en || item.name_ar || "Unnamed Product",
+    id: item.id,
+    brand: "Dermaé",
+    category: "Skincare",
+    price: item.price_iqd || 0,
+    rating: 5,
+    reviews: 0,
+    badge: "NEW",
+    image: item.image_urls?.[0] || "",
+  }));
+
+  console.log("Products:", mappedProducts);
+
+  setDbProducts(mappedProducts);
+};
+
+useEffect(() => {
+  loadProducts();
+}, []);
   const [customerName, setCustomerName] = useState("");
 const [customerPhone, setCustomerPhone] = useState("");
 const [customerGovernorate, setCustomerGovernorate] = useState("");
@@ -167,7 +251,7 @@ const [customerAddress, setCustomerAddress] = useState("");
   const [cartOpen, setCartOpen] = useState(false);
 
   const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
+    return [...products, ...dbProducts].filter((product) => {
       const categoryMatch =
         activeCategory === "All" || product.category === activeCategory;
 
@@ -182,7 +266,7 @@ const [customerAddress, setCustomerAddress] = useState("");
 
       return categoryMatch && genderMatch && searchMatch;
     });
-  }, [activeCategory, gender, search]);
+  }, [dbProducts, activeCategory, gender, search]);
 
   const addToCart = (product) => {
     setCart((current) => {
@@ -238,42 +322,60 @@ const [customerAddress, setCustomerAddress] = useState("");
   
       {/* TOP BAR */}
       <div className="top-bar">
-        <span>Free delivery on orders over 100,000 IQD</span>
+        <span>
+  {language === "en"
+    ? "Free delivery on orders over 100,000 IQD"
+    : "توصيل مجاني للطلبات فوق 100,000 دينار"}
+</span>
         <span className="top-bar-right">
   Care That Shows™
+<button
+  style={{ marginLeft: "10px" }}
+  onClick={() =>
+    setLanguage(language === "en" ? "ar" : "en")
+  }
+>
+  {language === "en" ? "العربية" : "English"}
+</button>
+<button
+  onClick={async () => {
+    const password = prompt("Enter Admin Password");
 
-  <button
-    style={{ marginLeft: "15px" }}
-    onClick={async () => {
-      await loadOrders();
-      setAdminOpen(true);
-    }}
-  >
-    Admin
-  </button>
+    if (password !== "sadiq") {
+      alert("Wrong Password");
+      return;
+    }
+
+    await loadOrders();
+    setAdminOpen(true);
+  }}
+>
+  Admin
+</button>
 </span>
-      </div>
-
-      {/* HEADER */}
-      <header className="header">
-        <button
-          className="mobile-menu-button"
-          onClick={() => setMobileMenu(!mobileMenu)}
-        >
-          {mobileMenu ? <X size={23} /> : <Menu size={23} />}
-        </button>
-
+</div>
+<header className="header">
         <div className="logo">
-          <span className="logo-main">Dermæ</span>
-          <span className="logo-sub">SKINCARE</span>
+          <span className="logo-main">Dermaé</span>
+          <span className="logo-sub">CARE THAT SHOWS</span>
         </div>
 
         <nav className={`nav ${mobileMenu ? "nav-open" : ""}`}>
-          <a href="#home">Home</a>
-          <a href="#shop">Shop</a>
-          <a href="#about">Our Story</a>
-          <a href="#bestsellers">Bestsellers</a>
-          <a href="#contact">Contact</a>
+          <a href="#home">
+            {language === "en" ? "Home" : "الرئيسية"}
+          </a>
+          <a href="#shop">
+            {language === "en" ? "Shop" : "المتجر"}
+          </a>
+          <a href="#about">
+            {language === "en" ? "Our Story" : "قصتنا"}
+          </a>
+          <a href="#bestsellers">
+            {language === "en" ? "Bestsellers" : "الأكثر مبيعاً"}
+          </a>
+          <a href="#contact">
+            {language === "en" ? "Contact" : "تواصل معنا"}
+          </a>
         </nav>
 
         <div className="header-actions">
@@ -300,46 +402,61 @@ const [customerAddress, setCustomerAddress] = useState("");
         <div className="hero-content">
           <span className="eyebrow">
             <Sparkles size={15} />
-            PREMIUM SKINCARE
+            {language === "en" ? "PREMIUM SKINCARE" : "عناية فائقة بالبشرة"}
           </span>
 
           <h1>
-            Care
-            <br />
-            <em>That Shows.</em>
-          </h1>
-
-          <p>
-            Thoughtfully crafted skincare for every kind of skin.
-            Discover a simple ritual designed to make your natural beauty
-            visible.
-          </p>
+  
+  {language === "en" ? (
+    <>
+      Care
+      <br />
+      <em>That Shows.</em>
+    </>
+  ) : (
+    <>
+      عناية
+      <br />
+      <em>تظهر نتائجها.</em>
+    </>
+  )}
+</h1>
+<p>
+  {language === "en"
+    ? "Thoughtfully crafted skincare for every kind of skin. Discover a simple ritual designed to make your natural beauty visible."
+    : "عناية بالبشرة مصممة بعناية لكل أنواع البشرة. اكتشف روتيناً بسيطاً يساعد على إبراز جمالك الطبيعي."}
+</p>
+          
 
           <div className="hero-buttons">
             <a href="#shop" className="primary-button">
-              Shop Collection
+              {language === "en"
+  ? "Shop Collection"
+  : "تسوق المنتجات"}
               <ChevronRight size={18} />
             </a>
 
             <a href="#about" className="secondary-button">
-              Discover Dermæ
+              {language === "en"
+  ? "Discover Dermaé"
+  : "اكتشف Dermaé"}
             </a>
           </div>
 
           <div className="hero-features">
             <div>
               <ShieldCheck size={19} />
-              <span>Clean formulas</span>
+              {language === "en" ? "Clean formulas" : "تركيبات نظيفة"}
             </div>
 
             <div>
               <Sparkles size={19} />
-              <span>Premium care</span>
+              {language === "en" ? "Premium care" : "عناية فاخرة"}
             </div>
 
             <div>
               <Truck size={19} />
-              <span>Iraq delivery</span>
+              {language === "en" ? "Iraq delivery" : "توصيل داخل العراق"}
             </div>
           </div>
         </div>
@@ -355,8 +472,10 @@ const [customerAddress, setCustomerAddress] = useState("");
           <div className="floating-card">
             <span>01</span>
             <div>
-              <strong>Skin first.</strong>
-              <small>Always.</small>
+              {language === "en"
+  ? "Skin first. Always."
+  : "البشرة أولاً... دائماً"}
+            
             </div>
           </div>
         </div>
@@ -364,22 +483,41 @@ const [customerAddress, setCustomerAddress] = useState("");
 
       {/* BRAND STRIP */}
       <section className="brand-strip">
-        <span>CLINICALLY MINDED</span>
-        <span>THOUGHTFULLY FORMULATED</span>
-        <span>CRUELTY FREE</span>
-        <span>MADE FOR EVERYONE</span>
+        <span>
+  {language === "en"
+    ? "CLINICALLY MINDED"
+    : "مدعوم سريرياً"}
+</span>
+        <span>
+  {language === "en" ? "THOUGHTFULLY FORMULATED" : "مُصمم بعناية"}
+</span>
+        <span>
+  {language === "en" ? "CRUELTY FREE" : "غير مختبر على الحيوانات"}
+</span>
+        <span>
+  {language === "en" ? "MADE FOR EVERYONE" : "مُصمم لجميع الأشخاص"}
+</span>
       </section>
 
       {/* SHOP */}
       <section className="shop-section" id="shop">
         <div className="section-heading">
           <div>
-            <span className="eyebrow">THE COLLECTION</span>
-            <h2>Find your ritual.</h2>
+            <span className="eyebrow">
+  {language === "en" ? "THE COLLECTION" : "المجموعة"}
+</span>
+            <h2>
+  {language === "en"
+    ? "Find your ritual."
+    : "اكتشف روتينك المثالي"}
+</h2>
           </div>
 
           <p>
-            High-performance essentials designed to work beautifully together.
+            {language === "en"
+  ? "High-performance essentials designed to work beautifully together."
+  : "منتجات أساسية عالية الأداء مصممة لتعمل بتناغم تام معاً."}
+``
           </p>
         </div>
 
@@ -389,14 +527,22 @@ const [customerAddress, setCustomerAddress] = useState("");
             <Search size={18} />
             <input
               type="text"
-              placeholder="Search products..."
+              placeholder={
+  language === "en"
+    ? "Search products..."
+    : "ابحث عن المنتجات..."
+}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
 
           <div className="gender-buttons">
-            {["All", "Women", "Men"].map((item) => (
+            {[
+  language === "en" ? "All" : "الكل",
+  language === "en" ? "Women" : "نساء",
+  language === "en" ? "Men" : "رجال",
+].map((item) => (
               <button
                 key={item}
                 className={gender === item ? "active" : ""}
@@ -416,7 +562,23 @@ const [customerAddress, setCustomerAddress] = useState("");
               className={activeCategory === category ? "active" : ""}
               onClick={() => setActiveCategory(category)}
             >
-              {category}
+              {
+  language === "en"
+    ? category
+    : category === "All"
+    ? "الكل"
+    : category === "Serums"
+    ? "سيرومات"
+    : category === "Cleansers"
+    ? "منظفات"
+    : category === "Moisturizers"
+    ? "مرطبات"
+    : category === "Sun Care"
+    ? "عناية شمسية"
+    : category === "Treatments"
+    ? "علاجات"
+    : category
+}
             </button>
           ))}
         </div>
@@ -437,7 +599,6 @@ const [customerAddress, setCustomerAddress] = useState("");
 
                 <div className="product-image">
                   <img src={product.image} alt={product.name} />
-
                   <span className="product-badge">{product.badge}</span>
 
                   <button
@@ -454,7 +615,7 @@ const [customerAddress, setCustomerAddress] = useState("");
                     className="quick-view"
                     onClick={() => setSelectedProduct(product)}
                   >
-                    Quick view
+                   {language === "en" ? "Quick View" : "عرض سريع"}
                   </button>
                 </div>
 
@@ -463,7 +624,11 @@ const [customerAddress, setCustomerAddress] = useState("");
                     {product.category}
                   </span>
 
-                  <h3>{product.name}</h3>
+                  <h3>
+  {language === "en"
+    ? (product.name_en || product.name)
+    : (product.name_ar || product.name)}
+</h3>
 
                   <div className="rating">
                     <Star size={14} fill="currentColor" />
@@ -511,27 +676,40 @@ const [customerAddress, setCustomerAddress] = useState("");
         </div>
 
         <div className="about-content">
-          <span className="eyebrow">OUR PHILOSOPHY</span>
+          {language === "en" ? "OUR PHILOSOPHY" : "فلسفتنا"}
+``
 
           <h2>
-            Beautiful skin
-            <br />
-            starts with <em>care.</em>
-          </h2>
+  {language === "en" ? (
+    <>
+      Beautiful skin
+      <br />
+      starts with <em>care.</em>
+    </>
+  ) : (
+    <>
+      بشرة جميلة
+      <br />
+      تبدأ مع <em>العناية.</em>
+    </>
+  )}
+</h2>
 
-          <p>
-            Dermæ was created around one simple idea: skincare should feel
-            considered, effective and beautiful.
-          </p>
+         <p>
+  {language === "en"
+    ? "Dermae was created around one simple idea: skincare should feel considered, effective and beautiful."
+    : "تم إنشاء Dermaé حول فكرة بسيطة: يجب أن تكون العناية بالبشرة فعالة وجميلة ومصممة بعناية."}
+</p>
 
-          <p>
-            We create modern formulas that fit naturally into your everyday
-            routine — because the best skincare is the skincare you actually
-            enjoy using.
-          </p>
+
+<p>
+  {language === "en"
+    ? "We create modern formulas that fit naturally into your everyday routine because the best skincare is the skincare you actually enjoy using."
+    : "نحن نصنع تركيبات حديثة تندمج بشكل طبيعي مع روتينك اليومي، لأن أفضل عناية بالبشرة هي التي تستمتع باستخدامها فعلاً."}
+</p>
 
           <a href="#shop" className="text-link">
-            Explore our products <ChevronRight size={17} />
+            {language === "en" ? "Explore our products" : "استكشف منتجاتنا"} <ChevronRight size={17} />
           </a>
         </div>
       </section>
@@ -540,38 +718,72 @@ const [customerAddress, setCustomerAddress] = useState("");
       <section className="benefits-section">
         <div className="benefit">
           <Sparkles size={27} />
-          <h3>Thoughtful formulas</h3>
-          <p>Ingredients selected with purpose and care.</p>
+          {language === "en"
+  ? "Thoughtful formulas"
+  : "تركيبات مدروسة"}
+          {language === "en"
+  ? "Ingredients selected with purpose and care."
+  : "مكونات مختارة بعناية وهدف واضح."}
         </div>
 
         <div className="benefit">
           <ShieldCheck size={27} />
-          <h3>Skin-conscious</h3>
-          <p>Designed to support your skin barrier.</p>
+          {language === "en"
+  ? "Skin-conscious"
+  : "مراعية للبشرة"}
+          {language === "en"
+  ? "Designed to support your skin barrier."
+  : "مصممة لدعم حاجز البشرة."}
         </div>
 
         <div className="benefit">
           <Truck size={27} />
-          <h3>Local delivery</h3>
-          <p>Reliable delivery across Iraq.</p>
+          {language === "en"
+  ? "Local delivery"
+  : "توصيل محلي"}
+`
+          {language === "en"
+  ? "Reliable delivery across Iraq."
+  : "توصيل موثوق إلى جميع أنحاء العراق."}
         </div>
 
         <div className="benefit">
           <Heart size={27} />
-          <h3>Made for everyone</h3>
-          <p>Simple skincare for women and men.</p>
+          {language === "en"
+  ? "Made for everyone"
+  : "مناسب للجميع"}
+
+          {language === "en"
+  ? "Simple skincare for women and men."
+  : "عناية بسيطة بالبشرة للنساء والرجال."}
         </div>
       </section>
 
       {/* NEWSLETTER */}
       <section className="newsletter">
-        <span className="eyebrow">STAY IN THE LOOP</span>
-        <h2>Good skin news, delivered.</h2>
-        <p>Join our community for skincare tips, launches and exclusive offers.</p>
+        {language === "en"
+  ? "STAY IN THE LOOP"
+  : "ابقَ على اطلاع"}
+        {language === "en"
+  ? "Good skin news, delivered."
+  : "أخبار رائعة للعناية بالبشرة."}
+        {language === "en"
+  ? "Join our community for skincare tips, launches and exclusive offers."
+  : "انضم إلى مجتمعنا للحصول على نصائح العناية بالبشرة والعروض الحصرية."
+}
 
         <div className="newsletter-form">
-          <input type="email" placeholder="Your email address" />
-          <button>Subscribe</button>
+        <input
+  type="email"
+  placeholder={
+    language === "en"
+      ? "Your email address"
+      : "عنوان بريدك الإلكتروني"
+  }
+/>
+          {language === "en"
+  ? "Subscribe"
+  : "اشترك"}
         </div>
       </section>
 
@@ -580,29 +792,45 @@ const [customerAddress, setCustomerAddress] = useState("");
         <div className="footer-brand">
           <div className="logo">
             <span className="logo-main">Dermæ</span>
-            <span className="logo-sub">SKINCARE</span>
+            <span className="logo-sub">
+  {language === "en" ? "SKINCARE" : "العناية بالبشرة"}
+</span>
           </div>
 
-          <p>Care That Shows.</p>
+          <p>
+  {language === "en"
+    ? "Care That Shows."
+    : "عناية تظهر نتائجها."}
+</p>
         </div>
 
         <div className="footer-links">
           <div>
-            <h4>Shop</h4>
-            <a href="#shop">All Products</a>
-            <a href="#shop">Best Sellers</a>
-            <a href="#shop">New Arrivals</a>
+            <h4>
+  {language === "en" ? "Shop" : "المتجر"}
+</h4>
+            <a href="#shop">
+              {language === "en" ? "All Products" : "جميع المنتجات"}
+            </a>
+            <a href="#shop">
+              {language === "en" ? "Best Sellers" : "الأكثر مبيعاً"}
+            </a>
+            <a href="#shop">
+              {language === "en" ? "New Arrivals" : "الواردون جدد"}
+            </a>
           </div>
 
           <div>
-            <h4>Help</h4>
-            <a href="#contact">Contact Us</a>
-            <a href="#contact">Shipping</a>
-            <a href="#contact">Returns</a>
+            <h4>
+  {language === "en" ? "Help" : "المساعدة"}
+</h4>
+            {language === "en" ? "Contact Us" : "اتصل بنا"}
+            {language === "en" ? "Shipping" : "الشحن"}
+            {language === "en" ? "Returns" : "الإرجاع"}
           </div>
 
           <div>
-            <h4>Follow</h4>
+            {language === "en" ? "Follow" : "تابعنا"}
             <a href="#contact">Instagram</a>
             <a href="#contact">Facebook</a>
             <a href="#contact">WhatsApp</a>
@@ -610,8 +838,10 @@ const [customerAddress, setCustomerAddress] = useState("");
         </div>
 
         <div className="footer-bottom">
-          <span>© 2026 Dermæ. All rights reserved.</span>
-          <span>Made with care in Iraq.</span>
+          {language === "en"
+  ? "© 2026 Dermaé. All rights reserved. Made with care in Iraq."
+  : "© 2026 Dermaé. جميع الحقوق محفوظة. صُنع بعناية في العراق."}
+         
         </div>
       </footer>
 
@@ -655,7 +885,12 @@ const [customerAddress, setCustomerAddress] = useState("");
                 {selectedProduct.category}
               </span>
 
-              <h2>{selectedProduct.name}</h2>
+              <h2>
+  {language === "en"
+    ? (selectedProduct.name_en || selectedProduct.name)
+    : (selectedProduct.name_ar || selectedProduct.name)}
+</h2>
+
 
               <div className="rating">
                 <Star size={15} fill="currentColor" />
@@ -667,7 +902,11 @@ const [customerAddress, setCustomerAddress] = useState("");
                 {formatIQD(selectedProduct.price)}
               </div>
 
-              <p>{selectedProduct.description}</p>
+              <p>
+  {language === "en"
+    ? (selectedProduct.description_en || selectedProduct.description)
+    : (selectedProduct.description_ar || selectedProduct.description)}
+</p>
 
               <div className="ingredients">
                 <h4>Key ingredients</h4>
@@ -686,8 +925,8 @@ const [customerAddress, setCustomerAddress] = useState("");
                   setSelectedProduct(null);
                 }}
               >
-                Add to bag
-                <ShoppingBag size={18} />
+               {language === "en" ? "Add to bag" : "أضف إلى السلة"}
+                <h2>{language === "en" ? "Shopping Bag" : "سلة التسوق"}</h2>
               </button>
             </div>
           </div>
@@ -703,7 +942,9 @@ const [customerAddress, setCustomerAddress] = useState("");
           >
             <div className="cart-header">
               <div>
-                <span className="eyebrow">YOUR BAG</span>
+                <span className="eyebrow">
+  {language === "en" ? "YOUR BAG" : "سلتك"}
+</span>
                 <h2>Shopping Bag</h2>
               </div>
 
@@ -805,19 +1046,19 @@ const [customerAddress, setCustomerAddress] = useState("");
         ✕
       </button>
 
-      <h2>Checkout</h2>
+      <h2>{language === "en" ? "Checkout" : "إكمال الطلب"}</h2>
       
 
 <input
   type="text"
-  placeholder="Full Name"
+  placeholder={language === "en" ? "Full Name" : "الاسم الكامل"}
   value={customerName}
   onChange={(e) => setCustomerName(e.target.value)}
   style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
 />
 <input
   type="text"
-  placeholder="Phone Number"
+  placeholder={language === "en" ? "Phone Number" : "رقم الهاتف"}
   value={customerPhone}
   onChange={(e) => setCustomerPhone(e.target.value)}
   style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
@@ -825,14 +1066,14 @@ const [customerAddress, setCustomerAddress] = useState("");
 
 <input
   type="text"
-  placeholder="Governorate"
+  placeholder={language === "en" ? "Governorate" : "المحافظة"}
   value={customerGovernorate}
   onChange={(e) => setCustomerGovernorate(e.target.value)}
   style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
 />
 
 <textarea
-  placeholder="Address"
+  placeholder={language === "en" ? "Address" : "العنوان"}
   value={customerAddress}
   onChange={(e) => setCustomerAddress(e.target.value)}
   style={{
@@ -888,20 +1129,223 @@ setCheckoutOpen(false);
 setCartOpen(false);
 }}
 >
-  Place Order
+  {language === "en" ? "Place Order" : "إرسال الطلب"}
 </button>
     </div>
   </div>
 )}
 {adminOpen && (
   <div className="modal-overlay">
-    <div className="product-modal">
+    <div
+  className="product-modal"
+  style={{
+    maxHeight: "90vh",
+    overflowY: "auto"
+  }}
+>
       <button
-        className="modal-close"
-        onClick={() => setAdminOpen(false)}
-      >
-        ✕
-      </button>
+  onClick={() => setAdminOpen(false)}
+  style={{
+    position: "sticky",
+    top: "10px",
+    zIndex: 9999,
+    float: "right"
+  }}
+>
+  ✕ Close Dashboard
+</button>
+<hr style={{ margin: "20px 0" }} />
+<div
+  style={{
+    display: "flex",
+    gap: "15px",
+    marginBottom: "20px",
+    flexWrap: "wrap",
+  }}
+>
+  <div
+    style={{
+      background: "#f3f4f6",
+      padding: "15px",
+      borderRadius: "10px",
+      minWidth: "150px",
+    }}
+  >
+    <strong>Total Products</strong>
+    <p>{dbProducts.length}</p>
+  </div>
+
+  <div
+    style={{
+      background: "#f3f4f6",
+      padding: "15px",
+      borderRadius: "10px",
+      minWidth: "150px",
+    }}
+  >
+    <strong>Total Orders</strong>
+    <p>{orders.length}</p>
+  </div>
+
+  <div
+    style={{
+      background: "#f3f4f6",
+      padding: "15px",
+      borderRadius: "10px",
+      minWidth: "150px",
+    }}
+  >
+    <strong>Revenue</strong>
+    <p>
+      {orders.reduce(
+        (sum, order) => sum + (Number(order.total) || 0),
+        0
+      ).toLocaleString()} IQD
+    </p>
+  </div>
+</div>
+<h2>Products Management</h2>
+  <div style={{ marginBottom: "20px" }}>
+    <button
+  onClick={async () => {
+    if (editingProductId) {
+  await updateProduct();
+  return;
+}
+   const { error } = await supabase
+  .from("products")
+  .insert([
+    {
+      name_en: productName,
+      name_ar: productNameAr,
+      description_ar: descriptionAr,
+description_en: descriptionEn,
+      price_iqd: Number(productPrice),
+      image_urls: [imageUrl],
+    },
+  ]);
+
+if (error) {
+  console.error(error);
+  alert("Error saving product");
+  return;
+}
+
+alert("Product saved successfully");
+setProductName("");
+setProductNameAr("");
+setDescriptionAr("");
+setDescriptionEn("");
+setProductPrice("");
+setImageUrl("");
+  }}
+  style={{
+    padding: "10px 20px",
+    marginBottom: "20px",
+    cursor: "pointer",
+  }}
+>
+  Save Product
+</button>
+  <input
+  type="text"
+  placeholder="Product Name Arabic"
+  value={productNameAr}
+  onChange={(e) => setProductNameAr(e.target.value)}
+  style={{ marginRight: "10px", padding: "8px" }}
+/>
+   <input
+  type="text"
+  placeholder="Product Name"
+  value={productName}
+  onChange={(e) => setProductName(e.target.value)}
+  style={{ marginRight: "10px", padding: "8px" }}
+/>
+``
+<input
+  type="text"
+  placeholder="Description Arabic"
+  value={descriptionAr}
+  onChange={(e) => setDescriptionAr(e.target.value)}
+  style={{ marginRight: "10px", padding: "8px" }}
+/>
+
+<input
+  type="text"
+  placeholder="Description English"
+  value={descriptionEn}
+  onChange={(e) => setDescriptionEn(e.target.value)}
+  style={{ marginRight: "10px", padding: "8px" }}
+/>
+  <input
+    type="number"
+    placeholder="Price"
+    value={productPrice}
+    onChange={(e) => setProductPrice(e.target.value)}
+    style={{ padding: "8px" }}
+  />
+  <input
+  type="text"
+  placeholder="Image URL"
+  value={imageUrl}
+  onChange={(e) => setImageUrl(e.target.value)}
+  style={{ marginRight: "10px", padding: "8px" }}
+/>
+</div>
+<h3>Existing Products</h3>
+
+{dbProducts.map((product) => (
+  <div
+    key={product.id}
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: "10px",
+      borderBottom: "1px solid #ccc",
+      paddingBottom: "10px",
+    }}
+  >
+    <span>{product.name}</span>
+
+    
+  <button
+  onClick={() => {
+  
+    setEditingProductId(product.id);
+    setProductName(product.name_en || "");
+    setProductNameAr(product.name_ar || "");
+    setDescriptionAr(product.description_ar || "");
+    setDescriptionEn(product.description_en || "");
+    setProductPrice(product.price || "");
+  }}
+  style={{
+    background: "#2563eb",
+    color: "white",
+    border: "none",
+    padding: "6px 12px",
+    cursor: "pointer",
+    marginRight: "8px",
+  }}
+>
+  Edit
+</button>
+
+<button
+  onClick={() => deleteProduct(product.id)}
+  style={{
+    background: "red",
+    color: "white",
+    border: "none",
+    padding: "6px 12px",
+    cursor: "pointer",
+  }}
+>
+  Delete
+</button>
+  </div>
+))}
+
 {orders.length === 0 ? (
   <p>No orders found</p>
 ) : (
@@ -918,6 +1362,23 @@ setCartOpen(false);
       <p><strong>Name:</strong> {order.customer_name}</p>
       <p><strong>Phone:</strong> {order.customer_phone}</p>
       <p><strong>Total:</strong> {order.total}</p>
+      <p><strong>Status:</strong> {order.status}</p>
+      <p><strong>Governorate:</strong> {order.customer_governorate}</p>
+
+<p><strong>Address:</strong> {order.customer_address}</p>
+      <button
+  onClick={async () => {
+    await supabase
+      .from("orders")
+      .update({ status: "delivered" })
+      .eq("id", order.id);
+
+    await loadOrders();
+  }}
+>
+  Mark as Delivered
+</button>
+
     </div>
   ))
 )}
