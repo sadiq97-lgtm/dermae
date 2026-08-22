@@ -141,6 +141,7 @@ const formatIQD = (price) => `${price.toLocaleString("en-US")} IQD`;
 function App() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState("default");
   const [gender, setGender] = useState("All");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
@@ -266,6 +267,17 @@ const [customerAddress, setCustomerAddress] = useState("");
       return categoryMatch && genderMatch && searchMatch;
     });
   }, [dbProducts, activeCategory, gender, search]);
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+  if (sortBy === "low-high") {
+    return (a.price || 0) - (b.price || 0);
+  }
+
+  if (sortBy === "high-low") {
+    return (b.price || 0) - (a.price || 0);
+  }
+
+  return 0;
+});
 
   const addToCart = (product) => {
     setCart((current) => {
@@ -527,7 +539,25 @@ const [customerAddress, setCustomerAddress] = useState("");
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-
+<div style={{ marginTop: "10px" }}>
+  <select
+    value={sortBy}
+    onChange={(e) => setSortBy(e.target.value)}
+    style={{
+      padding: "10px",
+      borderRadius: "10px",
+    }}
+  >
+    <option value="default">Default</option>
+    <option value="low-high">
+      Price: Low → High
+    </option>
+    <option value="high-low">
+      Price: High → Low
+    </option>
+  </select>
+</div>
+``
           <div className="gender-buttons">
             {[
   language === "en" ? "All" : "الكل",
@@ -586,6 +616,19 @@ const [customerAddress, setCustomerAddress] = useState("");
   Showing {filteredProducts.length} products
 </p>
         <div className="products-grid">
+          {filteredProducts.length === 0 && (
+  <div
+    style={{
+      textAlign: "center",
+      padding: "40px",
+      width: "100%",
+    }}
+  >
+    {language === "en"
+      ? "No products found"
+      : "لا توجد منتجات مطابقة"}
+  </div>
+)}
           {filteredProducts.map((product) => {
             const isLiked = wishlist.includes(product.id);
 
