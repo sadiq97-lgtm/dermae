@@ -285,7 +285,30 @@ export default function Admin() {
     closeProductForm();
     alert("Product updated");
   };
+const updateOrderStatus = async (
+  orderId,
+  newStatus
+) => {
+  const { error } = await supabase
+    .from("orders")
+    .update({
+      status: newStatus,
+    })
+    .eq("id", orderId);
 
+  if (error) {
+    alert(`Status update failed: ${error.message}`);
+    return;
+  }
+
+  setOrders((currentOrders) =>
+    currentOrders.map((order) =>
+      order.id === orderId
+        ? { ...order, status: newStatus }
+        : order
+    )
+  );
+};
   const deleteProduct = async (id) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this product?"
@@ -780,13 +803,49 @@ export default function Admin() {
               Order #{order.order_number || order.id}
             </strong>
 
-            <p style={{ margin: "8px 0 0" }}>
-              Total: {getOrderTotal(order).toLocaleString()} IQD
-             
-            </p>
+<p>
+  Customer: {order.customer_name || "-"}
+</p>
+
+<p>
+  Phone: {order.customer_phone || order.phone || "-"}
+</p>
+
+<p>
+  Governorate: {order.customer_governorate || "-"}
+</p>
+
+<p style={{ margin: "8px 0 0" }}>
+  Total: {getOrderTotal(order).toLocaleString()} IQD
+</p>
+
+<p style={{ margin: "6px 0 0" }}>
+  Status: {order.status || "Pending"}
+</p>
+
+          
+        
 
             <p style={{ margin: "6px 0 0" }}>
-              Status: {order.status || "Pending"}
+              <select
+  value={order.status || "Pending"}
+  onChange={(event) =>
+  updateOrderStatus(
+    order.id,
+    event.target.value
+  )
+}
+  style={{
+    marginTop: "8px",
+    padding: "6px",
+    borderRadius: "6px",
+  }}
+>
+  <option value="Pending">Pending</option>
+  <option value="Processing">Processing</option>
+  <option value="Delivered">Delivered</option>
+  <option value="Cancelled">Cancelled</option>
+</select>
             </p>
           </div>
         ))
