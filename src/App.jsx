@@ -18,6 +18,9 @@ import {
 } from "lucide-react";
 import "./App.css";
 import { supabase } from "./lib/supabase";
+import { Routes, Route } from "react-router-dom";
+import Admin from "./Admin";
+
 
 const products = [
   {
