@@ -14,6 +14,7 @@ export default function Admin() {
   const [products, setProducts] = useState([]);
 
   const [editingProductId, setEditingProductId] = useState(null);
+  const [addingProduct, setAddingProduct] = useState(false);
   const [productNameEn, setProductNameEn] = useState("");
   const [productNameAr, setProductNameAr] = useState("");
   const [descriptionEn, setDescriptionEn] = useState("");
@@ -118,7 +119,22 @@ export default function Admin() {
       alert("Logout failed");
     }
   };
+const startAddingProduct = () => {
+  setEditingProductId(null);
+  setAddingProduct(true);
 
+  setProductNameEn("");
+  setProductNameAr("");
+  setDescriptionEn("");
+  setDescriptionAr("");
+  setProductPrice("");
+  setImageUrl("");
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+};
   const startEditingProduct = (product) => {
     setEditingProductId(product.id);
     setProductNameEn(product.name_en || "");
@@ -134,17 +150,22 @@ export default function Admin() {
     });
   };
 
-  const cancelEditingProduct = () => {
-    setEditingProductId(null);
-    setProductNameEn("");
-    setProductNameAr("");
-    setDescriptionEn("");
-    setDescriptionAr("");
-    setProductPrice("");
-    setImageUrl("");
-    setUpdateLoading(false);
-  };
+  const closeProductForm = () => {
+  setEditingProductId(null);
+  setAddingProduct(false);
 
+  setProductNameEn("");
+  setProductNameAr("");
+  setDescriptionEn("");
+  setDescriptionAr("");
+  setProductPrice("");
+  setImageUrl("");
+
+  setUpdateLoading(false);
+};
+const createProduct = async () => {
+  alert("Add Product connected successfully");
+};
   const updateProduct = async () => {
     if (!editingProductId) {
       return;
@@ -198,7 +219,7 @@ export default function Admin() {
       )
     );
 
-    cancelEditingProduct();
+    closeProductForm
     alert("Product updated");
   };
 
@@ -235,7 +256,7 @@ export default function Admin() {
     );
 
     if (editingProductId === id) {
-      cancelEditingProduct();
+      closeProductForm
     }
 
     alert("Product deleted");
@@ -405,9 +426,33 @@ export default function Admin() {
         </div>
       </div>
 
-      <h2>Products Management</h2>
+      <div
+  style={{
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "15px",
+  }}
+>
+  <h2>Products Management</h2>
 
-      {editingProductId && (
+  <button
+    type="button"
+    onClick={startAddingProduct}
+    style={{
+      background: "#16a34a",
+      color: "white",
+      border: "none",
+      borderRadius: "6px",
+      padding: "8px 14px",
+      cursor: "pointer",
+    }}
+  >
+    Add Product
+  </button>
+</div>
+
+      {(addingProduct || editingProductId) && (
         <div
           style={{
             border: "1px solid #444",
@@ -519,7 +564,11 @@ export default function Admin() {
           >
             <button
               type="button"
-              onClick={updateProduct}
+              onClick={
+  editingProductId
+    ? updateProduct
+    : createProduct
+}
               disabled={updateLoading}
               style={{
                 background: "#16a34a",
@@ -540,7 +589,7 @@ export default function Admin() {
 
             <button
               type="button"
-              onClick={cancelEditingProduct}
+              closeProductForm
               disabled={updateLoading}
               style={{
                 background: "#6b7280",
