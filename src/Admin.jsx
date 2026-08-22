@@ -39,17 +39,17 @@ export default function Admin() {
   };
 
   const loadOrders = async () => {
-    const { data, error } = await supabase
-      .from("orders")
-      .select("*");
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*");
 
-    if (error) {
-      console.error("Orders error:", error);
-      return;
-    }
+  console.log("ORDERS DATA:", data);
+  console.log("ORDERS ERROR:", error);
 
-    setOrders(data || []);
-  };
+  if (error) {
+    console.error("Orders error:", error);
+    return;
+  }
 
   useEffect(() => {
     const checkSession = async () => {
