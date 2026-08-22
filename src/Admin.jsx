@@ -39,17 +39,21 @@ export default function Admin() {
   };
 
   const loadOrders = async () => {
-  const { data, error } = await supabase
-    .from("orders")
-    .select("*");
+    const { data, error } = await supabase
+      .from("orders")
+      .select("*")
+      .order("id", { ascending: false });
 
-  console.log("ORDERS DATA:", data);
-  console.log("ORDERS ERROR:", error);
+    console.log("ORDERS DATA:", data);
+    console.log("ORDERS ERROR:", error);
 
-  if (error) {
-    console.error("Orders error:", error);
-    return;
-  }
+    if (error) {
+      console.error("Orders error:", error);
+      return;
+    }
+
+    setOrders(data || []);
+  };
 
   useEffect(() => {
     const checkSession = async () => {
@@ -323,6 +327,10 @@ export default function Admin() {
     alert("Product deleted");
   };
 
+  const getOrderTotal = (order) => {
+  return Number(order.total || 0);
+};
+
   if (authLoading) {
     return (
       <div style={{ padding: "40px" }}>
@@ -484,8 +492,7 @@ export default function Admin() {
             {orders
               .reduce(
                 (sum, order) =>
-                  sum +
-                  (Number(order.total) || 0),
+                  sum + getOrderTotal(order),
                 0
               )
               .toLocaleString()}{" "}
@@ -751,6 +758,39 @@ export default function Admin() {
           </div>
         </div>
       ))}
+
+      <h2 style={{ marginTop: "40px" }}>
+        Orders Management
+      </h2>
+
+      {orders.length === 0 ? (
+        <p>No orders found.</p>
+      ) : (
+        orders.map((order) => (
+          <div
+            key={order.id}
+            style={{
+              border: "1px solid #444",
+              borderRadius: "10px",
+              padding: "15px",
+              marginBottom: "12px",
+            }}
+          >
+            <strong>
+              Order #{order.order_number || order.id}
+            </strong>
+
+            <p style={{ margin: "8px 0 0" }}>
+              Total: {getOrderTotal(order).toLocaleString()} IQD
+             
+            </p>
+
+            <p style={{ margin: "6px 0 0" }}>
+              Status: {order.status || "Pending"}
+            </p>
+          </div>
+        ))
+      )}
     </div>
   );
 }
