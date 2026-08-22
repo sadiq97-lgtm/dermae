@@ -39,6 +39,7 @@ const cancelledOrders = orders.filter(
   const [descriptionAr, setDescriptionAr] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+const [productImage, setProductImage] = useState(null);
 
   const [updateLoading, setUpdateLoading] = useState(false);
 
@@ -665,18 +666,19 @@ const updateOrderStatus = async (
           />
 
           <input
-            value={imageUrl}
-            onChange={(event) =>
-              setImageUrl(event.target.value)
-            }
-            placeholder="Image URL"
-            style={{
-              width: "100%",
-              padding: "10px",
-              marginBottom: "15px",
-              boxSizing: "border-box",
-            }}
-          />
+  type="file"
+  accept="image/*"
+  onChange={(event) =>
+    setProductImage(event.target.files?.[0] || null)
+  }
+/>
+          <input
+  type="file"
+  accept="image/*"
+  onChange={(event) =>
+    setProductImage(event.target.files?.[0] || null)
+  }
+/>
 
           <div
             style={{
