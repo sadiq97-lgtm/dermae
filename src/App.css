@@ -468,19 +468,20 @@ button.active {
   background: #8b5cf6;
   border-color: #8b5cf6;
   color: white;
-}.brand-strip {
+  }
+.brand-strip {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
-  gap: 30px;
   flex-wrap: wrap;
-  padding: 20px;
+  padding: 20px 40px;
   text-align: center;
-margin-top: -30px;
+  margin-top: 0;
 }
 
 
 .brand-strip span {
+  white-space: nowrap;
   color: #a1a1aa;
   font-size: 14px;
   letter-spacing: 1px;
