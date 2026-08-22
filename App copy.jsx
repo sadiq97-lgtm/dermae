@@ -449,10 +449,7 @@ function App() {
 
                     <button
                       className="add-button"
-                     onClick={(e) => {
-  e.stopPropagation();
-  addToCart(product);
-}}
+                      onClick={() => addToCart(product)}
                     >
                       <Plus size={18} />
                     </button>

@@ -263,7 +263,7 @@ const [customerAddress, setCustomerAddress] = useState("");
 
       return categoryMatch && genderMatch && searchMatch;
     });
-  }, [activeCategory, gender, search]);
+  }, [dbProducts, activeCategory, gender, search]);
 
   const addToCart = (product) => {
     setCart((current) => {
@@ -619,7 +619,11 @@ const [customerAddress, setCustomerAddress] = useState("");
                     {product.category}
                   </span>
 
-                  <h3>{product.name}</h3>
+                  <h3>
+  {language === "en"
+    ? (product.name_en || product.name)
+    : (product.name_ar || product.name)}
+</h3>
 
                   <div className="rating">
                     <Star size={14} fill="currentColor" />
@@ -839,7 +843,12 @@ const [customerAddress, setCustomerAddress] = useState("");
                 {selectedProduct.category}
               </span>
 
-              <h2>{selectedProduct.name}</h2>
+              <h2>
+  {language === "en"
+    ? (selectedProduct.name_en || selectedProduct.name)
+    : (selectedProduct.name_ar || selectedProduct.name)}
+</h2>
+
 
               <div className="rating">
                 <Star size={15} fill="currentColor" />
@@ -851,7 +860,11 @@ const [customerAddress, setCustomerAddress] = useState("");
                 {formatIQD(selectedProduct.price)}
               </div>
 
-              <p>{selectedProduct.description}</p>
+              <p>
+  {language === "en"
+    ? (selectedProduct.description_en || selectedProduct.description)
+    : (selectedProduct.description_ar || selectedProduct.description)}
+</p>
 
               <div className="ingredients">
                 <h4>Key ingredients</h4>
