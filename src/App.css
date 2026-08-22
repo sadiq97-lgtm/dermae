@@ -622,7 +622,6 @@ input[type="search"] {
   font-size: 1.35rem;
   line-height: 1.35;
   margin: 12px 0;
-  min-height: 52px;
 }
 
 .product-info .rating {
@@ -631,11 +630,8 @@ input[type="search"] {
 }
 
 .product-info .price {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
   margin-top: 10px;
+  text-align: center;
 }
 @media (max-width: 768px) {
   .products-grid {

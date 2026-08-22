@@ -670,11 +670,7 @@ const [customerAddress, setCustomerAddress] = useState("");
                     {product.category}
                   </span>
 
-                  <h3
-  style={{
-    minHeight: "52px",
-  }}
->
+                  <h3>
   {language === "en"
     ? (product.name_en || product.name)
     : (product.name_ar || product.name)}
@@ -693,7 +689,6 @@ const [customerAddress, setCustomerAddress] = useState("");
                       {product.oldPrice && (
   <del>{formatIQD(product.oldPrice)}</del>
 )}
-                      )
                     </div>
 
                     <button
