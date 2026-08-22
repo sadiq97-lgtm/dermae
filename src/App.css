@@ -618,3 +618,34 @@ input[type="search"] {
     grid-template-columns: 1fr;
   }
 }
+.product-info h3 {
+  font-size: 1.35rem;
+  line-height: 1.35;
+  margin: 12px 0;
+  min-height: 52px;
+}
+
+.product-info .rating {
+  margin: 10px 0;
+  font-size: 0.95rem;
+}
+
+.product-info .price {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+@media (max-width: 768px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+}

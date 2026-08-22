@@ -691,26 +691,9 @@ const [customerAddress, setCustomerAddress] = useState("");
                       <strong>{formatIQD(product.price)}</strong>
 
                       {product.oldPrice && (
-                        <del>{formatIQD(product.oldPrice)}</del>
-                        {product.oldPrice && (
-  <span
-    style={{
-      color: "#16a34a",
-      fontWeight: "bold",
-      fontSize: "12px",
-      marginLeft: "8px",
-    }}
-  >
-    Save{" "}
-    {Math.round(
-      ((product.oldPrice - product.price) /
-        product.oldPrice) *
-        100
-    )}
-    %
-  </span>
+  <del>{formatIQD(product.oldPrice)}</del>
 )}
-                      )}
+                      )
                     </div>
 
                     <button
