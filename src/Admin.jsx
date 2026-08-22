@@ -15,12 +15,14 @@ export default function Admin() {
 
   const [editingProductId, setEditingProductId] = useState(null);
   const [addingProduct, setAddingProduct] = useState(false);
+
   const [productNameEn, setProductNameEn] = useState("");
   const [productNameAr, setProductNameAr] = useState("");
   const [descriptionEn, setDescriptionEn] = useState("");
   const [descriptionAr, setDescriptionAr] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+
   const [updateLoading, setUpdateLoading] = useState(false);
 
   const loadProducts = async () => {
@@ -119,24 +121,28 @@ export default function Admin() {
       alert("Logout failed");
     }
   };
-const startAddingProduct = () => {
-  setEditingProductId(null);
-  setAddingProduct(true);
 
-  setProductNameEn("");
-  setProductNameAr("");
-  setDescriptionEn("");
-  setDescriptionAr("");
-  setProductPrice("");
-  setImageUrl("");
+  const startAddingProduct = () => {
+    setEditingProductId(null);
+    setAddingProduct(true);
 
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
-};
+    setProductNameEn("");
+    setProductNameAr("");
+    setDescriptionEn("");
+    setDescriptionAr("");
+    setProductPrice("");
+    setImageUrl("");
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   const startEditingProduct = (product) => {
+    setAddingProduct(false);
     setEditingProductId(product.id);
+
     setProductNameEn(product.name_en || "");
     setProductNameAr(product.name_ar || "");
     setDescriptionEn(product.description_en || "");
@@ -151,21 +157,72 @@ const startAddingProduct = () => {
   };
 
   const closeProductForm = () => {
-  setEditingProductId(null);
-  setAddingProduct(false);
+    setEditingProductId(null);
+    setAddingProduct(false);
 
-  setProductNameEn("");
-  setProductNameAr("");
-  setDescriptionEn("");
-  setDescriptionAr("");
-  setProductPrice("");
-  setImageUrl("");
+    setProductNameEn("");
+    setProductNameAr("");
+    setDescriptionEn("");
+    setDescriptionAr("");
+    setProductPrice("");
+    setImageUrl("");
 
-  setUpdateLoading(false);
-};
-const createProduct = async () => {
-  alert("Add Product connected successfully");
-};
+    setUpdateLoading(false);
+  };
+
+  const createProduct = async () => {
+    if (!productNameEn.trim() && !productNameAr.trim()) {
+      alert("Please enter at least one product name.");
+      return;
+    }
+
+    if (!productPrice || Number(productPrice) < 0) {
+      alert("Please enter a valid product price.");
+      return;
+    }
+
+    setUpdateLoading(true);
+
+    const { data: insertedRows, error } = await supabase
+      .from("products")
+      .insert([
+        {
+          name_en: productNameEn.trim(),
+          name_ar: productNameAr.trim(),
+          description_en: descriptionEn.trim(),
+          description_ar: descriptionAr.trim(),
+          price_iqd: Number(productPrice),
+          image_urls: imageUrl.trim()
+            ? [imageUrl.trim()]
+            : [],
+        },
+      ])
+      .select("*");
+
+    if (error) {
+      console.error("Add product error:", error);
+      alert(`Add failed: ${error.message}`);
+      setUpdateLoading(false);
+      return;
+    }
+
+    if (!insertedRows || insertedRows.length === 0) {
+      alert(
+        "The product was not added. Check the products INSERT policy."
+      );
+      setUpdateLoading(false);
+      return;
+    }
+
+    setProducts((currentProducts) => [
+      insertedRows[0],
+      ...currentProducts,
+    ]);
+
+    closeProductForm();
+    alert("Product added");
+  };
+
   const updateProduct = async () => {
     if (!editingProductId) {
       return;
@@ -191,7 +248,9 @@ const createProduct = async () => {
         description_en: descriptionEn.trim(),
         description_ar: descriptionAr.trim(),
         price_iqd: Number(productPrice),
-        image_urls: imageUrl.trim() ? [imageUrl.trim()] : [],
+        image_urls: imageUrl.trim()
+          ? [imageUrl.trim()]
+          : [],
       })
       .eq("id", editingProductId)
       .select("*");
@@ -219,7 +278,7 @@ const createProduct = async () => {
       )
     );
 
-    closeProductForm
+    closeProductForm();
     alert("Product updated");
   };
 
@@ -252,11 +311,13 @@ const createProduct = async () => {
     }
 
     setProducts((currentProducts) =>
-      currentProducts.filter((product) => product.id !== id)
+      currentProducts.filter(
+        (product) => product.id !== id
+      )
     );
 
     if (editingProductId === id) {
-      closeProductForm
+      closeProductForm();
     }
 
     alert("Product deleted");
@@ -302,7 +363,9 @@ const createProduct = async () => {
           <input
             type="email"
             value={email}
-            onChange={(event) => setEmail(event.target.value)}
+            onChange={(event) =>
+              setEmail(event.target.value)
+            }
             placeholder="Admin email"
             autoComplete="email"
             required
@@ -317,7 +380,9 @@ const createProduct = async () => {
           <input
             type="password"
             value={password}
-            onChange={(event) => setPassword(event.target.value)}
+            onChange={(event) =>
+              setPassword(event.target.value)
+            }
             placeholder="Password"
             autoComplete="current-password"
             required
@@ -356,7 +421,9 @@ const createProduct = async () => {
               opacity: loginLoading ? 0.7 : 1,
             }}
           >
-            {loginLoading ? "Signing in..." : "Sign In"}
+            {loginLoading
+              ? "Signing in..."
+              : "Sign In"}
           </button>
         </form>
       </div>
@@ -417,7 +484,8 @@ const createProduct = async () => {
             {orders
               .reduce(
                 (sum, order) =>
-                  sum + (Number(order.total) || 0),
+                  sum +
+                  (Number(order.total) || 0),
                 0
               )
               .toLocaleString()}{" "}
@@ -427,30 +495,34 @@ const createProduct = async () => {
       </div>
 
       <div
-  style={{
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: "15px",
-  }}
->
-  <h2>Products Management</h2>
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: "15px",
+          flexWrap: "wrap",
+          marginBottom: "15px",
+        }}
+      >
+        <h2 style={{ margin: 0 }}>
+          Products Management
+        </h2>
 
-  <button
-    type="button"
-    onClick={startAddingProduct}
-    style={{
-      background: "#16a34a",
-      color: "white",
-      border: "none",
-      borderRadius: "6px",
-      padding: "8px 14px",
-      cursor: "pointer",
-    }}
-  >
-    Add Product
-  </button>
-</div>
+        <button
+          type="button"
+          onClick={startAddingProduct}
+          style={{
+            background: "#16a34a",
+            color: "white",
+            border: "none",
+            borderRadius: "6px",
+            padding: "8px 14px",
+            cursor: "pointer",
+          }}
+        >
+          Add Product
+        </button>
+      </div>
 
       {(addingProduct || editingProductId) && (
         <div
@@ -461,7 +533,11 @@ const createProduct = async () => {
             marginBottom: "25px",
           }}
         >
-          <h3>Edit Product</h3>
+          <h3>
+            {editingProductId
+              ? "Edit Product"
+              : "Add Product"}
+          </h3>
 
           <input
             value={productNameEn}
@@ -565,10 +641,10 @@ const createProduct = async () => {
             <button
               type="button"
               onClick={
-  editingProductId
-    ? updateProduct
-    : createProduct
-}
+                editingProductId
+                  ? updateProduct
+                  : createProduct
+              }
               disabled={updateLoading}
               style={{
                 background: "#16a34a",
@@ -579,17 +655,21 @@ const createProduct = async () => {
                 cursor: updateLoading
                   ? "not-allowed"
                   : "pointer",
-                opacity: updateLoading ? 0.7 : 1,
+                opacity: updateLoading
+                  ? 0.7
+                  : 1,
               }}
             >
               {updateLoading
                 ? "Saving..."
-                : "Save Changes"}
+                : editingProductId
+                ? "Save Changes"
+                : "Add Product"}
             </button>
 
             <button
               type="button"
-              closeProductForm
+              onClick={closeProductForm}
               disabled={updateLoading}
               style={{
                 background: "#6b7280",
@@ -600,7 +680,9 @@ const createProduct = async () => {
                 cursor: updateLoading
                   ? "not-allowed"
                   : "pointer",
-                opacity: updateLoading ? 0.7 : 1,
+                opacity: updateLoading
+                  ? 0.7
+                  : 1,
               }}
             >
               Cancel
@@ -622,7 +704,8 @@ const createProduct = async () => {
           }}
         >
           <span>
-            {product.name_en || product.name_ar}
+            {product.name_en ||
+              product.name_ar}
           </span>
 
           <div
@@ -634,7 +717,9 @@ const createProduct = async () => {
           >
             <button
               type="button"
-              onClick={() => startEditingProduct(product)}
+              onClick={() =>
+                startEditingProduct(product)
+              }
               style={{
                 background: "#2563eb",
                 color: "white",
@@ -649,7 +734,9 @@ const createProduct = async () => {
 
             <button
               type="button"
-              onClick={() => deleteProduct(product.id)}
+              onClick={() =>
+                deleteProduct(product.id)
+              }
               style={{
                 background: "#dc2626",
                 color: "white",
