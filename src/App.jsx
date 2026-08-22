@@ -1152,7 +1152,55 @@ setCartOpen(false);
   ✕ Close Dashboard
 </button>
 <hr style={{ margin: "20px 0" }} />
+<div
+  style={{
+    display: "flex",
+    gap: "15px",
+    marginBottom: "20px",
+    flexWrap: "wrap",
+  }}
+>
+  <div
+    style={{
+      background: "#f3f4f6",
+      padding: "15px",
+      borderRadius: "10px",
+      minWidth: "150px",
+    }}
+  >
+    <strong>Total Products</strong>
+    <p>{dbProducts.length}</p>
+  </div>
 
+  <div
+    style={{
+      background: "#f3f4f6",
+      padding: "15px",
+      borderRadius: "10px",
+      minWidth: "150px",
+    }}
+  >
+    <strong>Total Orders</strong>
+    <p>{orders.length}</p>
+  </div>
+
+  <div
+    style={{
+      background: "#f3f4f6",
+      padding: "15px",
+      borderRadius: "10px",
+      minWidth: "150px",
+    }}
+  >
+    <strong>Revenue</strong>
+    <p>
+      {orders.reduce(
+        (sum, order) => sum + (Number(order.total) || 0),
+        0
+      ).toLocaleString()} IQD
+    </p>
+  </div>
+</div>
 <h2>Products Management</h2>
   <div style={{ marginBottom: "20px" }}>
     <button
