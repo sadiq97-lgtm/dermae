@@ -13,6 +13,41 @@ export default function Admin() {
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
 
+  const [editingProductId, setEditingProductId] = useState(null);
+  const [productNameEn, setProductNameEn] = useState("");
+  const [productNameAr, setProductNameAr] = useState("");
+  const [descriptionEn, setDescriptionEn] = useState("");
+  const [descriptionAr, setDescriptionAr] = useState("");
+  const [productPrice, setProductPrice] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [updateLoading, setUpdateLoading] = useState(false);
+
+  const loadProducts = async () => {
+    const { data, error } = await supabase
+      .from("products")
+      .select("*");
+
+    if (error) {
+      console.error("Products error:", error);
+      return;
+    }
+
+    setProducts(data || []);
+  };
+
+  const loadOrders = async () => {
+    const { data, error } = await supabase
+      .from("orders")
+      .select("*");
+
+    if (error) {
+      console.error("Orders error:", error);
+      return;
+    }
+
+    setOrders(data || []);
+  };
+
   useEffect(() => {
     const checkSession = async () => {
       const {
@@ -52,32 +87,6 @@ export default function Admin() {
     };
   }, []);
 
-  const loadProducts = async () => {
-    const { data, error } = await supabase
-      .from("products")
-      .select("*");
-
-    if (error) {
-      console.error("Products error:", error);
-      return;
-    }
-
-    setProducts(data || []);
-  };
-
-  const loadOrders = async () => {
-    const { data, error } = await supabase
-      .from("orders")
-      .select("*");
-
-    if (error) {
-      console.error("Orders error:", error);
-      return;
-    }
-
-    setOrders(data || []);
-  };
-
   const loginAdmin = async (event) => {
     event.preventDefault();
 
@@ -110,12 +119,97 @@ export default function Admin() {
     }
   };
 
+  const startEditingProduct = (product) => {
+    setEditingProductId(product.id);
+    setProductNameEn(product.name_en || "");
+    setProductNameAr(product.name_ar || "");
+    setDescriptionEn(product.description_en || "");
+    setDescriptionAr(product.description_ar || "");
+    setProductPrice(product.price_iqd || "");
+    setImageUrl(product.image_urls?.[0] || "");
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  const cancelEditingProduct = () => {
+    setEditingProductId(null);
+    setProductNameEn("");
+    setProductNameAr("");
+    setDescriptionEn("");
+    setDescriptionAr("");
+    setProductPrice("");
+    setImageUrl("");
+    setUpdateLoading(false);
+  };
+
+  const updateProduct = async () => {
+    if (!editingProductId) {
+      return;
+    }
+
+    if (!productNameEn.trim() && !productNameAr.trim()) {
+      alert("Please enter at least one product name.");
+      return;
+    }
+
+    if (!productPrice || Number(productPrice) < 0) {
+      alert("Please enter a valid product price.");
+      return;
+    }
+
+    setUpdateLoading(true);
+
+    const { data: updatedRows, error } = await supabase
+      .from("products")
+      .update({
+        name_en: productNameEn.trim(),
+        name_ar: productNameAr.trim(),
+        description_en: descriptionEn.trim(),
+        description_ar: descriptionAr.trim(),
+        price_iqd: Number(productPrice),
+        image_urls: imageUrl.trim() ? [imageUrl.trim()] : [],
+      })
+      .eq("id", editingProductId)
+      .select("*");
+
+    if (error) {
+      console.error("Update error:", error);
+      alert(`Update failed: ${error.message}`);
+      setUpdateLoading(false);
+      return;
+    }
+
+    if (!updatedRows || updatedRows.length === 0) {
+      alert(
+        "The product was not updated. Check the products UPDATE policy."
+      );
+      setUpdateLoading(false);
+      return;
+    }
+
+    setProducts((currentProducts) =>
+      currentProducts.map((product) =>
+        product.id === editingProductId
+          ? updatedRows[0]
+          : product
+      )
+    );
+
+    cancelEditingProduct();
+    alert("Product updated");
+  };
+
   const deleteProduct = async (id) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this product?"
     );
 
-    if (!confirmed) return;
+    if (!confirmed) {
+      return;
+    }
 
     const { data: deletedRows, error } = await supabase
       .from("products")
@@ -139,6 +233,10 @@ export default function Admin() {
     setProducts((currentProducts) =>
       currentProducts.filter((product) => product.id !== id)
     );
+
+    if (editingProductId === id) {
+      cancelEditingProduct();
+    }
 
     alert("Product deleted");
   };
@@ -231,7 +329,9 @@ export default function Admin() {
               color: "white",
               border: "none",
               borderRadius: "6px",
-              cursor: loginLoading ? "not-allowed" : "pointer",
+              cursor: loginLoading
+                ? "not-allowed"
+                : "pointer",
               opacity: loginLoading ? 0.7 : 1,
             }}
           >
@@ -256,6 +356,7 @@ export default function Admin() {
         <h1>Admin Dashboard</h1>
 
         <button
+          type="button"
           onClick={logoutAdmin}
           style={{
             background: "#374151",
@@ -290,6 +391,7 @@ export default function Admin() {
 
         <div>
           <h3>Revenue</h3>
+
           <p>
             {orders
               .reduce(
@@ -304,6 +406,159 @@ export default function Admin() {
       </div>
 
       <h2>Products Management</h2>
+
+      {editingProductId && (
+        <div
+          style={{
+            border: "1px solid #444",
+            borderRadius: "10px",
+            padding: "20px",
+            marginBottom: "25px",
+          }}
+        >
+          <h3>Edit Product</h3>
+
+          <input
+            value={productNameEn}
+            onChange={(event) =>
+              setProductNameEn(event.target.value)
+            }
+            placeholder="Product Name English"
+            style={{
+              width: "100%",
+              padding: "10px",
+              marginBottom: "10px",
+              boxSizing: "border-box",
+            }}
+          />
+
+          <input
+            value={productNameAr}
+            onChange={(event) =>
+              setProductNameAr(event.target.value)
+            }
+            placeholder="Product Name Arabic"
+            dir="rtl"
+            style={{
+              width: "100%",
+              padding: "10px",
+              marginBottom: "10px",
+              boxSizing: "border-box",
+            }}
+          />
+
+          <textarea
+            value={descriptionEn}
+            onChange={(event) =>
+              setDescriptionEn(event.target.value)
+            }
+            placeholder="Description English"
+            rows="4"
+            style={{
+              width: "100%",
+              padding: "10px",
+              marginBottom: "10px",
+              boxSizing: "border-box",
+              resize: "vertical",
+            }}
+          />
+
+          <textarea
+            value={descriptionAr}
+            onChange={(event) =>
+              setDescriptionAr(event.target.value)
+            }
+            placeholder="Description Arabic"
+            rows="4"
+            dir="rtl"
+            style={{
+              width: "100%",
+              padding: "10px",
+              marginBottom: "10px",
+              boxSizing: "border-box",
+              resize: "vertical",
+            }}
+          />
+
+          <input
+            type="number"
+            min="0"
+            value={productPrice}
+            onChange={(event) =>
+              setProductPrice(event.target.value)
+            }
+            placeholder="Price IQD"
+            style={{
+              width: "100%",
+              padding: "10px",
+              marginBottom: "10px",
+              boxSizing: "border-box",
+            }}
+          />
+
+          <input
+            value={imageUrl}
+            onChange={(event) =>
+              setImageUrl(event.target.value)
+            }
+            placeholder="Image URL"
+            style={{
+              width: "100%",
+              padding: "10px",
+              marginBottom: "15px",
+              boxSizing: "border-box",
+            }}
+          />
+
+          <div
+            style={{
+              display: "flex",
+              gap: "8px",
+              flexWrap: "wrap",
+            }}
+          >
+            <button
+              type="button"
+              onClick={updateProduct}
+              disabled={updateLoading}
+              style={{
+                background: "#16a34a",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                padding: "9px 14px",
+                cursor: updateLoading
+                  ? "not-allowed"
+                  : "pointer",
+                opacity: updateLoading ? 0.7 : 1,
+              }}
+            >
+              {updateLoading
+                ? "Saving..."
+                : "Save Changes"}
+            </button>
+
+            <button
+              type="button"
+              onClick={cancelEditingProduct}
+              disabled={updateLoading}
+              style={{
+                background: "#6b7280",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                padding: "9px 14px",
+                cursor: updateLoading
+                  ? "not-allowed"
+                  : "pointer",
+                opacity: updateLoading ? 0.7 : 1,
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
 
       {products.map((product) => (
         <div
@@ -321,19 +576,43 @@ export default function Admin() {
             {product.name_en || product.name_ar}
           </span>
 
-          <button
-            onClick={() => deleteProduct(product.id)}
+          <div
             style={{
-              background: "#dc2626",
-              color: "white",
-              border: "none",
-              borderRadius: "6px",
-              padding: "7px 12px",
-              cursor: "pointer",
+              display: "flex",
+              gap: "8px",
+              flexShrink: 0,
             }}
           >
-            Delete
-          </button>
+            <button
+              type="button"
+              onClick={() => startEditingProduct(product)}
+              style={{
+                background: "#2563eb",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                padding: "7px 12px",
+                cursor: "pointer",
+              }}
+            >
+              Edit
+            </button>
+
+            <button
+              type="button"
+              onClick={() => deleteProduct(product.id)}
+              style={{
+                background: "#dc2626",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                padding: "7px 12px",
+                cursor: "pointer",
+              }}
+            >
+              Delete
+            </button>
+          </div>
         </div>
       ))}
     </div>
