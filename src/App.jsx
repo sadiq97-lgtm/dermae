@@ -443,6 +443,7 @@ const [customerAddress, setCustomerAddress] = useState("");
               {language === "en"
   ? "Discover Dermaé"
   : "اكتشف Dermaé"}
+  <ChevronRight size={18} />
             </a>
           </div>
 
