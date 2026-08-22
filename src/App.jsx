@@ -443,17 +443,17 @@ const [customerAddress, setCustomerAddress] = useState("");
           <div className="hero-features">
             <div>
               <ShieldCheck size={19} />
-              <span>Clean formulas</span>
+              {language === "en" ? "Clean formulas" : "تركيبات نظيفة"}
             </div>
 
             <div>
               <Sparkles size={19} />
-              <span>Premium care</span>
+              {language === "en" ? "Premium care" : "عناية فاخرة"}
             </div>
 
             <div>
               <Truck size={19} />
-              <span>Iraq delivery</span>
+              {language === "en" ? "Iraq delivery" : "توصيل داخل العراق"}
             </div>
           </div>
         </div>
@@ -469,8 +469,10 @@ const [customerAddress, setCustomerAddress] = useState("");
           <div className="floating-card">
             <span>01</span>
             <div>
-              <strong>Skin first.</strong>
-              <small>Always.</small>
+              {language === "en"
+  ? "Skin first. Always."
+  : "البشرة أولاً... دائماً"}
+            
             </div>
           </div>
         </div>
@@ -671,7 +673,8 @@ const [customerAddress, setCustomerAddress] = useState("");
         </div>
 
         <div className="about-content">
-          <span className="eyebrow">OUR PHILOSOPHY</span>
+          {language === "en" ? "OUR PHILOSOPHY" : "فلسفتنا"}
+``
 
           <h2>
   {language === "en" ? (
@@ -712,38 +715,72 @@ const [customerAddress, setCustomerAddress] = useState("");
       <section className="benefits-section">
         <div className="benefit">
           <Sparkles size={27} />
-          <h3>Thoughtful formulas</h3>
-          <p>Ingredients selected with purpose and care.</p>
+          {language === "en"
+  ? "Thoughtful formulas"
+  : "تركيبات مدروسة"}
+          {language === "en"
+  ? "Ingredients selected with purpose and care."
+  : "مكونات مختارة بعناية وهدف واضح."}
         </div>
 
         <div className="benefit">
           <ShieldCheck size={27} />
-          <h3>Skin-conscious</h3>
-          <p>Designed to support your skin barrier.</p>
+          {language === "en"
+  ? "Skin-conscious"
+  : "مراعية للبشرة"}
+          {language === "en"
+  ? "Designed to support your skin barrier."
+  : "مصممة لدعم حاجز البشرة."}
         </div>
 
         <div className="benefit">
           <Truck size={27} />
-          <h3>Local delivery</h3>
-          <p>Reliable delivery across Iraq.</p>
+          {language === "en"
+  ? "Local delivery"
+  : "توصيل محلي"}
+`
+          {language === "en"
+  ? "Reliable delivery across Iraq."
+  : "توصيل موثوق إلى جميع أنحاء العراق."}
         </div>
 
         <div className="benefit">
           <Heart size={27} />
-          <h3>Made for everyone</h3>
-          <p>Simple skincare for women and men.</p>
+          {language === "en"
+  ? "Made for everyone"
+  : "مناسب للجميع"}
+
+          {language === "en"
+  ? "Simple skincare for women and men."
+  : "عناية بسيطة بالبشرة للنساء والرجال."}
         </div>
       </section>
 
       {/* NEWSLETTER */}
       <section className="newsletter">
-        <span className="eyebrow">STAY IN THE LOOP</span>
-        <h2>Good skin news, delivered.</h2>
-        <p>Join our community for skincare tips, launches and exclusive offers.</p>
+        {language === "en"
+  ? "STAY IN THE LOOP"
+  : "ابقَ على اطلاع"}
+        {language === "en"
+  ? "Good skin news, delivered."
+  : "أخبار رائعة للعناية بالبشرة."}
+        {language === "en"
+  ? "Join our community for skincare tips, launches and exclusive offers."
+  : "انضم إلى مجتمعنا للحصول على نصائح العناية بالبشرة والعروض الحصرية."
+}
 
         <div className="newsletter-form">
-          <input type="email" placeholder="Your email address" />
-          <button>Subscribe</button>
+        <input
+  type="email"
+  placeholder={
+    language === "en"
+      ? "Your email address"
+      : "عنوان بريدك الإلكتروني"
+  }
+/>
+          {language === "en"
+  ? "Subscribe"
+  : "اشترك"}
         </div>
       </section>
 
@@ -784,13 +821,13 @@ const [customerAddress, setCustomerAddress] = useState("");
             <h4>
   {language === "en" ? "Help" : "المساعدة"}
 </h4>
-            <a href="#contact">Contact Us</a>
-            <a href="#contact">Shipping</a>
-            <a href="#contact">Returns</a>
+            {language === "en" ? "Contact Us" : "اتصل بنا"}
+            {language === "en" ? "Shipping" : "الشحن"}
+            {language === "en" ? "Returns" : "الإرجاع"}
           </div>
 
           <div>
-            <h4>Follow</h4>
+            {language === "en" ? "Follow" : "تابعنا"}
             <a href="#contact">Instagram</a>
             <a href="#contact">Facebook</a>
             <a href="#contact">WhatsApp</a>
@@ -798,8 +835,10 @@ const [customerAddress, setCustomerAddress] = useState("");
         </div>
 
         <div className="footer-bottom">
-          <span>© 2026 Dermæ. All rights reserved.</span>
-          <span>Made with care in Iraq.</span>
+          {language === "en"
+  ? "© 2026 Dermaé. All rights reserved. Made with care in Iraq."
+  : "© 2026 Dermaé. جميع الحقوق محفوظة. صُنع بعناية في العراق."}
+         
         </div>
       </footer>
 
