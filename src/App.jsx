@@ -575,6 +575,16 @@ const [customerAddress, setCustomerAddress] = useState("");
         </div>
 
         {/* PRODUCTS */}
+ 
+<p
+  style={{
+    textAlign: "center",
+    marginBottom: "20px",
+    opacity: 0.8,
+  }}
+>
+  Showing {filteredProducts.length} products
+</p>
         <div className="products-grid">
           {filteredProducts.map((product) => {
             const isLiked = wishlist.includes(product.id);

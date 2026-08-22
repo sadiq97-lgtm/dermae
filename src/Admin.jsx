@@ -11,6 +11,23 @@ export default function Admin() {
   const [loginError, setLoginError] = useState("");
 
   const [orders, setOrders] = useState([]);
+  const [orderFilter, setOrderFilter] = useState("All");
+  const [orderSearch, setOrderSearch] = useState("");
+  const pendingOrders = orders.filter(
+  (order) => (order.status || "Pending") === "Pending"
+).length;
+
+const processingOrders = orders.filter(
+  (order) => order.status === "Processing"
+).length;
+
+const deliveredOrders = orders.filter(
+  (order) => order.status === "Delivered"
+).length;
+
+const cancelledOrders = orders.filter(
+  (order) => order.status === "Cancelled"
+).length;
   const [products, setProducts] = useState([]);
 
   const [editingProductId, setEditingProductId] = useState(null);
@@ -785,11 +802,82 @@ const updateOrderStatus = async (
       <h2 style={{ marginTop: "40px" }}>
         Orders Management
       </h2>
+      <div
+  style={{
+    display: "flex",
+    gap: "12px",
+    flexWrap: "wrap",
+    marginBottom: "15px",
+  }}
+>
+  <div style={{ color: "#eab308", fontWeight: "bold" }}>
+    Pending: {pendingOrders}
+  </div>
 
+  <div style={{ color: "#3b82f6", fontWeight: "bold" }}>
+    Processing: {processingOrders}
+  </div>
+
+  <div style={{ color: "#22c55e", fontWeight: "bold" }}>
+    Delivered: {deliveredOrders}
+  </div>
+
+  <div style={{ color: "#ef4444", fontWeight: "bold" }}>
+    Cancelled: {cancelledOrders}
+  </div>
+</div>
+<input
+  type="text"
+  placeholder="Search customer or phone..."
+  value={orderSearch}
+  onChange={(event) =>
+    setOrderSearch(event.target.value)
+  }
+  style={{
+    width: "100%",
+    maxWidth: "350px",
+    padding: "8px",
+    marginBottom: "12px",
+    borderRadius: "6px",
+  }}
+/>
+<div style={{ marginBottom: "20px" }}>
+  <select
+    value={orderFilter}
+    onChange={(event) =>
+      setOrderFilter(event.target.value)
+    }
+    style={{
+      padding: "8px",
+      borderRadius: "6px",
+    }}
+  >
+    <option value="All">All Orders</option>
+    <option value="Pending">Pending</option>
+    <option value="Processing">Processing</option>
+    <option value="Delivered">Delivered</option>
+    <option value="Cancelled">Cancelled</option>
+  </select>
+</div>
       {orders.length === 0 ? (
         <p>No orders found.</p>
       ) : (
-        orders.map((order) => (
+        orders
+  .filter(
+    (order) =>
+      orderFilter === "All" ||
+      (order.status || "Pending") === orderFilter
+  )
+  .filter(
+    (order) =>
+      (order.customer_name || "")
+        .toLowerCase()
+        .includes(orderSearch.toLowerCase()) ||
+      (order.phone || "")
+        .toLowerCase()
+        .includes(orderSearch.toLowerCase())
+  )
+  .map((order) => (
           <div
             key={order.id}
             style={{
@@ -819,7 +907,20 @@ const updateOrderStatus = async (
   Total: {getOrderTotal(order).toLocaleString()} IQD
 </p>
 
-<p style={{ margin: "6px 0 0" }}>
+<p
+  style={{
+    margin: "6px 0 0",
+    fontWeight: "bold",
+    color:
+      order.status === "Delivered"
+        ? "#22c55e"
+        : order.status === "Cancelled"
+        ? "#ef4444"
+        : order.status === "Processing"
+        ? "#3b82f6"
+        : "#eab308",
+  }}
+>
   Status: {order.status || "Pending"}
 </p>
 
