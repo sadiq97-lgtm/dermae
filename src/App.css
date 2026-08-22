@@ -597,3 +597,24 @@ input[type="search"] {
   object-fit: cover;
   border-radius: 20px;
 }
+@media (max-width: 768px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .gender-buttons {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+}

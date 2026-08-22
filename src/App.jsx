@@ -613,7 +613,9 @@ const [customerAddress, setCustomerAddress] = useState("");
     opacity: 0.8,
   }}
 >
-  Showing {filteredProducts.length} products
+  {language === "en"
+  ? `Showing ${filteredProducts.length} products`
+  : `عرض ${filteredProducts.length} منتج`}
 </p>
         <div className="products-grid">
           {filteredProducts.length === 0 && (
@@ -668,7 +670,11 @@ const [customerAddress, setCustomerAddress] = useState("");
                     {product.category}
                   </span>
 
-                  <h3>
+                  <h3
+  style={{
+    minHeight: "52px",
+  }}
+>
   {language === "en"
     ? (product.name_en || product.name)
     : (product.name_ar || product.name)}
@@ -686,6 +692,24 @@ const [customerAddress, setCustomerAddress] = useState("");
 
                       {product.oldPrice && (
                         <del>{formatIQD(product.oldPrice)}</del>
+                        {product.oldPrice && (
+  <span
+    style={{
+      color: "#16a34a",
+      fontWeight: "bold",
+      fontSize: "12px",
+      marginLeft: "8px",
+    }}
+  >
+    Save{" "}
+    {Math.round(
+      ((product.oldPrice - product.price) /
+        product.oldPrice) *
+        100
+    )}
+    %
+  </span>
+)}
                       )}
                     </div>
 
@@ -693,7 +717,14 @@ const [customerAddress, setCustomerAddress] = useState("");
                       className="add-button"
                       onClick={() => addToCart(product)}
                     >
-                      <Plus size={18} />
+                      <>
+  <Plus size={18} />
+  <span style={{ marginLeft: "6px" }}>
+    {language === "en"
+      ? "Add"
+      : "إضافة"}
+  </span>
+</>
                     </button>
                   </div>
                 </div>
