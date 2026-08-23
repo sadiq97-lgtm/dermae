@@ -163,6 +163,7 @@ export default function Admin() {
   };
 
   const uploadProductImage = async () => {
+    alert(productImage ? productImage.name : "NO FILE");
     if (!productImage) return imageUrl.trim();
 
     const fileExtension =
