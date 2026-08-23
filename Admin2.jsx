@@ -673,7 +673,22 @@ const updateOrderStatus = async (
     setProductImage(event.target.files?.[0] || null)
   }
 />
-
+{productImage && (
+  <img
+    src={URL.createObjectURL(productImage)}
+    alt="Preview"
+    style={{
+      width: "120px",
+      height: "120px",
+      objectFit: "cover",
+      borderRadius: "8px",
+      marginTop: "10px",
+      marginBottom: "15px",
+      border: "1px solid #444",
+    }}
+  />
+)}
+`
           <div
             style={{
               display: "flex",
