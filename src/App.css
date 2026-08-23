@@ -188,8 +188,8 @@ body {
    ========================= */
 
 .hero {
-  min-height: 620px;
-  padding: 90px 48px;
+  min-height: 100vh;
+  padding: 120px 48px;
   display: flex;
   align-items: center;
   justify-content: center;
