@@ -8,6 +8,7 @@ import { motion, MotionConfig, useMotionValue, useSpring, useTransform } from "f
 import "./App.css";
 import "./mobile.css";
 import "./premium.css";
+import "./featured.css";
 import { supabase } from "./lib/supabase";
 
 const fallbackProducts = [
@@ -53,6 +54,7 @@ function App() {
   useEffect(()=>{document.body.style.overflow=cartOpen||checkoutOpen||selectedProduct||mobileMenu?"hidden":"";return()=>{document.body.style.overflow=""}},[cartOpen,checkoutOpen,selectedProduct,mobileMenu]);
 
   const allProducts=useMemo(()=>[...dbProducts,...fallbackProducts],[dbProducts]);
+  const featuredProducts=useMemo(()=>allProducts.filter(product=>product.image).slice(0,3),[allProducts]);
   const filteredProducts=useMemo(()=>{const q=search.trim().toLowerCase();return allProducts.filter(p=>(activeCategory==="All"||p.category===activeCategory)&&(gender==="All"||p.gender===gender||p.gender==="Unisex")&&(!q||[p.name,p.name_en,p.name_ar,p.category,p.brand].join(" ").toLowerCase().includes(q))).sort((a,b)=>sortBy==="low-high"?a.price-b.price:sortBy==="high-low"?b.price-a.price:0)},[allProducts,activeCategory,gender,search,sortBy]);
   const addToCart=p=>{setCart(c=>{const e=c.find(i=>i.id===p.id);return e?c.map(i=>i.id===p.id?{...i,quantity:i.quantity+1}:i):[...c,{...p,quantity:1}]});setCartOpen(true)};
   const updateQuantity=(id,n)=>setCart(a=>a.map(i=>i.id===id?{...i,quantity:i.quantity+n}:i).filter(i=>i.quantity>0));
@@ -80,6 +82,51 @@ function App() {
             </div>
           ))}
         </div>
+      </motion.section>
+
+      <motion.section className="featured-section" initial="hidden" whileInView="show" viewport={{once:true,amount:.12}} variants={stagger}>
+        <motion.div className="featured-heading" variants={reveal}>
+          <div>
+            <span className="eyebrow">{tr("FEATURED EDIT","مختارات Dermaé")}</span>
+            <h2>{tr("The ritual, in focus.","روتينك، بصورة أوضح.")}</h2>
+          </div>
+          <p>{tr("Three essentials selected to turn everyday care into a considered ritual.","ثلاثة منتجات مختارة لتحوّل العناية اليومية إلى روتين متكامل.")}</p>
+        </motion.div>
+
+        <div className="featured-stack">
+          {featuredProducts.map((product,index)=>{
+            const displayName=isArabic?product.name_ar||product.name:product.name_en||product.name;
+            return (
+              <motion.article
+                className={`featured-card featured-card-${index+1}`}
+                key={`featured-${product.id}`}
+                variants={reveal}
+                whileHover={{y:-8}}
+                transition={{type:"spring",stiffness:180,damping:22}}
+              >
+                <button className="featured-media" onClick={()=>setSelectedProduct(product)} aria-label={tr(`View ${displayName}`,`عرض ${displayName}`)}>
+                  <motion.img src={product.image} alt={displayName} loading="lazy" whileHover={{scale:1.055}} transition={{duration:.65,ease:[.22,1,.36,1]}}/>
+                  <span className="featured-number">0{index+1}</span>
+                  <span className="featured-view">{tr("View product","عرض المنتج")} <ChevronRight size={15}/></span>
+                </button>
+                <div className="featured-info">
+                  <div>
+                    <span>{isArabic?categoryAr[product.category]||product.category:product.category}</span>
+                    <h3>{displayName}</h3>
+                  </div>
+                  <div className="featured-action">
+                    <strong>{formatIQD(product.price)}</strong>
+                    <motion.button whileTap={{scale:.9}} onClick={()=>addToCart(product)} aria-label={tr(`Add ${displayName} to cart`,`أضف ${displayName} إلى السلة`)}><Plus size={18}/></motion.button>
+                  </div>
+                </div>
+              </motion.article>
+            );
+          })}
+        </div>
+
+        <motion.a variants={reveal} whileHover={{x:isArabic?-6:6}} className="featured-shop-link" href="#shop">
+          {tr("Shop the full collection","تسوّق المجموعة الكاملة")} <ChevronRight size={18}/>
+        </motion.a>
       </motion.section>
 
       <motion.section className="why-section" initial="hidden" whileInView="show" viewport={{once:true,amount:.18}} variants={stagger}>
@@ -123,7 +170,7 @@ function App() {
         {filteredProducts.length===0?<div className="empty-products"><h3>{tr("No products found","لا توجد منتجات مطابقة")}</h3><p>{tr("Try another search or category.","جرّب بحثاً أو تصنيفاً آخر.")}</p></div>:<motion.div className="products-grid" variants={stagger} initial="hidden" whileInView="show" viewport={{once:true,amount:.08}}>{filteredProducts.map(product=>{const liked=wishlist.includes(product.id),displayName=isArabic?product.name_ar||product.name:product.name_en||product.name;return <motion.article variants={reveal} whileHover={{y:-10}} transition={{type:"spring",stiffness:220,damping:22}} className="product-card" key={product.id} onClick={()=>setSelectedProduct(product)}><div className="product-image">{product.image?<motion.img whileHover={{scale:1.06}} transition={{duration:.45}} src={product.image} alt={displayName} loading="lazy"/>:<div className="product-image-placeholder">Dermaé</div>}<span className="product-badge">{product.badge}</span><motion.button whileTap={{scale:.78}} className={`wishlist-button ${liked?"liked":""}`} onClick={e=>{e.stopPropagation();toggleWishlist(product.id)}} aria-label="Wishlist"><Heart size={18} fill={liked?"currentColor":"none"}/></motion.button><button className="quick-view" onClick={e=>{e.stopPropagation();setSelectedProduct(product)}}>{tr("Quick View","عرض سريع")}</button></div><div className="product-info"><span className="product-category">{isArabic?categoryAr[product.category]||product.category:product.category}</span><h3>{displayName}</h3><div className="rating"><Star size={14} fill="currentColor"/><span>{product.rating}</span><small>({product.reviews})</small></div><div className="product-bottom"><div className="price"><strong>{formatIQD(product.price)}</strong>{product.oldPrice&&<del>{formatIQD(product.oldPrice)}</del>}</div><motion.button whileHover={{scale:1.06}} whileTap={{scale:.92}} className="add-button" onClick={e=>{e.stopPropagation();addToCart(product)}}><Plus size={18}/><span>{tr("Add","إضافة")}</span></motion.button></div></div></motion.article>})}</motion.div>}
       </section>
 
-      <motion.section className="about-section" id="about" initial="hidden" whileInView="show" viewport={{once:true,amount:.2}} variants={stagger}><motion.div variants={{hidden:{opacity:0,x:-70},show:{opacity:1,x:0,transition:{duration:.85}}}} className="about-image"><motion.img whileHover={{scale:1.04}} transition={{duration:.55}} src="https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=1000&q=85" alt="Skincare ritual" loading="lazy"/></motion.div><motion.div variants={{hidden:{opacity:0,x:70},show:{opacity:1,x:0,transition:{duration:.85}}}} className="about-content"><span className="eyebrow">{tr("OUR PHILOSOPHY","فلسفتنا")}</span><h2>{tr("Beautiful skin starts with care.","بشرة جميلة تبدأ مع العناية.")}</h2><p>{tr("Dermaé was created around one simple idea: skincare should feel considered, effective and beautiful.","تم إنشاء Dermaé حول فكرة بسيطة: يجب أن تكون العناية بالبشرة فعالة وجميلة ومصممة بعناية.")}</p><a href="#shop" className="text-link">{tr("Explore our products","استكشف منتجاتنا")}<ChevronRight size={17}/></a></motion.div></motion.section>
+      <motion.section className="about-section" id="about" initial="hidden" whileInView="show" viewport={{once:true,amount:.2}} variants={stagger}><motion.div variants={{hidden:{opacity:0,x:-70},show:{opacity:1,x:0,transition:{duration:.85}}}} className="about-image"><motion.img whileHover={{scale:1.04}} transition={{duration:.55}} src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=1600&q=90" alt="Skincare ritual" loading="lazy"/></motion.div><motion.div variants={{hidden:{opacity:0,x:70},show:{opacity:1,x:0,transition:{duration:.85}}}} className="about-content"><span className="eyebrow">{tr("OUR PHILOSOPHY","فلسفتنا")}</span><h2>{tr("Beautiful skin starts with care.","بشرة جميلة تبدأ مع العناية.")}</h2><p>{tr("Dermaé was created around one simple idea: skincare should feel considered, effective and beautiful.","تم إنشاء Dermaé حول فكرة بسيطة: يجب أن تكون العناية بالبشرة فعالة وجميلة ومصممة بعناية.")}</p><a href="#shop" className="text-link">{tr("Explore our products","استكشف منتجاتنا")}<ChevronRight size={17}/></a></motion.div></motion.section>
     </main>
 
     <footer className="footer" id="contact"><div className="footer-brand"><div className="logo"><span className="logo-main">Dermaé</span><span className="logo-sub">SKINCARE</span></div><p>{tr("Care That Shows.","عناية تظهر نتائجها.")}</p></div><div className="footer-bottom">{tr("© 2026 Dermaé. All rights reserved. Made with care in Iraq.","© 2026 Dermaé. جميع الحقوق محفوظة. صنع بعناية في العراق.")}</div></footer>

@@ -20,8 +20,8 @@
 .why-card h3{font-size:24px;letter-spacing:-.03em;margin:44px 0 12px;color:var(--text-h)}
 .why-card p{font-size:14px;line-height:1.7;margin:0;color:var(--text)}
 
-.promise-section{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(380px,.92fr);min-height:760px;background:#0c0d11;border-block:1px solid rgba(255,255,255,.07)}
-.promise-visual{position:relative;overflow:hidden;min-height:680px}
+.promise-section{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(380px,.92fr);min-height:auto;background:#0c0d11;border-block:1px solid rgba(255,255,255,.07)}
+.promise-visual{position:relative;overflow:hidden;min-height:380px}
 .promise-visual::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 60%,rgba(12,13,17,.65))}
 [dir="rtl"] .promise-visual::after{background:linear-gradient(-90deg,transparent 60%,rgba(12,13,17,.65))}
 .promise-visual img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.78) contrast(1.04)}
