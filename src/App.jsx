@@ -9,6 +9,7 @@ import "./App.css";
 import "./mobile.css";
 import "./premium.css";
 import "./featured.css";
+import "./community.css";
 import { supabase } from "./lib/supabase";
 
 const fallbackProducts = [
@@ -47,6 +48,7 @@ function App() {
   const [selectedProduct,setSelectedProduct]=useState(null), [mobileMenu,setMobileMenu]=useState(false), [cartOpen,setCartOpen]=useState(false), [checkoutOpen,setCheckoutOpen]=useState(false);
   const [cart,setCart]=useState([]), [wishlist,setWishlist]=useState([]), [placingOrder,setPlacingOrder]=useState(false);
   const [customerName,setCustomerName]=useState(""), [customerPhone,setCustomerPhone]=useState(""), [customerGovernorate,setCustomerGovernorate]=useState(""), [customerAddress,setCustomerAddress]=useState("");
+  const [newsletterEmail,setNewsletterEmail]=useState("");
   const isArabic=language==="ar"; const tr=(en,ar)=>isArabic?ar:en;
 
   useEffect(()=>{ (async()=>{ const {data,error}=await supabase.from("products").select("*").order("id",{ascending:false}); if(error){console.error("Products error:",error);return;} setDbProducts((data||[]).map(item=>({id:`db-${item.id}`,databaseId:item.id,name:item.name_en||item.name_ar||"Unnamed Product",name_en:item.name_en||"",name_ar:item.name_ar||"",description:item.description_en||item.description_ar||"",description_en:item.description_en||"",description_ar:item.description_ar||"",brand:"Dermaé",category:item.category||"Skincare",gender:item.gender||"Unisex",price:Number(item.price_iqd||0),oldPrice:null,rating:5,reviews:0,badge:"NEW",image:item.image_urls?.[0]||"",ingredients:[]}))); })(); },[]);
@@ -63,8 +65,10 @@ function App() {
   const cartCount=cart.reduce((s,i)=>s+i.quantity,0), cartSubtotal=cart.reduce((s,i)=>s+i.price*i.quantity,0), delivery=cartSubtotal>=100000?0:5000, orderTotal=cartSubtotal+delivery;
   const placeOrder=async()=>{if(!customerName.trim()||!customerPhone.trim()||!customerGovernorate.trim()||!customerAddress.trim()){alert(tr("Please complete all checkout fields.","يرجى إكمال جميع حقول الطلب."));return}if(!cart.length||placingOrder)return;setPlacingOrder(true);const {error}=await supabase.from("orders").insert([{customer_name:customerName.trim(),customer_phone:customerPhone.trim(),customer_governorate:customerGovernorate.trim(),customer_address:customerAddress.trim(),items:cart,total:orderTotal,status:"Pending"}]);if(error){console.error("Order error:",error);alert(error.message||tr("Order failed","فشل إرسال الطلب"));setPlacingOrder(false);return}alert(tr("Order placed successfully","تم إرسال الطلب بنجاح"));setCart([]);setCustomerName("");setCustomerPhone("");setCustomerGovernorate("");setCustomerAddress("");setCheckoutOpen(false);setCartOpen(false);setPlacingOrder(false)};
   const scrollToShop=()=>document.getElementById("shop")?.scrollIntoView({behavior:"smooth"});
+  const subscribeNewsletter=(event)=>{event.preventDefault();const email=newsletterEmail.trim();if(!email||!email.includes("@")){alert(tr("Please enter a valid email address.","يرجى إدخال بريد إلكتروني صحيح."));return;}alert(tr("Thank you for joining Dermaé.","شكراً لانضمامك إلى مجتمع Dermaé."));setNewsletterEmail("");};
 
-  return <MotionConfig reducedMotion="user"><div className="app" dir={isArabic?"rtl":"ltr"}>
+  return <MotionConfig reducedMotion="user"><div className="app" dir={isArabic?"rtl":"ltr"} onPointerMove={(event)=>{if(event.pointerType!=="mouse")return;document.documentElement.style.setProperty("--cursor-x",`${event.clientX}px`);document.documentElement.style.setProperty("--cursor-y",`${event.clientY}px`);}}>
+    <motion.div className="cursor-glow" aria-hidden="true" initial={{opacity:0}} animate={{opacity:1}}/>
     <motion.div className="top-bar" initial={{y:-40,opacity:0}} animate={{y:0,opacity:1}} transition={{duration:.6}}><span>{tr("Free delivery on orders over 100,000 IQD","توصيل مجاني للطلبات فوق 100,000 دينار")}</span><span className="top-bar-right"><span className="care-tagline">Care That Shows™</span><button className="language-button" onClick={()=>setLanguage(isArabic?"en":"ar")}>{isArabic?"English":"العربية"}</button><button className="admin-link" onClick={()=>{window.location.href="/admin"}}>Admin</button></span></motion.div>
     <motion.header className="header" initial={{y:-30,opacity:0}} animate={{y:0,opacity:1}} transition={{duration:.65,delay:.15}}><button className="mobile-menu-button" onClick={()=>setMobileMenu(true)} aria-label="Open menu"><Menu size={23}/></button><a className="logo" href="#home"><span className="logo-main">Dermaé</span><span className="logo-sub">CARE THAT SHOWS</span></a><nav className={`nav ${mobileMenu?"nav-open":""}`}><button className="mobile-nav-close" onClick={()=>setMobileMenu(false)}><X/></button>{[["#home","Home","الرئيسية"],["#shop","Shop","المتجر"],["#about","Our Story","قصتنا"],["#contact","Contact","تواصل معنا"]].map(([h,e,a])=><a key={h} href={h} onClick={()=>setMobileMenu(false)}>{tr(e,a)}</a>)}</nav>{mobileMenu&&<button className="mobile-menu-overlay" onClick={()=>setMobileMenu(false)} aria-label="Close menu"/>}<div className="header-actions"><button className="icon-button desktop-only" onClick={()=>document.querySelector(".search-box input")?.focus()}><Search size={20}/></button><button className="icon-button desktop-only"><User size={20}/></button><motion.button whileTap={{scale:.88}} className="icon-button cart-button" onClick={()=>setCartOpen(true)}><ShoppingBag size={21}/>{cartCount>0&&<span className="cart-count">{cartCount}</span>}</motion.button></div></motion.header>
 
@@ -85,48 +89,9 @@ function App() {
       </motion.section>
 
       <motion.section className="featured-section" initial="hidden" whileInView="show" viewport={{once:true,amount:.12}} variants={stagger}>
-        <motion.div className="featured-heading" variants={reveal}>
-          <div>
-            <span className="eyebrow">{tr("FEATURED EDIT","مختارات Dermaé")}</span>
-            <h2>{tr("The ritual, in focus.","روتينك، بصورة أوضح.")}</h2>
-          </div>
-          <p>{tr("Three essentials selected to turn everyday care into a considered ritual.","ثلاثة منتجات مختارة لتحوّل العناية اليومية إلى روتين متكامل.")}</p>
-        </motion.div>
-
-        <div className="featured-stack">
-          {featuredProducts.map((product,index)=>{
-            const displayName=isArabic?product.name_ar||product.name:product.name_en||product.name;
-            return (
-              <motion.article
-                className={`featured-card featured-card-${index+1}`}
-                key={`featured-${product.id}`}
-                variants={reveal}
-                whileHover={{y:-8}}
-                transition={{type:"spring",stiffness:180,damping:22}}
-              >
-                <button className="featured-media" onClick={()=>setSelectedProduct(product)} aria-label={tr(`View ${displayName}`,`عرض ${displayName}`)}>
-                  <motion.img src={product.image} alt={displayName} loading="lazy" whileHover={{scale:1.055}} transition={{duration:.65,ease:[.22,1,.36,1]}}/>
-                  <span className="featured-number">0{index+1}</span>
-                  <span className="featured-view">{tr("View product","عرض المنتج")} <ChevronRight size={15}/></span>
-                </button>
-                <div className="featured-info">
-                  <div>
-                    <span>{isArabic?categoryAr[product.category]||product.category:product.category}</span>
-                    <h3>{displayName}</h3>
-                  </div>
-                  <div className="featured-action">
-                    <strong>{formatIQD(product.price)}</strong>
-                    <motion.button whileTap={{scale:.9}} onClick={()=>addToCart(product)} aria-label={tr(`Add ${displayName} to cart`,`أضف ${displayName} إلى السلة`)}><Plus size={18}/></motion.button>
-                  </div>
-                </div>
-              </motion.article>
-            );
-          })}
-        </div>
-
-        <motion.a variants={reveal} whileHover={{x:isArabic?-6:6}} className="featured-shop-link" href="#shop">
-          {tr("Shop the full collection","تسوّق المجموعة الكاملة")} <ChevronRight size={18}/>
-        </motion.a>
+        <motion.div className="featured-heading" variants={reveal}><div><span className="eyebrow">{tr("FEATURED EDIT","مختارات Dermaé")}</span><h2>{tr("The ritual, in focus.","روتينك، بصورة أوضح.")}</h2></div><p>{tr("Three essentials selected to turn everyday care into a considered ritual.","ثلاثة منتجات مختارة لتحوّل العناية اليومية إلى روتين متكامل.")}</p></motion.div>
+        <div className="featured-stack">{featuredProducts.map((product,index)=>{const displayName=isArabic?product.name_ar||product.name:product.name_en||product.name;return <motion.article className={`featured-card featured-card-${index+1}`} key={`featured-${product.id}`} variants={reveal} whileHover={{y:-8}} transition={{type:"spring",stiffness:180,damping:22}}><button className="featured-media" onClick={()=>setSelectedProduct(product)} aria-label={tr(`View ${displayName}`,`عرض ${displayName}`)}><motion.img src={product.image} alt={displayName} loading="lazy" whileHover={{scale:1.055}} transition={{duration:.65,ease:[.22,1,.36,1]}}/><span className="featured-number">0{index+1}</span><span className="featured-view">{tr("View product","عرض المنتج")} <ChevronRight size={15}/></span></button><div className="featured-info"><div><span>{isArabic?categoryAr[product.category]||product.category:product.category}</span><h3>{displayName}</h3></div><div className="featured-action"><strong>{formatIQD(product.price)}</strong><motion.button whileTap={{scale:.9}} onClick={()=>addToCart(product)} aria-label={tr(`Add ${displayName} to cart`,`أضف ${displayName} إلى السلة`)}><Plus size={18}/></motion.button></div></div></motion.article>})}</div>
+        <motion.a variants={reveal} whileHover={{x:isArabic?-6:6}} className="featured-shop-link" href="#shop">{tr("Shop the full collection","تسوّق المجموعة الكاملة")} <ChevronRight size={18}/></motion.a>
       </motion.section>
 
       <motion.section className="why-section" initial="hidden" whileInView="show" viewport={{once:true,amount:.18}} variants={stagger}>
@@ -173,7 +138,12 @@ function App() {
       <motion.section className="about-section" id="about" initial="hidden" whileInView="show" viewport={{once:true,amount:.2}} variants={stagger}><motion.div variants={{hidden:{opacity:0,x:-70},show:{opacity:1,x:0,transition:{duration:.85}}}} className="about-image"><motion.img whileHover={{scale:1.04}} transition={{duration:.55}} src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=1600&q=90" alt="Skincare ritual" loading="lazy"/></motion.div><motion.div variants={{hidden:{opacity:0,x:70},show:{opacity:1,x:0,transition:{duration:.85}}}} className="about-content"><span className="eyebrow">{tr("OUR PHILOSOPHY","فلسفتنا")}</span><h2>{tr("Beautiful skin starts with care.","بشرة جميلة تبدأ مع العناية.")}</h2><p>{tr("Dermaé was created around one simple idea: skincare should feel considered, effective and beautiful.","تم إنشاء Dermaé حول فكرة بسيطة: يجب أن تكون العناية بالبشرة فعالة وجميلة ومصممة بعناية.")}</p><a href="#shop" className="text-link">{tr("Explore our products","استكشف منتجاتنا")}<ChevronRight size={17}/></a></motion.div></motion.section>
     </main>
 
-    <footer className="footer" id="contact"><div className="footer-brand"><div className="logo"><span className="logo-main">Dermaé</span><span className="logo-sub">SKINCARE</span></div><p>{tr("Care That Shows.","عناية تظهر نتائجها.")}</p></div><div className="footer-bottom">{tr("© 2026 Dermaé. All rights reserved. Made with care in Iraq.","© 2026 Dermaé. جميع الحقوق محفوظة. صنع بعناية في العراق.")}</div></footer>
+    <motion.section className="testimonials-section" initial="hidden" whileInView="show" viewport={{once:true,amount:.16}} variants={stagger}>
+      <motion.div className="testimonials-heading" variants={reveal}><span className="eyebrow">{tr("COMMUNITY NOTES","آراء المجتمع")}</span><h2>{tr("Care, reflected back.","العناية كما يصفها عملاؤنا.")}</h2><p>{tr("Sample review cards for the design preview. Replace these with verified customer feedback before publishing.","نماذج مراجعات لمعاينة التصميم. استبدلها بآراء موثقة من العملاء قبل النشر.")}</p></motion.div>
+      <div className="testimonials-grid">{[{quoteEn:"The routine feels clear, elegant and easy to follow.",quoteAr:"الروتين واضح وأنيق وسهل المتابعة.",name:"Sample 01"},{quoteEn:"A calm shopping experience with thoughtful product details.",quoteAr:"تجربة تسوق هادئة مع تفاصيل مدروسة للمنتجات.",name:"Sample 02"},{quoteEn:"The collection makes daily skincare feel more intentional.",quoteAr:"المجموعة تجعل العناية اليومية أكثر ترتيباً ووضوحاً.",name:"Sample 03"}].map((item,index)=><motion.article className="testimonial-card" variants={reveal} whileHover={{y:-8}} key={item.name}><div className="testimonial-top"><span className="testimonial-stars" aria-label="5 stars">★★★★★</span><span className="sample-label">{tr("SAMPLE","نموذج")}</span></div><blockquote>“{tr(item.quoteEn,item.quoteAr)}”</blockquote><div className="testimonial-person"><span>0{index+1}</span><strong>{item.name}</strong></div></motion.article>)}</div>
+    </motion.section>
+    <motion.section className="newsletter-section" initial={{opacity:0,y:50}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.25}} transition={{duration:.85,ease:[.22,1,.36,1]}}><div className="newsletter-orb" aria-hidden="true"/><div className="newsletter-copy"><span className="eyebrow">{tr("THE DERMAÉ LETTER","رسائل Dermaé")}</span><h2>{tr("Stay close to what’s next.","كن أول من يعرف الجديد.")}</h2><p>{tr("New arrivals, considered rituals and occasional notes from Dermaé.","إصدارات جديدة وروتينات مختارة ورسائل مميزة من Dermaé.")}</p></div><form className="newsletter-form" onSubmit={subscribeNewsletter}><label htmlFor="newsletter-email">{tr("Email address","البريد الإلكتروني")}</label><div><input id="newsletter-email" type="email" autoComplete="email" placeholder="name@example.com" value={newsletterEmail} onChange={event=>setNewsletterEmail(event.target.value)}/><motion.button whileHover={{scale:1.02}} whileTap={{scale:.97}} type="submit">{tr("Join the community","انضم إلى المجتمع")}<ChevronRight size={18}/></motion.button></div><small>{tr("By subscribing, you agree to receive Dermaé updates.","بالاشتراك، أنت توافق على استلام تحديثات Dermaé.")}</small></form></motion.section>
+    <footer className="premium-footer" id="contact"><div className="footer-main"><div className="footer-identity"><a className="footer-logo" href="#home">Dermaé</a><p>{tr("Care that shows, in every detail.","عناية تظهر في كل التفاصيل.")}</p><span>{tr("Iraq · Online skincare destination","العراق · وجهة إلكترونية للعناية بالبشرة")}</span></div><div className="footer-column"><h3>{tr("Explore","استكشف")}</h3><a href="#home">{tr("Home","الرئيسية")}</a><a href="#shop">{tr("Shop","المتجر")}</a><a href="#about">{tr("Our story","قصتنا")}</a></div><div className="footer-column"><h3>{tr("Connect","تواصل")}</h3><a href="#contact">Instagram</a><a href="#contact">Facebook</a><a href="#contact">TikTok</a></div><div className="footer-column footer-service"><h3>{tr("Care","الخدمة")}</h3><a href="#shop">{tr("Delivery","التوصيل")}</a><a href="#shop">{tr("Product guide","دليل المنتجات")}</a><a href="https://wa.me/9640000000000" target="_blank" rel="noreferrer">WhatsApp</a></div></div><div className="footer-wordmark" aria-hidden="true">Dermaé</div><div className="footer-bottom"><span>{tr("© 2026 Dermaé. All rights reserved.","© 2026 Dermaé. جميع الحقوق محفوظة.")}</span><a href="#home">{tr("Back to top","العودة للأعلى")} ↑</a></div></footer>
     <motion.a whileHover={{scale:1.1,y:-3}} whileTap={{scale:.92}} className="whatsapp-button" href="https://wa.me/9640000000000" target="_blank" rel="noreferrer" aria-label="WhatsApp"><MessageCircle size={24}/></motion.a>
 
     {selectedProduct&&<motion.div className="modal-overlay" onClick={()=>setSelectedProduct(null)} initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}><motion.div className="product-modal mobile-product-modal" onClick={e=>e.stopPropagation()} initial={{opacity:0,y:35,scale:.96}} animate={{opacity:1,y:0,scale:1}}><button className="modal-close" onClick={()=>setSelectedProduct(null)}><X size={22}/></button><div className="modal-image">{selectedProduct.image?<img src={selectedProduct.image} alt={selectedProduct.name}/>:<div className="product-image-placeholder">Dermaé</div>}</div><div className="modal-content"><span className="product-category">{selectedProduct.category}</span><h2>{isArabic?selectedProduct.name_ar||selectedProduct.name:selectedProduct.name_en||selectedProduct.name}</h2><div className="rating"><Star size={15} fill="currentColor"/><span>{selectedProduct.rating}</span><small>({selectedProduct.reviews})</small></div><div className="modal-price">{formatIQD(selectedProduct.price)}</div><p>{isArabic?selectedProduct.description_ar||selectedProduct.description:selectedProduct.description_en||selectedProduct.description}</p>{selectedProduct.ingredients?.length>0&&<div className="ingredients"><h4>{tr("Key ingredients","المكونات الأساسية")}</h4><div>{selectedProduct.ingredients.map(i=><span key={i}>{i}</span>)}</div></div>}<button className="modal-add" onClick={()=>{addToCart(selectedProduct);setSelectedProduct(null)}}>{tr("Add to Shopping Bag","أضف إلى سلة التسوق")}</button></div></motion.div></motion.div>}
