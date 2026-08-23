@@ -1,5 +1,8 @@
 import { supabase } from "./lib/supabase";
 import { useEffect, useMemo, useState } from "react";
+import { motion } from "framer-motion";
+import { BarChart3, Box, LogOut, PackagePlus, RefreshCw, Search, ShoppingBag, Sparkles, Trash2, Edit3, ImagePlus, X, Clock3, CircleCheck, Ban, Truck } from "lucide-react";
+import "./Admin.css";
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
@@ -428,149 +431,97 @@ export default function Admin() {
       ].some((value) => String(value || "").toLowerCase().includes(search));
     });
 
+  const totalRevenue = orders.reduce((sum, order) => sum + getOrderTotal(order), 0);
+  const refreshDashboard = async () => {
+    await Promise.all([loadProducts(), loadOrders()]);
+  };
+  const statusClass = (status) => `admin-status admin-status-${(status || "Pending").toLowerCase()}`;
+
   if (authLoading) {
-    return <div style={{ padding: "40px" }}><h2>Loading...</h2></div>;
+    return <div className="admin-loading"><div className="admin-loader" /><span>Loading Dermaé Admin...</span></div>;
   }
 
   if (!session) {
     return (
-      <div style={{ minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center", padding: "20px" }}>
-        <form onSubmit={loginAdmin} style={{ width: "100%", maxWidth: "400px", padding: "30px", border: "1px solid #444", borderRadius: "12px" }}>
-          <h1 style={{ marginBottom: "10px" }}>Admin Login</h1>
-          <p style={{ marginBottom: "25px" }}>Dermaé Administration</p>
-          <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Admin email" autoComplete="email" required style={{ ...fieldStyle, padding: "12px" }} />
-          <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Password" autoComplete="current-password" required style={{ ...fieldStyle, padding: "12px" }} />
-          {loginError && <p style={{ color: "#ef4444", marginBottom: "12px" }}>{loginError}</p>}
-          <button type="submit" disabled={loginLoading} style={{ ...buttonStyle("#2563eb", loginLoading), width: "100%", padding: "12px" }}>
-            {loginLoading ? "Signing in..." : "Sign In"}
-          </button>
-        </form>
+      <div className="admin-login-page">
+        <div className="admin-login-glow" />
+        <motion.form className="admin-login-card" onSubmit={loginAdmin} initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65 }}>
+          <div className="admin-login-brand"><Sparkles size={20} /><span>DERMAÉ</span></div>
+          <h1>Welcome back.</h1>
+          <p>Sign in to manage products, orders and the Dermaé experience.</p>
+          <label>Email address</label>
+          <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="admin@example.com" autoComplete="email" required />
+          <label>Password</label>
+          <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Your password" autoComplete="current-password" required />
+          {loginError && <p className="admin-error">{loginError}</p>}
+          <button className="admin-primary admin-login-button" type="submit" disabled={loginLoading}>{loginLoading ? "Signing in..." : "Sign In"}</button>
+          <a href="/">← Back to storefront</a>
+        </motion.form>
       </div>
     );
   }
 
+  const stats = [
+    { label: "Products", value: products.length.toLocaleString(), note: "Active catalogue", icon: Box, tone: "violet" },
+    { label: "Orders", value: orders.length.toLocaleString(), note: `${pendingOrders} waiting`, icon: ShoppingBag, tone: "blue" },
+    { label: "Revenue", value: `${totalRevenue.toLocaleString()} IQD`, note: "All recorded orders", icon: BarChart3, tone: "green" },
+    { label: "Delivered", value: deliveredOrders.toLocaleString(), note: `${processingOrders} processing`, icon: CircleCheck, tone: "amber" },
+  ];
+
   return (
-    <div style={{ padding: "40px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "20px", flexWrap: "wrap" }}>
-        <h1>Admin Dashboard</h1>
-        <button type="button" onClick={logoutAdmin} style={buttonStyle("#374151")}>Sign Out</button>
-      </div>
-
-      <div style={{ display: "flex", gap: "30px", marginBottom: "30px", flexWrap: "wrap" }}>
-        <div><h3>Products</h3><p>{products.length}</p></div>
-        <div><h3>Orders</h3><p>{orders.length}</p></div>
-        <div><h3>Revenue</h3><p>{orders.reduce((sum, order) => sum + getOrderTotal(order), 0).toLocaleString()} IQD</p></div>
-      </div>
-
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "15px", flexWrap: "wrap", marginBottom: "15px" }}>
-        <h2 style={{ margin: 0 }}>Products Management</h2>
-        <button type="button" onClick={startAddingProduct} style={buttonStyle("#16a34a")}>Add Product</button>
-      </div>
-
-      {(addingProduct || editingProductId) && (
-        <div style={{ border: "1px solid #444", borderRadius: "10px", padding: "20px", marginBottom: "25px" }}>
-          <h3>{editingProductId ? "Edit Product" : "Add Product"}</h3>
-          <input value={productNameEn} onChange={(event) => setProductNameEn(event.target.value)} placeholder="Product Name English" style={fieldStyle} />
-          <input value={productNameAr} onChange={(event) => setProductNameAr(event.target.value)} placeholder="Product Name Arabic" dir="rtl" style={fieldStyle} />
-          <textarea value={descriptionEn} onChange={(event) => setDescriptionEn(event.target.value)} placeholder="Description English" rows="4" style={{ ...fieldStyle, resize: "vertical" }} />
-          <textarea value={descriptionAr} onChange={(event) => setDescriptionAr(event.target.value)} placeholder="Description Arabic" rows="4" dir="rtl" style={{ ...fieldStyle, resize: "vertical" }} />
-          <input type="number" min="0" value={productPrice} onChange={(event) => setProductPrice(event.target.value)} placeholder="Price IQD" style={fieldStyle} />
-          <input key={imageInputKey} type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={handleImageChange} style={{ marginBottom: "15px" }} />
-          <p style={{ marginTop: 0, fontSize: "13px", opacity: 0.75 }}>JPG, PNG, WEBP, or GIF. Maximum 5 MB.</p>
-
-          {imagePreviewUrl && (
-            <div style={{ marginBottom: "15px" }}>
-              <p style={{ margin: "0 0 6px" }}>New image preview:</p>
-              <img src={imagePreviewUrl} alt="Selected product preview" style={{ display: "block", width: "120px", height: "120px", objectFit: "cover", borderRadius: "8px", border: "1px solid #444" }} />
-              <button type="button" onClick={resetImageSelection} style={{ ...buttonStyle("#6b7280"), marginTop: "8px" }}>Remove selected image</button>
-            </div>
-          )}
-
-          {imageUrl && !productImage && (
-            <div style={{ marginBottom: "15px" }}>
-              <p style={{ margin: "0 0 6px" }}>Current image:</p>
-              <img src={imageUrl} alt="Current product" style={{ display: "block", width: "120px", height: "120px", objectFit: "cover", borderRadius: "8px", border: "1px solid #444" }} />
-              <p style={{ margin: "6px 0 0", fontSize: "13px" }}>This image remains unless a new image is selected.</p>
-            </div>
-          )}
-
-          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-            <button type="button" onClick={editingProductId ? updateProduct : createProduct} disabled={updateLoading} style={buttonStyle("#16a34a", updateLoading)}>
-              {updateLoading ? "Saving..." : editingProductId ? "Save Changes" : "Add Product"}
-            </button>
-            <button type="button" onClick={closeProductForm} disabled={updateLoading} style={buttonStyle("#6b7280", updateLoading)}>Cancel</button>
-          </div>
+    <div className="admin-shell">
+      <aside className="admin-sidebar">
+        <a className="admin-logo" href="/"><strong>Dermaé</strong><span>ADMINISTRATION</span></a>
+        <nav>
+          <a className="active" href="#overview"><BarChart3 size={18} />Overview</a>
+          <a href="#products"><Box size={18} />Products</a>
+          <a href="#orders"><ShoppingBag size={18} />Orders <b>{pendingOrders}</b></a>
+        </nav>
+        <div className="admin-sidebar-bottom">
+          <span>Signed in as</span><strong>{session.user?.email}</strong>
+          <button type="button" onClick={logoutAdmin}><LogOut size={17} />Sign Out</button>
         </div>
-      )}
+      </aside>
 
-      <input type="text" placeholder="Search products..." value={productSearch} onChange={(event) => setProductSearch(event.target.value)} style={{ width: "100%", maxWidth: "350px", padding: "8px", marginBottom: "12px", borderRadius: "6px" }} />
+      <main className="admin-main">
+        <header className="admin-topbar" id="overview">
+          <div><span className="admin-kicker">DERMAÉ CONTROL CENTER</span><h1>Dashboard overview</h1><p>Manage your catalogue and fulfil customer orders from one place.</p></div>
+          <div className="admin-top-actions"><button className="admin-secondary" type="button" onClick={refreshDashboard}><RefreshCw size={17} />Refresh</button><button className="admin-primary" type="button" onClick={startAddingProduct}><PackagePlus size={18} />New Product</button></div>
+        </header>
 
-      {visibleProducts.length === 0 ? (
-        <p>No products found.</p>
-      ) : (
-        visibleProducts.map((product) => (
-          <div key={product.id} style={{ borderBottom: "1px solid #ccc", padding: "10px 0", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "15px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", minWidth: 0 }}>
-              {product.image_urls?.[0] ? (
-                <img src={product.image_urls[0]} alt="" style={{ width: "48px", height: "48px", objectFit: "cover", borderRadius: "6px", flexShrink: 0 }} />
-              ) : (
-                <div style={{ width: "48px", height: "48px", border: "1px solid #555", borderRadius: "6px", display: "grid", placeItems: "center", fontSize: "10px", flexShrink: 0 }}>No image</div>
-              )}
-              <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{product.name_en || product.name_ar}</span>
+        <section className="admin-stats-grid">
+          {stats.map(({ label, value, note, icon: Icon, tone }, index) => <motion.article className={`admin-stat admin-stat-${tone}`} key={label} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.08 }} whileHover={{ y: -5 }}><div className="admin-stat-icon"><Icon size={20} /></div><span>{label}</span><strong>{value}</strong><small>{note}</small></motion.article>)}
+        </section>
+
+        {(addingProduct || editingProductId) && (
+          <motion.section className="admin-form-panel" initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }}>
+            <div className="admin-section-title"><div><span className="admin-kicker">CATALOGUE EDITOR</span><h2>{editingProductId ? "Edit product" : "Add a new product"}</h2></div><button className="admin-icon-button" type="button" onClick={closeProductForm} disabled={updateLoading}><X size={20} /></button></div>
+            <div className="admin-form-grid">
+              <label><span>English name</span><input value={productNameEn} onChange={(event) => setProductNameEn(event.target.value)} placeholder="Hydra Glow Serum" /></label>
+              <label><span>Arabic name</span><input value={productNameAr} onChange={(event) => setProductNameAr(event.target.value)} placeholder="اسم المنتج" dir="rtl" /></label>
+              <label className="admin-form-wide"><span>English description</span><textarea value={descriptionEn} onChange={(event) => setDescriptionEn(event.target.value)} placeholder="Product description" rows="4" /></label>
+              <label className="admin-form-wide"><span>Arabic description</span><textarea value={descriptionAr} onChange={(event) => setDescriptionAr(event.target.value)} placeholder="وصف المنتج" rows="4" dir="rtl" /></label>
+              <label><span>Price in IQD</span><input type="number" min="0" value={productPrice} onChange={(event) => setProductPrice(event.target.value)} placeholder="45000" /></label>
+              <label className="admin-upload"><span>Product image</span><div><ImagePlus size={22} /><input key={imageInputKey} type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={handleImageChange} /><small>JPG, PNG, WEBP or GIF · Max 5 MB</small></div></label>
             </div>
-            <div style={{ display: "flex", gap: "8px", flexShrink: 0 }}>
-              <button type="button" onClick={() => startEditingProduct(product)} disabled={deletingProductId === product.id} style={buttonStyle("#2563eb", deletingProductId === product.id)}>Edit</button>
-              <button type="button" onClick={() => deleteProduct(product)} disabled={deletingProductId === product.id} style={buttonStyle("#dc2626", deletingProductId === product.id)}>
-                {deletingProductId === product.id ? "Deleting..." : "Delete"}
-              </button>
-            </div>
-          </div>
-        ))
-      )}
+            {(imagePreviewUrl || (imageUrl && !productImage)) && <div className="admin-image-preview"><img src={imagePreviewUrl || imageUrl} alt="Product preview" /><div><strong>{imagePreviewUrl ? "New image selected" : "Current product image"}</strong><span>{imagePreviewUrl ? "This image will be uploaded when you save." : "Select a new image to replace the current one."}</span>{imagePreviewUrl && <button type="button" onClick={resetImageSelection}>Remove selected image</button>}</div></div>}
+            <div className="admin-form-actions"><button className="admin-primary" type="button" onClick={editingProductId ? updateProduct : createProduct} disabled={updateLoading}>{updateLoading ? "Saving..." : editingProductId ? "Save Changes" : "Add Product"}</button><button className="admin-secondary" type="button" onClick={closeProductForm} disabled={updateLoading}>Cancel</button></div>
+          </motion.section>
+        )}
 
-      <h2 style={{ marginTop: "40px" }}>Orders Management</h2>
-      <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginBottom: "15px" }}>
-        <div style={{ color: "#eab308", fontWeight: "bold" }}>Pending: {pendingOrders}</div>
-        <div style={{ color: "#3b82f6", fontWeight: "bold" }}>Processing: {processingOrders}</div>
-        <div style={{ color: "#22c55e", fontWeight: "bold" }}>Delivered: {deliveredOrders}</div>
-        <div style={{ color: "#ef4444", fontWeight: "bold" }}>Cancelled: {cancelledOrders}</div>
-      </div>
+        <section className="admin-section" id="products">
+          <div className="admin-section-title"><div><span className="admin-kicker">CATALOGUE</span><h2>Products</h2><p>{visibleProducts.length} of {products.length} products</p></div><button className="admin-primary" type="button" onClick={startAddingProduct}><PackagePlus size={17} />Add Product</button></div>
+          <div className="admin-toolbar"><div className="admin-search"><Search size={18} /><input type="search" placeholder="Search products..." value={productSearch} onChange={(event) => setProductSearch(event.target.value)} /></div></div>
+          {visibleProducts.length === 0 ? <div className="admin-empty"><Box size={34} /><h3>No products found</h3><p>Try a different search or add a new product.</p></div> : <div className="admin-products-grid">{visibleProducts.map((product) => <motion.article className="admin-product-card" key={product.id} whileHover={{ y: -6 }}><div className="admin-product-image">{product.image_urls?.[0] ? <img src={product.image_urls[0]} alt={product.name_en || product.name_ar || "Product"} /> : <div><ImagePlus size={28} /><span>No image</span></div>}<span className="admin-product-id">#{product.id}</span></div><div className="admin-product-body"><span className="admin-product-label">DERMAÉ PRODUCT</span><h3>{product.name_en || product.name_ar || "Unnamed product"}</h3>{product.name_ar && <p dir="rtl">{product.name_ar}</p>}<strong>{Number(product.price_iqd || 0).toLocaleString()} IQD</strong><div className="admin-card-actions"><button className="admin-edit" type="button" onClick={() => startEditingProduct(product)} disabled={deletingProductId === product.id}><Edit3 size={16} />Edit</button><button className="admin-delete" type="button" onClick={() => deleteProduct(product)} disabled={deletingProductId === product.id}><Trash2 size={16} />{deletingProductId === product.id ? "Deleting..." : "Delete"}</button></div></div></motion.article>)}</div>}
+        </section>
 
-      <input type="text" placeholder="Search customer, phone, or order..." value={orderSearch} onChange={(event) => setOrderSearch(event.target.value)} style={{ width: "100%", maxWidth: "350px", padding: "8px", marginBottom: "12px", borderRadius: "6px" }} />
-      <div style={{ marginBottom: "20px" }}>
-        <select value={orderFilter} onChange={(event) => setOrderFilter(event.target.value)} style={{ padding: "8px", borderRadius: "6px" }}>
-          <option value="All">All Orders</option>
-          <option value="Pending">Pending</option>
-          <option value="Processing">Processing</option>
-          <option value="Delivered">Delivered</option>
-          <option value="Cancelled">Cancelled</option>
-        </select>
-      </div>
-
-      {orders.length === 0 ? (
-        <p>No orders found.</p>
-      ) : visibleOrders.length === 0 ? (
-        <p>No orders match the selected filters.</p>
-      ) : (
-        visibleOrders.map((order) => (
-          <div key={order.id} style={{ border: "1px solid #444", borderRadius: "10px", padding: "15px", marginBottom: "12px" }}>
-            <strong>Order #{order.order_number || order.id}</strong>
-            <p>Customer: {order.customer_name || "-"}</p>
-            <p>Phone: {order.customer_phone || order.phone || "-"}</p>
-            <p>Governorate: {order.customer_governorate || "-"}</p>
-            <p style={{ margin: "8px 0 0" }}>Total: {getOrderTotal(order).toLocaleString()} IQD</p>
-            <p style={{ margin: "6px 0 0", fontWeight: "bold", color: order.status === "Delivered" ? "#22c55e" : order.status === "Cancelled" ? "#ef4444" : order.status === "Processing" ? "#3b82f6" : "#eab308" }}>
-              Status: {order.status || "Pending"}
-            </p>
-            <select value={order.status || "Pending"} disabled={updatingOrderId === order.id} onChange={(event) => updateOrderStatus(order.id, event.target.value)} style={{ marginTop: "8px", padding: "6px", borderRadius: "6px", opacity: updatingOrderId === order.id ? 0.7 : 1 }}>
-              <option value="Pending">Pending</option>
-              <option value="Processing">Processing</option>
-              <option value="Delivered">Delivered</option>
-              <option value="Cancelled">Cancelled</option>
-            </select>
-          </div>
-        ))
-      )}
+        <section className="admin-section" id="orders">
+          <div className="admin-section-title"><div><span className="admin-kicker">FULFILMENT</span><h2>Orders</h2><p>Review customer details and update fulfilment status.</p></div></div>
+          <div className="admin-status-summary"><button onClick={() => setOrderFilter("Pending")}><Clock3 size={16} /><span>Pending</span><b>{pendingOrders}</b></button><button onClick={() => setOrderFilter("Processing")}><Truck size={16} /><span>Processing</span><b>{processingOrders}</b></button><button onClick={() => setOrderFilter("Delivered")}><CircleCheck size={16} /><span>Delivered</span><b>{deliveredOrders}</b></button><button onClick={() => setOrderFilter("Cancelled")}><Ban size={16} /><span>Cancelled</span><b>{cancelledOrders}</b></button></div>
+          <div className="admin-toolbar admin-orders-toolbar"><div className="admin-search"><Search size={18} /><input type="search" placeholder="Search customer, phone or order..." value={orderSearch} onChange={(event) => setOrderSearch(event.target.value)} /></div><select value={orderFilter} onChange={(event) => setOrderFilter(event.target.value)}><option value="All">All Orders</option><option value="Pending">Pending</option><option value="Processing">Processing</option><option value="Delivered">Delivered</option><option value="Cancelled">Cancelled</option></select></div>
+          {orders.length === 0 ? <div className="admin-empty"><ShoppingBag size={34} /><h3>No orders yet</h3><p>New customer orders will appear here.</p></div> : visibleOrders.length === 0 ? <div className="admin-empty"><Search size={34} /><h3>No matching orders</h3><p>Change the search or selected status.</p></div> : <div className="admin-orders-grid">{visibleOrders.map((order) => { const status = order.status || "Pending"; return <motion.article className="admin-order-card" key={order.id} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}><div className="admin-order-head"><div><span>ORDER</span><strong>#{order.order_number || order.id}</strong></div><span className={statusClass(status)}>{status}</span></div><div className="admin-order-details"><div><span>Customer</span><strong>{order.customer_name || "-"}</strong></div><div><span>Phone</span><strong>{order.customer_phone || order.phone || "-"}</strong></div><div><span>Governorate</span><strong>{order.customer_governorate || "-"}</strong></div><div><span>Total</span><strong>{getOrderTotal(order).toLocaleString()} IQD</strong></div></div><div className="admin-order-footer"><label>Update status<select value={status} disabled={updatingOrderId === order.id} onChange={(event) => updateOrderStatus(order.id, event.target.value)}><option value="Pending">Pending</option><option value="Processing">Processing</option><option value="Delivered">Delivered</option><option value="Cancelled">Cancelled</option></select></label>{updatingOrderId === order.id && <span className="admin-saving">Updating...</span>}</div></motion.article>; })}</div>}
+        </section>
+      </main>
     </div>
   );
 }
