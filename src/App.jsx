@@ -13,6 +13,7 @@ import "./community.css";
 import { supabase } from "./lib/supabase";
 import ScrollStory from "./ScrollStory";
 import heroVideo from "./assets/hero-video.mp4";
+import IntroLoader from "./IntroLoader";
 
 const fallbackProducts = [
   { id:"demo-1", name:"Hydra Glow Serum", name_en:"Hydra Glow Serum", name_ar:"سيروم الإشراقة والترطيب", brand:"Dermaé", category:"Serums", gender:"Women", price:45000, oldPrice:55000, rating:4.9, reviews:128, badge:"BESTSELLER", image:"https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=900&q=85", description:"A lightweight hydrating serum designed to restore moisture and give the skin a natural glow.", description_ar:"سيروم خفيف للترطيب واستعادة نضارة البشرة الطبيعية.", ingredients:["Hyaluronic Acid","Niacinamide","Vitamin B5"] },
@@ -54,6 +55,15 @@ function HeroImage() {
 
 function App() {
   const [language,setLanguage]=useState("en"), [dbProducts,setDbProducts]=useState([]), [activeCategory,setActiveCategory]=useState("All");
+  const [showLoader, setShowLoader] = useState(true);
+
+useEffect(() => {
+  const timer = setTimeout(() => {
+    setShowLoader(false);
+  }, 2500);
+
+  return () => clearTimeout(timer);
+}, []);
   const [search,setSearch]=useState(""), [sortBy,setSortBy]=useState("default"), [gender,setGender]=useState("All");
   const [selectedProduct,setSelectedProduct]=useState(null), [mobileMenu,setMobileMenu]=useState(false), [cartOpen,setCartOpen]=useState(false), [checkoutOpen,setCheckoutOpen]=useState(false);
   const [cart,setCart]=useState([]), [wishlist,setWishlist]=useState([]), [placingOrder,setPlacingOrder]=useState(false);
@@ -76,6 +86,10 @@ function App() {
   const placeOrder=async()=>{if(!customerName.trim()||!customerPhone.trim()||!customerGovernorate.trim()||!customerAddress.trim()){alert(tr("Please complete all checkout fields.","يرجى إكمال جميع حقول الطلب."));return}if(!cart.length||placingOrder)return;setPlacingOrder(true);const {error}=await supabase.from("orders").insert([{customer_name:customerName.trim(),customer_phone:customerPhone.trim(),customer_governorate:customerGovernorate.trim(),customer_address:customerAddress.trim(),items:cart,total:orderTotal,status:"Pending"}]);if(error){console.error("Order error:",error);alert(error.message||tr("Order failed","فشل إرسال الطلب"));setPlacingOrder(false);return}alert(tr("Order placed successfully","تم إرسال الطلب بنجاح"));setCart([]);setCustomerName("");setCustomerPhone("");setCustomerGovernorate("");setCustomerAddress("");setCheckoutOpen(false);setCartOpen(false);setPlacingOrder(false)};
   const scrollToShop=()=>document.getElementById("shop")?.scrollIntoView({behavior:"smooth"});
   const subscribeNewsletter=(event)=>{event.preventDefault();const email=newsletterEmail.trim();if(!email||!email.includes("@")){alert(tr("Please enter a valid email address.","يرجى إدخال بريد إلكتروني صحيح."));return;}alert(tr("Thank you for joining Dermaé.","شكراً لانضمامك إلى مجتمع Dermaé."));setNewsletterEmail("");};
+
+  if (showLoader) {
+    return <IntroLoader />;
+  }
 
   return <MotionConfig reducedMotion="user"><div className="app" dir={isArabic?"rtl":"ltr"} onPointerMove={(event)=>{if(event.pointerType!=="mouse")return;document.documentElement.style.setProperty("--cursor-x",`${event.clientX}px`);document.documentElement.style.setProperty("--cursor-y",`${event.clientY}px`);}}>
     <motion.div className="cursor-glow" aria-hidden="true" initial={{opacity:0}} animate={{opacity:1}}/>
