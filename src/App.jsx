@@ -12,6 +12,7 @@ import "./featured.css";
 import "./community.css";
 import { supabase } from "./lib/supabase";
 import ScrollStory from "./ScrollStory";
+import heroVideo from "./assets/hero-video.mp4";
 
 const fallbackProducts = [
   { id:"demo-1", name:"Hydra Glow Serum", name_en:"Hydra Glow Serum", name_ar:"سيروم الإشراقة والترطيب", brand:"Dermaé", category:"Serums", gender:"Women", price:45000, oldPrice:55000, rating:4.9, reviews:128, badge:"BESTSELLER", image:"https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=900&q=85", description:"A lightweight hydrating serum designed to restore moisture and give the skin a natural glow.", description_ar:"سيروم خفيف للترطيب واستعادة نضارة البشرة الطبيعية.", ingredients:["Hyaluronic Acid","Niacinamide","Vitamin B5"] },
@@ -38,7 +39,15 @@ function HeroImage() {
   const reset = () => { mx.set(0); my.set(0); };
   return <motion.div className="hero-image" initial={{opacity:0,x:120}} animate={{opacity:1,x:0}} transition={{duration:1.05,ease:[.22,1,.36,1]}} onMouseMove={move} onMouseLeave={reset} style={{perspective:1000}}>
     <motion.div className="hero-image-card" style={{rotateX,rotateY,x,y,transformStyle:"preserve-3d"}} whileHover={{scale:1.025}} transition={{type:"spring",stiffness:180,damping:20}}>
-      <motion.img src="https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?auto=format&fit=crop&w=1200&q=90" alt="Dermaé skincare" draggable="false" style={{scale:1.04}} />
+      <video
+  className="hero-video"
+  autoPlay
+  muted
+  loop
+  playsInline
+>
+  <source src={heroVideo} type="video/mp4" />
+</video>
     </motion.div>
   </motion.div>;
 }
