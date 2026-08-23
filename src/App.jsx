@@ -7,6 +7,7 @@ import {
 import { motion, MotionConfig, useMotionValue, useSpring, useTransform } from "framer-motion";
 import "./App.css";
 import "./mobile.css";
+import "./premium.css";
 import { supabase } from "./lib/supabase";
 
 const fallbackProducts = [
@@ -68,7 +69,53 @@ function App() {
     <main>
       <section className="hero" id="home"><motion.div className="hero-content" variants={stagger} initial="hidden" animate="show"><motion.span variants={reveal} className="eyebrow"><Sparkles size={15}/>{tr("PREMIUM SKINCARE","عناية فائقة بالبشرة")}</motion.span><motion.h1 variants={reveal}>{tr("Care","عناية")}<br/><em>{tr("That Shows.","تظهر نتائجها.")}</em></motion.h1><motion.p variants={reveal}>{tr("Thoughtfully crafted skincare for every kind of skin. Discover a simple ritual designed to make your natural beauty visible.","عناية بالبشرة مصممة بعناية لكل أنواع البشرة. اكتشف روتيناً بسيطاً يساعد على إبراز جمالك الطبيعي.")}</motion.p><motion.div variants={reveal} className="hero-buttons"><motion.a whileHover={{y:-4,scale:1.02}} whileTap={{scale:.97}} href="#shop" className="primary-button">{tr("Shop Collection","تسوق المنتجات")}<ChevronRight size={18}/></motion.a><motion.a whileHover={{y:-4}} whileTap={{scale:.97}} href="#about" className="secondary-button">{tr("Discover Dermaé","اكتشف Dermaé")}<ChevronRight size={18}/></motion.a></motion.div><motion.div variants={reveal} className="hero-features"><div><ShieldCheck size={19}/>{tr("Clean formulas","تركيبات نظيفة")}</div><div><Sparkles size={19}/>{tr("Premium care","عناية فاخرة")}</div><div><Truck size={19}/>{tr("Iraq delivery","توصيل داخل العراق")}</div></motion.div></motion.div><HeroImage/></section>
 
-      <motion.section className="brand-strip" initial={{opacity:0}} whileInView={{opacity:1}} viewport={{once:true,amount:.5}} transition={{duration:.8}}><span>{tr("CLINICALLY MINDED","مدعوم سريرياً")}</span><span>{tr("THOUGHTFULLY FORMULATED","مصمم بعناية")}</span><span>{tr("CRUELTY FREE","غير مختبر على الحيوانات")}</span></motion.section>
+      <motion.section className="brand-strip premium-marquee" initial={{opacity:0}} whileInView={{opacity:1}} viewport={{once:true,amount:.5}} transition={{duration:.8}} aria-label={tr("Dermaé values","قيم Dermaé")}>
+        <div className="marquee-track">
+          {[0,1].map((copy) => (
+            <div className="marquee-group" key={copy} aria-hidden={copy === 1}>
+              <span>{tr("THOUGHTFUL FORMULAS","تركيبات مدروسة")}</span><b>✦</b>
+              <span>{tr("PREMIUM DAILY CARE","عناية يومية فاخرة")}</span><b>✦</b>
+              <span>{tr("MADE FOR EVERY RITUAL","مصمم لكل روتين")}</span><b>✦</b>
+              <span>{tr("DELIVERY ACROSS IRAQ","توصيل إلى أنحاء العراق")}</span><b>✦</b>
+            </div>
+          ))}
+        </div>
+      </motion.section>
+
+      <motion.section className="why-section" initial="hidden" whileInView="show" viewport={{once:true,amount:.18}} variants={stagger}>
+        <motion.div className="why-heading" variants={reveal}>
+          <span className="eyebrow">{tr("WHY DERMAÉ","لماذا Dermaé")}</span>
+          <h2>{tr("Skincare, made more intentional.","عناية بالبشرة بتفاصيل أكثر وعناية أكبر.")}</h2>
+          <p>{tr("A refined ritual built around clarity, comfort and products that belong together.","روتين أنيق يجمع الوضوح والراحة ومنتجات مصممة لتكمل بعضها.")}</p>
+        </motion.div>
+        <div className="why-grid">
+          {[
+            { icon: ShieldCheck, no:"01", en:"Thoughtful selection", ar:"اختيار مدروس", enText:"A focused collection designed to keep your routine simple.", arText:"مجموعة مركزة تجعل روتين العناية أبسط." },
+            { icon: Sparkles, no:"02", en:"Premium experience", ar:"تجربة فاخرة", enText:"Considered details from discovery to daily use.", arText:"تفاصيل مدروسة من لحظة الاكتشاف حتى الاستخدام اليومي." },
+            { icon: Grid2X2, no:"03", en:"Ritual-first care", ar:"عناية مبنية على الروتين", enText:"Products presented to help you build a coherent ritual.", arText:"منتجات تساعدك على بناء روتين متكامل وواضح." },
+            { icon: Truck, no:"04", en:"Iraq delivery", ar:"توصيل داخل العراق", enText:"A local shopping experience with delivery across Iraq.", arText:"تجربة تسوق محلية مع توصيل إلى أنحاء العراق." },
+          ].map(({icon:Icon,no,en,ar,enText,arText}) => (
+            <motion.article className="why-card" variants={reveal} whileHover={{y:-8}} key={no}>
+              <div className="why-card-top"><span>{no}</span><Icon size={24}/></div>
+              <h3>{tr(en,ar)}</h3><p>{tr(enText,arText)}</p>
+            </motion.article>
+          ))}
+        </div>
+      </motion.section>
+
+      <motion.section className="promise-section" initial="hidden" whileInView="show" viewport={{once:true,amount:.2}} variants={stagger}>
+        <motion.div className="promise-visual" variants={{hidden:{opacity:0,scale:.94},show:{opacity:1,scale:1,transition:{duration:1,ease:[.22,1,.36,1]}}}}>
+          <motion.img src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=1400&q=88" alt="Dermaé skincare ritual" loading="lazy" whileHover={{scale:1.035}} transition={{duration:.7}}/>
+          <div className="promise-stamp"><span>DERMAÉ</span><small>{tr("CARE THAT SHOWS","عناية تظهر نتائجها")}</small></div>
+        </motion.div>
+        <motion.div className="promise-copy" variants={{hidden:{opacity:0,x:isArabic?-70:70},show:{opacity:1,x:0,transition:{duration:.9,ease:[.22,1,.36,1]}}}}>
+          <span className="eyebrow">{tr("OUR PROMISE","وعدنا")}</span>
+          <h2>{tr("Less noise. More meaningful care.","ضجيج أقل. عناية أكثر معنى.")}</h2>
+          <p>{tr("Dermaé brings products, education and an elevated shopping experience into one calm destination. Every detail is designed to help skincare feel easier to understand and more beautiful to use.","تجمع Dermaé المنتجات والمعلومات وتجربة تسوق راقية في وجهة هادئة واحدة. صُممت كل التفاصيل لتجعل العناية بالبشرة أوضح وأسهل وأكثر جمالاً في الاستخدام.")}</p>
+          <div className="promise-points"><span>01 <b>{tr("Discover","اكتشف")}</b></span><span>02 <b>{tr("Choose","اختر")}</b></span><span>03 <b>{tr("Build your ritual","ابنِ روتينك")}</b></span></div>
+          <motion.a whileHover={{x:isArabic?-6:6}} href="#shop" className="text-link">{tr("Explore the collection","استكشف المجموعة")}<ChevronRight size={17}/></motion.a>
+        </motion.div>
+      </motion.section>
 
       <section className="shop-section" id="shop"><motion.div className="section-heading" variants={reveal} initial="hidden" whileInView="show" viewport={{once:true,amount:.25}}><div><span className="eyebrow">{tr("THE COLLECTION","المجموعة")}</span><h2>{tr("Find your ritual.","اكتشف روتينك المثالي")}</h2></div><p>{tr("High-performance essentials designed to work beautifully together.","منتجات أساسية عالية الأداء مصممة لتعمل بتناغم تام.")}</p></motion.div>
         <div className="shop-controls mobile-shop-controls"><div className="search-box"><Search size={18}/><input type="search" placeholder={tr("Search products...","ابحث عن المنتجات...")} value={search} onChange={e=>setSearch(e.target.value)}/></div><select className="sort-select" value={sortBy} onChange={e=>setSortBy(e.target.value)} aria-label="Sort products"><option value="default">{tr("Recommended","مقترحة")}</option><option value="low-high">{tr("Price: Low to High","السعر: من الأقل")}</option><option value="high-low">{tr("Price: High to Low","السعر: من الأعلى")}</option></select><div className="gender-buttons">{genderOptions.map(o=><button key={o.value} className={gender===o.value?"active":""} onClick={()=>setGender(o.value)}>{isArabic?o.ar:o.en}</button>)}</div></div>
