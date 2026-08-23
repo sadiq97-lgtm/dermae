@@ -54,7 +54,7 @@
 @media (max-width: 768px){
   .why-section::before{
     font-size: 130px !important;
-    top: 3% !important;
+    top: 5% !important;
     color: rgba(255,255,255,.03) !important;
   }
 }
