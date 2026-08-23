@@ -849,8 +849,15 @@ input[type="search"] {
   display:block;
   font-size:72px;
   font-weight:700;
-  color:white;
+  color:#fff;
   letter-spacing:-0.05em;
+
+  text-shadow:
+    0 0 10px rgba(168,85,247,.45),
+    0 0 30px rgba(168,85,247,.35),
+    0 0 60px rgba(168,85,247,.25);
+
+  animation: dermaeGlow 2s ease-in-out infinite;
 }
 
 .intro-loader-line{
@@ -865,4 +872,19 @@ input[type="search"] {
   color:#bdbdbd;
   letter-spacing:.25em;
   font-size:12px;
+}
+@keyframes dermaeGlow{
+  0%,100%{
+    text-shadow:
+      0 0 10px rgba(168,85,247,.45),
+      0 0 30px rgba(168,85,247,.35),
+      0 0 60px rgba(168,85,247,.25);
+  }
+
+  50%{
+    text-shadow:
+      0 0 20px rgba(168,85,247,.75),
+      0 0 50px rgba(168,85,247,.55),
+      0 0 100px rgba(168,85,247,.35);
+  }
 }

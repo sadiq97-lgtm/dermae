@@ -10,6 +10,7 @@ import "./mobile.css";
 import "./premium.css";
 import "./featured.css";
 import "./community.css";
+import "./floating-card.css";
 import { supabase } from "./lib/supabase";
 import ScrollStory from "./ScrollStory";
 import heroVideo from "./assets/hero-video.mp4";
@@ -29,7 +30,7 @@ const formatIQD = (price) => `${Number(price || 0).toLocaleString("en-US")} IQD`
 const reveal = { hidden:{opacity:0,y:55}, show:{opacity:1,y:0,transition:{duration:.75,ease:[.22,1,.36,1]}} };
 const stagger = { hidden:{}, show:{transition:{staggerChildren:.11,delayChildren:.08}} };
 
-function HeroImage() {
+function HeroImage({ product, isArabic, tr, addToCart, setSelectedProduct }) {
   const mx = useMotionValue(0), my = useMotionValue(0);
   const sx = useSpring(mx,{stiffness:90,damping:18}), sy = useSpring(my,{stiffness:90,damping:18});
   const rotateY = useTransform(sx,[-.5,.5],[-5,5]);
@@ -49,6 +50,48 @@ function HeroImage() {
 >
   <source src={heroVideo} type="video/mp4" />
 </video>
+      {product && (
+        <motion.div
+          className="hero-floating-card"
+          initial={{ opacity: 0, y: 24, scale: 0.94 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: 1.05, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          whileHover={{ y: -7, scale: 1.02 }}
+          onClick={() => setSelectedProduct(product)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") setSelectedProduct(product);
+          }}
+        >
+          <div className="hero-floating-top">
+            <span className="hero-floating-badge">{tr("BEST SELLER", "الأكثر مبيعاً")}</span>
+            <span className="hero-floating-rating"><Star size={12} fill="currentColor" /> {product.rating || 5}</span>
+          </div>
+          <div className="hero-floating-main">
+            {product.image && <img src={product.image} alt="" aria-hidden="true" />}
+            <div>
+              <small>{tr("FEATURED RITUAL", "روتين مختار")}</small>
+              <h3>{isArabic ? product.name_ar || product.name : product.name_en || product.name}</h3>
+              <strong>{formatIQD(product.price)}</strong>
+            </div>
+          </div>
+          <div className="hero-floating-actions">
+            <span>{tr("View details", "عرض التفاصيل")} <ChevronRight size={14} /></span>
+            <motion.button
+              type="button"
+              whileTap={{ scale: 0.88 }}
+              onClick={(event) => {
+                event.stopPropagation();
+                addToCart(product);
+              }}
+              aria-label={tr("Add featured product to cart", "أضف المنتج المختار إلى السلة")}
+            >
+              <Plus size={17} />
+            </motion.button>
+          </div>
+        </motion.div>
+      )}
     </motion.div>
   </motion.div>;
 }
@@ -97,7 +140,7 @@ useEffect(() => {
     <motion.header className="header" initial={{y:-30,opacity:0}} animate={{y:0,opacity:1}} transition={{duration:.65,delay:.15}}><button className="mobile-menu-button" onClick={()=>setMobileMenu(true)} aria-label="Open menu"><Menu size={23}/></button><a className="logo" href="#home"><span className="logo-main">Dermaé</span><span className="logo-sub">CARE THAT SHOWS</span></a><nav className={`nav ${mobileMenu?"nav-open":""}`}><button className="mobile-nav-close" onClick={()=>setMobileMenu(false)}><X/></button>{[["#home","Home","الرئيسية"],["#shop","Shop","المتجر"],["#about","Our Story","قصتنا"],["#contact","Contact","تواصل معنا"]].map(([h,e,a])=><a key={h} href={h} onClick={()=>setMobileMenu(false)}>{tr(e,a)}</a>)}</nav>{mobileMenu&&<button className="mobile-menu-overlay" onClick={()=>setMobileMenu(false)} aria-label="Close menu"/>}<div className="header-actions"><button className="icon-button desktop-only" onClick={()=>document.querySelector(".search-box input")?.focus()}><Search size={20}/></button><button className="icon-button desktop-only"><User size={20}/></button><motion.button whileTap={{scale:.88}} className="icon-button cart-button" onClick={()=>setCartOpen(true)}><ShoppingBag size={21}/>{cartCount>0&&<span className="cart-count">{cartCount}</span>}</motion.button></div></motion.header>
 
     <main>
-      <section className="hero" id="home"><motion.div className="hero-content" variants={stagger} initial="hidden" animate="show"><motion.span variants={reveal} className="eyebrow"><Sparkles size={15}/>{tr("PREMIUM SKINCARE","عناية فائقة بالبشرة")}</motion.span><motion.h1 variants={reveal}>{tr("Care","عناية")}<br/><em>{tr("That Shows.","تظهر نتائجها.")}</em></motion.h1><motion.p variants={reveal}>{tr("Thoughtfully crafted skincare for every kind of skin. Discover a simple ritual designed to make your natural beauty visible.","عناية بالبشرة مصممة بعناية لكل أنواع البشرة. اكتشف روتيناً بسيطاً يساعد على إبراز جمالك الطبيعي.")}</motion.p><motion.div variants={reveal} className="hero-buttons"><motion.a whileHover={{y:-4,scale:1.02}} whileTap={{scale:.97}} href="#shop" className="primary-button">{tr("Shop Collection","تسوق المنتجات")}<ChevronRight size={18}/></motion.a><motion.a whileHover={{y:-4}} whileTap={{scale:.97}} href="#about" className="secondary-button">{tr("Discover Dermaé","اكتشف Dermaé")}<ChevronRight size={18}/></motion.a></motion.div><motion.div variants={reveal} className="hero-features"><div><ShieldCheck size={19}/>{tr("Clean formulas","تركيبات نظيفة")}</div><div><Sparkles size={19}/>{tr("Premium care","عناية فاخرة")}</div><div><Truck size={19}/>{tr("Iraq delivery","توصيل داخل العراق")}</div></motion.div></motion.div><HeroImage/></section>
+      <section className="hero" id="home"><motion.div className="hero-content" variants={stagger} initial="hidden" animate="show"><motion.span variants={reveal} className="eyebrow"><Sparkles size={15}/>{tr("PREMIUM SKINCARE","عناية فائقة بالبشرة")}</motion.span><motion.h1 variants={reveal}>{tr("Care","عناية")}<br/><em>{tr("That Shows.","تظهر نتائجها.")}</em></motion.h1><motion.p variants={reveal}>{tr("Thoughtfully crafted skincare for every kind of skin. Discover a simple ritual designed to make your natural beauty visible.","عناية بالبشرة مصممة بعناية لكل أنواع البشرة. اكتشف روتيناً بسيطاً يساعد على إبراز جمالك الطبيعي.")}</motion.p><motion.div variants={reveal} className="hero-buttons"><motion.a whileHover={{y:-4,scale:1.02}} whileTap={{scale:.97}} href="#shop" className="primary-button">{tr("Shop Collection","تسوق المنتجات")}<ChevronRight size={18}/></motion.a><motion.a whileHover={{y:-4}} whileTap={{scale:.97}} href="#about" className="secondary-button">{tr("Discover Dermaé","اكتشف Dermaé")}<ChevronRight size={18}/></motion.a></motion.div><motion.div variants={reveal} className="hero-features"><div><ShieldCheck size={19}/>{tr("Clean formulas","تركيبات نظيفة")}</div><div><Sparkles size={19}/>{tr("Premium care","عناية فاخرة")}</div><div><Truck size={19}/>{tr("Iraq delivery","توصيل داخل العراق")}</div></motion.div></motion.div><HeroImage product={featuredProducts[0]} isArabic={isArabic} tr={tr} addToCart={addToCart} setSelectedProduct={setSelectedProduct}/></section>
 
       <motion.section className="brand-strip premium-marquee" initial={{opacity:0}} whileInView={{opacity:1}} viewport={{once:true,amount:.5}} transition={{duration:.8}} aria-label={tr("Dermaé values","قيم Dermaé")}>
         <div className="marquee-track">

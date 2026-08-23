@@ -1,0 +1,20 @@
+/* Dermae floating featured product card */
+.hero-image-card{position:relative;isolation:isolate}
+.hero-video{position:relative;z-index:0}
+.hero-floating-card{position:absolute;z-index:4;right:24px;bottom:24px;width:min(330px,calc(100% - 48px));box-sizing:border-box;padding:17px;border:1px solid rgba(255,255,255,.22);border-radius:20px;background:linear-gradient(145deg,rgba(18,18,25,.72),rgba(34,24,47,.58));box-shadow:0 24px 70px rgba(0,0,0,.34);backdrop-filter:blur(22px) saturate(1.25);-webkit-backdrop-filter:blur(22px) saturate(1.25);color:#fff;text-align:left;cursor:pointer;transform-style:preserve-3d}
+[dir="rtl"] .hero-floating-card{right:auto;left:24px;text-align:right}
+.hero-floating-card::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(125deg,rgba(255,255,255,.13),transparent 38%);pointer-events:none}
+.hero-floating-top{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.hero-floating-badge{padding:6px 9px;border-radius:999px;background:rgba(168,85,247,.2);color:#d8b4fe;font-size:8px;font-weight:700;letter-spacing:.16em}
+.hero-floating-rating{display:flex;align-items:center;gap:4px;color:#f5d88b;font-size:11px}
+.hero-floating-main{position:relative;display:grid;grid-template-columns:58px minmax(0,1fr);gap:13px;align-items:center}
+.hero-floating-main img{width:58px;height:68px;object-fit:cover;border-radius:12px;border:1px solid rgba(255,255,255,.13)}
+.hero-floating-main small{display:block;margin-bottom:5px;color:rgba(255,255,255,.5);font-size:8px;letter-spacing:.14em}
+.hero-floating-main h3{margin:0 0 6px;color:#fff;font-size:17px;line-height:1.15;letter-spacing:-.025em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hero-floating-main strong{font-size:12px;color:rgba(255,255,255,.78)}
+.hero-floating-actions{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:15px;padding-top:13px;border-top:1px solid rgba(255,255,255,.12)}
+.hero-floating-actions>span{display:flex;align-items:center;gap:5px;color:rgba(255,255,255,.74);font-size:10px}
+.hero-floating-actions button{width:38px;height:38px;padding:0;border:0;border-radius:50%;display:grid;place-items:center;background:#fff;color:#21152d;box-shadow:0 10px 24px rgba(0,0,0,.22)}
+@media(max-width:768px){.hero-floating-card{right:12px;bottom:12px;width:min(280px,calc(100% - 24px));padding:13px;border-radius:16px}[dir="rtl"] .hero-floating-card{right:auto;left:12px}.hero-floating-main{grid-template-columns:48px minmax(0,1fr);gap:10px}.hero-floating-main img{width:48px;height:56px}.hero-floating-main h3{font-size:14px}.hero-floating-actions{margin-top:11px;padding-top:10px}.hero-floating-actions button{width:34px;height:34px}}
+@media(max-width:430px){.hero-floating-card{width:calc(100% - 20px);right:10px;bottom:10px}[dir="rtl"] .hero-floating-card{right:auto;left:10px}.hero-floating-badge{font-size:7px}.hero-floating-main small{display:none}}
+@media(prefers-reduced-motion:reduce){.hero-floating-card{transform:none!important}}
