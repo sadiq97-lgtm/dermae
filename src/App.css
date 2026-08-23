@@ -677,3 +677,135 @@ input[type="search"] {
   justify-content: center;
   min-height: 48px;
 }
+/* =========================
+   DERMAE PREMIUM UPGRADE
+   ========================= */
+
+.header {
+  background: rgba(15,15,20,.55) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  border-bottom: 1px solid rgba(255,255,255,.08) !important;
+}
+
+.hero-image {
+  position: relative;
+}
+
+.hero-image::before {
+  content: "";
+  position: absolute;
+  inset: -80px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(139,92,246,.35),
+      transparent 70%
+    );
+
+  filter: blur(60px);
+
+  z-index: -1;
+
+  animation: glowFloat 8s ease-in-out infinite;
+}
+
+@keyframes glowFloat {
+  0%,100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.hero-image-card {
+  border-radius: 28px;
+
+  box-shadow:
+    0 40px 80px rgba(0,0,0,.25);
+
+  overflow: hidden;
+}
+
+.product-card {
+  position: relative;
+
+  overflow: hidden;
+
+  border-radius: 20px;
+
+  border: 1px solid rgba(255,255,255,.08);
+
+  backdrop-filter: blur(14px);
+
+  transition:
+    transform .45s ease,
+    box-shadow .45s ease,
+    border-color .45s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-12px);
+
+  border-color: rgba(139,92,246,.45);
+
+  box-shadow:
+    0 30px 60px rgba(0,0,0,.25);
+}
+
+.product-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: -150%;
+
+  width: 60%;
+  height: 100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,.16),
+      transparent
+    );
+
+  transition: .8s;
+}
+
+.product-card:hover::before {
+  left: 150%;
+}
+
+.product-image img {
+  transition:
+    transform .8s ease;
+}
+
+.product-card:hover .product-image img {
+  transform: scale(1.08);
+}
+
+.primary-button {
+  box-shadow:
+    0 15px 40px rgba(139,92,246,.35);
+}
+
+.primary-button:hover {
+  transform:
+    translateY(-3px)
+    scale(1.02);
+}
+
+.brand-strip {
+  border-top: 1px solid rgba(255,255,255,.08);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+
+  backdrop-filter: blur(15px);
+}
