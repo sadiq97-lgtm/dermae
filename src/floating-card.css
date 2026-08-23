@@ -18,3 +18,8 @@
 @media(max-width:768px){.hero-floating-card{right:12px;bottom:12px;width:min(280px,calc(100% - 24px));padding:13px;border-radius:16px}[dir="rtl"] .hero-floating-card{right:auto;left:12px}.hero-floating-main{grid-template-columns:48px minmax(0,1fr);gap:10px}.hero-floating-main img{width:48px;height:56px}.hero-floating-main h3{font-size:14px}.hero-floating-actions{margin-top:11px;padding-top:10px}.hero-floating-actions button{width:34px;height:34px}}
 @media(max-width:430px){.hero-floating-card{width:calc(100% - 20px);right:10px;bottom:10px}[dir="rtl"] .hero-floating-card{right:auto;left:10px}.hero-floating-badge{font-size:7px}.hero-floating-main small{display:none}}
 @media(prefers-reduced-motion:reduce){.hero-floating-card{transform:none!important}}
+@media (max-width: 768px){
+  .hero-floating-card{
+    display:none;
+  }
+}
