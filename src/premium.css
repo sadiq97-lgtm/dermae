@@ -8,7 +8,21 @@
 @keyframes dermaeMarquee{to{transform:translateX(-50%)}}
 
 .why-section{padding:clamp(80px,10vw,150px) 48px;background:linear-gradient(180deg,var(--bg),rgba(139,92,246,.035));position:relative;overflow:hidden}
-.why-section::before{content:"DERMAÉ";position:absolute;right:-1vw;top:15px;font-size:clamp(90px,18vw,280px);font-weight:700;letter-spacing:-.08em;color:rgba(255,255,255,.018);pointer-events:none}
+.why-section::before{
+  content:"Dermaé";
+  position:absolute;
+  left:50%;
+  top:14%;
+  transform:translate(-50%, -50%);
+  font-size:clamp(260px,30vw,620px);
+  font-weight:700;
+  line-height:.9;
+  letter-spacing:-0.08em;
+  color:rgba(255,255,255,.022);
+  white-space:nowrap;
+  pointer-events:none;
+  z-index:0;
+}
 .why-heading{max-width:820px;margin:0 auto 58px;text-align:center;position:relative}
 .why-heading h2,.promise-copy h2{font-size:clamp(42px,5.4vw,78px);line-height:1.02;letter-spacing:-.055em;margin:0;color:var(--text-h);font-weight:500}
 .why-heading p{max-width:620px;margin:22px auto 0;line-height:1.8;color:var(--text)}
