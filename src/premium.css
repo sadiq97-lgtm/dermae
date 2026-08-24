@@ -9,6 +9,7 @@
 
 .why-section{padding:clamp(80px,10vw,150px) 48px;background:linear-gradient(180deg,var(--bg),rgba(139,92,246,.035));position:relative;overflow:hidden}
 .why-section::before{
+    animation: dermaePulse 6s ease-in-out infinite;
   content:"Dermaé";
   position:absolute;
   left:50%;
@@ -56,5 +57,16 @@
     font-size: 130px !important;
     top: 5% !important;
     color: rgba(255,255,255,.03) !important;
+  }
+}
+@keyframes dermaePulse{
+  0%,100%{
+    opacity:.02;
+    transform:translate(-50%,-50%) scale(1);
+  }
+
+  50%{
+    opacity:.05;
+    transform:translate(-50%,-50%) scale(1.03);
   }
 }

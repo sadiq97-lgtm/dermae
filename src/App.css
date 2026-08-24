@@ -888,3 +888,213 @@ input[type="search"] {
       0 0 100px rgba(168,85,247,.35);
   }
 }
+
+/* =========================
+   MAGNETIC HERO BUTTONS
+   ========================= */
+.magnetic-button {
+  position: relative;
+  isolation: isolate;
+  will-change: transform;
+  transform-origin: center;
+  overflow: hidden;
+}
+
+.magnetic-button::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 255, 255, 0.22),
+    transparent 62%
+  );
+  opacity: 0;
+  transform: scale(0.65);
+  transition: opacity 0.3s ease, transform 0.45s ease;
+  pointer-events: none;
+}
+
+.magnetic-button:hover::before {
+  opacity: 1;
+  transform: scale(1.25);
+}
+
+.magnetic-button-content {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+@media (max-width: 768px), (pointer: coarse) {
+  .magnetic-button {
+    transform: none !important;
+  }
+
+  .magnetic-button::before {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .magnetic-button {
+    transform: none !important;
+  }
+
+  .magnetic-button::before {
+    transition: none;
+  }
+}
+/* =========================
+IPHONE FLOATING BOTTOM NAV
+========================= */
+
+@media (max-width: 768px){
+
+  .mobile-bottom-nav{
+    position: fixed !important;
+
+    left: 12px !important;
+    right: 12px !important;
+    bottom: 12px !important;
+
+    height: 72px;
+
+    border-radius: 999px !important;
+
+    background: rgba(255,255,255,.08) !important;
+
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+      0 20px 60px rgba(0,0,0,.35);
+
+    display:flex;
+    align-items:center;
+    justify-content:space-around;
+
+    z-index:9999;
+  }
+
+  .mobile-bottom-nav a,
+  .mobile-bottom-nav button{
+    color: #ffffff !important;
+opacity: 1 !important;
+
+    flex:1;
+    height:100%;
+
+    background:none !important;
+    border:none !important;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    gap:4px;
+
+    color:white;
+
+    font-size:11px;
+  }
+
+  .mobile-bottom-nav svg{
+    width:20px;
+    height:20px;
+  }
+
+  .mobile-bottom-nav b{
+    position:absolute;
+    top:10px;
+    right:18px;
+
+    min-width:18px;
+    height:18px;
+
+    border-radius:999px;
+
+    background:#8b5cf6;
+
+    color:#fff;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:10px;
+  }
+
+  body{
+    padding-bottom:95px;
+  }
+}
+
+
+/* Active iOS-style mobile navigation */
+@media (max-width: 768px){
+  .mobile-bottom-nav a,
+  .mobile-bottom-nav button{
+    position:relative;
+    isolation:isolate;
+    transition:color .32s ease, transform .32s cubic-bezier(.22,1,.36,1);
+  }
+
+  .mobile-bottom-nav .mobile-nav-icon{
+    width:36px;
+    height:30px;
+    border-radius:999px;
+    display:grid;
+    place-items:center;
+    transition:
+      color .32s ease,
+      background-color .32s ease,
+      box-shadow .32s ease,
+      transform .38s cubic-bezier(.22,1,.36,1);
+  }
+
+  .mobile-bottom-nav .active-nav{
+    color:#c084fc !important;
+  }
+
+  .mobile-bottom-nav .active-nav .mobile-nav-icon{
+    color:#fff;
+    background:linear-gradient(135deg,#a855f7,#7c3aed);
+    box-shadow:
+      0 8px 20px rgba(139,92,246,.38),
+      0 0 18px rgba(168,85,247,.28);
+    transform:translateY(-3px) scale(1.08);
+    animation:mobileNavPop .42s cubic-bezier(.22,1,.36,1);
+  }
+
+  .mobile-bottom-nav .active-nav > span:last-of-type{
+    color:#d8b4fe;
+    font-weight:700;
+  }
+
+  .mobile-bottom-nav .active-nav svg{
+    stroke:#fff !important;
+    filter:drop-shadow(0 0 5px rgba(255,255,255,.28));
+  }
+
+  @keyframes mobileNavPop{
+    0%{transform:translateY(0) scale(.74);}
+    58%{transform:translateY(-5px) scale(1.16);}
+    100%{transform:translateY(-3px) scale(1.08);}
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .mobile-bottom-nav .active-nav .mobile-nav-icon{
+    animation:none;
+  }
+}

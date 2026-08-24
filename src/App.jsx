@@ -30,6 +30,43 @@ const formatIQD = (price) => `${Number(price || 0).toLocaleString("en-US")} IQD`
 const reveal = { hidden:{opacity:0,y:55}, show:{opacity:1,y:0,transition:{duration:.75,ease:[.22,1,.36,1]}} };
 const stagger = { hidden:{}, show:{transition:{staggerChildren:.11,delayChildren:.08}} };
 
+function MagneticLink({ href, className, children }) {
+  const magneticX = useMotionValue(0);
+  const magneticY = useMotionValue(0);
+  const x = useSpring(magneticX, { stiffness: 260, damping: 20, mass: 0.35 });
+  const y = useSpring(magneticY, { stiffness: 260, damping: 20, mass: 0.35 });
+
+  const handlePointerMove = (event) => {
+    if (event.pointerType !== "mouse") return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    const offsetX = event.clientX - rect.left - rect.width / 2;
+    const offsetY = event.clientY - rect.top - rect.height / 2;
+    magneticX.set(offsetX * 0.18);
+    magneticY.set(offsetY * 0.22);
+  };
+
+  const resetPosition = () => {
+    magneticX.set(0);
+    magneticY.set(0);
+  };
+
+  return (
+    <motion.a
+      href={href}
+      className={`${className} magnetic-button`}
+      style={{ x, y }}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={resetPosition}
+      onPointerCancel={resetPosition}
+      whileHover={{ scale: 1.035 }}
+      whileTap={{ scale: 0.97 }}
+      transition={{ type: "spring", stiffness: 300, damping: 22 }}
+    >
+      <span className="magnetic-button-content">{children}</span>
+    </motion.a>
+  );
+}
+
 function HeroImage({ product, isArabic, tr, addToCart, setSelectedProduct }) {
   const mx = useMotionValue(0), my = useMotionValue(0);
   const sx = useSpring(mx,{stiffness:90,damping:18}), sy = useSpring(my,{stiffness:90,damping:18});
@@ -112,6 +149,7 @@ useEffect(() => {
   const [cart,setCart]=useState([]), [wishlist,setWishlist]=useState([]), [placingOrder,setPlacingOrder]=useState(false);
   const [customerName,setCustomerName]=useState(""), [customerPhone,setCustomerPhone]=useState(""), [customerGovernorate,setCustomerGovernorate]=useState(""), [customerAddress,setCustomerAddress]=useState("");
   const [newsletterEmail,setNewsletterEmail]=useState("");
+  const [activeMobileTab,setActiveMobileTab]=useState("home");
   const isArabic=language==="ar"; const tr=(en,ar)=>isArabic?ar:en;
 
   useEffect(()=>{ (async()=>{ const {data,error}=await supabase.from("products").select("*").order("id",{ascending:false}); if(error){console.error("Products error:",error);return;} setDbProducts((data||[]).map(item=>({id:`db-${item.id}`,databaseId:item.id,name:item.name_en||item.name_ar||"Unnamed Product",name_en:item.name_en||"",name_ar:item.name_ar||"",description:item.description_en||item.description_ar||"",description_en:item.description_en||"",description_ar:item.description_ar||"",brand:"Dermaé",category:item.category||"Skincare",gender:item.gender||"Unisex",price:Number(item.price_iqd||0),oldPrice:null,rating:5,reviews:0,badge:"NEW",image:item.image_urls?.[0]||"",ingredients:[]}))); })(); },[]);
@@ -140,7 +178,7 @@ useEffect(() => {
     <motion.header className="header" initial={{y:-30,opacity:0}} animate={{y:0,opacity:1}} transition={{duration:.65,delay:.15}}><button className="mobile-menu-button" onClick={()=>setMobileMenu(true)} aria-label="Open menu"><Menu size={23}/></button><a className="logo" href="#home"><span className="logo-main">Dermaé</span><span className="logo-sub">CARE THAT SHOWS</span></a><nav className={`nav ${mobileMenu?"nav-open":""}`}><button className="mobile-nav-close" onClick={()=>setMobileMenu(false)}><X/></button>{[["#home","Home","الرئيسية"],["#shop","Shop","المتجر"],["#about","Our Story","قصتنا"],["#contact","Contact","تواصل معنا"]].map(([h,e,a])=><a key={h} href={h} onClick={()=>setMobileMenu(false)}>{tr(e,a)}</a>)}</nav>{mobileMenu&&<button className="mobile-menu-overlay" onClick={()=>setMobileMenu(false)} aria-label="Close menu"/>}<div className="header-actions"><button className="icon-button desktop-only" onClick={()=>document.querySelector(".search-box input")?.focus()}><Search size={20}/></button><button className="icon-button desktop-only"><User size={20}/></button><motion.button whileTap={{scale:.88}} className="icon-button cart-button" onClick={()=>setCartOpen(true)}><ShoppingBag size={21}/>{cartCount>0&&<span className="cart-count">{cartCount}</span>}</motion.button></div></motion.header>
 
     <main>
-      <section className="hero" id="home"><motion.div className="hero-content" variants={stagger} initial="hidden" animate="show"><motion.span variants={reveal} className="eyebrow"><Sparkles size={15}/>{tr("PREMIUM SKINCARE","عناية فائقة بالبشرة")}</motion.span><motion.h1 variants={reveal}>{tr("Care","عناية")}<br/><em>{tr("That Shows.","تظهر نتائجها.")}</em></motion.h1><motion.p variants={reveal}>{tr("Thoughtfully crafted skincare for every kind of skin. Discover a simple ritual designed to make your natural beauty visible.","عناية بالبشرة مصممة بعناية لكل أنواع البشرة. اكتشف روتيناً بسيطاً يساعد على إبراز جمالك الطبيعي.")}</motion.p><motion.div variants={reveal} className="hero-buttons"><motion.a whileHover={{y:-4,scale:1.02}} whileTap={{scale:.97}} href="#shop" className="primary-button">{tr("Shop Collection","تسوق المنتجات")}<ChevronRight size={18}/></motion.a><motion.a whileHover={{y:-4}} whileTap={{scale:.97}} href="#about" className="secondary-button">{tr("Discover Dermaé","اكتشف Dermaé")}<ChevronRight size={18}/></motion.a></motion.div><motion.div variants={reveal} className="hero-features"><div><ShieldCheck size={19}/>{tr("Clean formulas","تركيبات نظيفة")}</div><div><Sparkles size={19}/>{tr("Premium care","عناية فاخرة")}</div><div><Truck size={19}/>{tr("Iraq delivery","توصيل داخل العراق")}</div></motion.div></motion.div><HeroImage product={featuredProducts[0]} isArabic={isArabic} tr={tr} addToCart={addToCart} setSelectedProduct={setSelectedProduct}/></section>
+      <section className="hero" id="home"><motion.div className="hero-content" variants={stagger} initial="hidden" animate="show"><motion.span variants={reveal} className="eyebrow"><Sparkles size={15}/>{tr("PREMIUM SKINCARE","عناية فائقة بالبشرة")}</motion.span><motion.h1 variants={reveal}>{tr("Care","عناية")}<br/><em>{tr("That Shows.","تظهر نتائجها.")}</em></motion.h1><motion.p variants={reveal}>{tr("Thoughtfully crafted skincare for every kind of skin. Discover a simple ritual designed to make your natural beauty visible.","عناية بالبشرة مصممة بعناية لكل أنواع البشرة. اكتشف روتيناً بسيطاً يساعد على إبراز جمالك الطبيعي.")}</motion.p><motion.div variants={reveal} className="hero-buttons"><MagneticLink href="#shop" className="primary-button">{tr("Shop Collection","تسوق المنتجات")}<ChevronRight size={18}/></MagneticLink><MagneticLink href="#about" className="secondary-button">{tr("Discover Dermaé","اكتشف Dermaé")}<ChevronRight size={18}/></MagneticLink></motion.div><motion.div variants={reveal} className="hero-features"><div><ShieldCheck size={19}/>{tr("Clean formulas","تركيبات نظيفة")}</div><div><Sparkles size={19}/>{tr("Premium care","عناية فاخرة")}</div><div><Truck size={19}/>{tr("Iraq delivery","توصيل داخل العراق")}</div></motion.div></motion.div><HeroImage product={featuredProducts[0]} isArabic={isArabic} tr={tr} addToCart={addToCart} setSelectedProduct={setSelectedProduct}/></section>
 
       <motion.section className="brand-strip premium-marquee" initial={{opacity:0}} whileInView={{opacity:1}} viewport={{once:true,amount:.5}} transition={{duration:.8}} aria-label={tr("Dermaé values","قيم Dermaé")}>
         <div className="marquee-track">
@@ -219,7 +257,20 @@ useEffect(() => {
 
     {checkoutOpen&&<motion.div className="modal-overlay" onClick={()=>setCheckoutOpen(false)} initial={{opacity:0}} animate={{opacity:1}}><motion.div className="checkout-modal" onClick={e=>e.stopPropagation()} initial={{opacity:0,y:35,scale:.96}} animate={{opacity:1,y:0,scale:1}}><button className="modal-close" onClick={()=>setCheckoutOpen(false)}><X size={22}/></button><h2>{tr("Checkout","إكمال الطلب")}</h2><input type="text" placeholder={tr("Full Name","الاسم الكامل")} value={customerName} onChange={e=>setCustomerName(e.target.value)}/><input type="tel" inputMode="tel" placeholder={tr("Phone Number","رقم الهاتف")} value={customerPhone} onChange={e=>setCustomerPhone(e.target.value)}/><input type="text" placeholder={tr("Governorate","المحافظة")} value={customerGovernorate} onChange={e=>setCustomerGovernorate(e.target.value)}/><textarea placeholder={tr("Full Address","العنوان الكامل")} value={customerAddress} onChange={e=>setCustomerAddress(e.target.value)}/><div className="checkout-summary"><span>{tr("Items","القطع")}: {cartCount}</span><strong>{formatIQD(orderTotal)}</strong></div><button className="checkout-button" disabled={placingOrder} onClick={placeOrder}>{placingOrder?tr("Sending...","جار الإرسال..."):tr("Place Order","إرسال الطلب")}</button></motion.div></motion.div>}
 
-    <nav className="mobile-bottom-nav" aria-label="Mobile navigation"><a href="#home"><Home size={21}/><span>{tr("Home","الرئيسية")}</span></a><button onClick={scrollToShop}><Grid2X2 size={21}/><span>{tr("Shop","المتجر")}</span></button><button onClick={scrollToShop}><Heart size={21}/><span>{tr("Wishlist","المفضلة")}</span>{wishlist.length>0&&<b>{wishlist.length}</b>}</button><button onClick={()=>setCartOpen(true)}><ShoppingBag size={21}/><span>{tr("Cart","السلة")}</span>{cartCount>0&&<b>{cartCount}</b>}</button></nav>
+    <nav className="mobile-bottom-nav" aria-label="Mobile navigation">
+      <motion.a href="#home" className={activeMobileTab==="home"?"active-nav":""} onClick={()=>setActiveMobileTab("home")} whileTap={{scale:.86}}>
+        <span className="mobile-nav-icon"><Home size={21}/></span><span>{tr("Home","الرئيسية")}</span>
+      </motion.a>
+      <motion.button className={activeMobileTab==="shop"?"active-nav":""} onClick={()=>{setActiveMobileTab("shop");scrollToShop();}} whileTap={{scale:.86}}>
+        <span className="mobile-nav-icon"><Grid2X2 size={21}/></span><span>{tr("Shop","المتجر")}</span>
+      </motion.button>
+      <motion.button className={activeMobileTab==="wishlist"?"active-nav":""} onClick={()=>{setActiveMobileTab("wishlist");scrollToShop();}} whileTap={{scale:.86}}>
+        <span className="mobile-nav-icon"><Heart size={21}/></span><span>{tr("Wishlist","المفضلة")}</span>{wishlist.length>0&&<b>{wishlist.length}</b>}
+      </motion.button>
+      <motion.button className={activeMobileTab==="cart"?"active-nav":""} onClick={()=>{setActiveMobileTab("cart");setCartOpen(true);}} whileTap={{scale:.86}}>
+        <span className="mobile-nav-icon"><ShoppingBag size={21}/></span><span>{tr("Cart","السلة")}</span>{cartCount>0&&<b>{cartCount}</b>}
+      </motion.button>
+    </nav>
   </div></MotionConfig>;
 }
 
