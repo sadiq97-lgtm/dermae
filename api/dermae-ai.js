@@ -85,7 +85,10 @@ export default async function handler(request, response) {
     const data = await apiResponse.json();
 
     if (!apiResponse.ok) {
-      console.error("OpenAI error:", JSON.stringify(data));
+      console.error(
+  "OpenAI FULL ERROR:",
+  JSON.stringify(data, null, 2)
+);
       return response.status(apiResponse.status).json({
         error: data?.error?.message || "Dermaé AI request failed",
       });
