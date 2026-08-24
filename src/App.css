@@ -1583,3 +1583,53 @@ PREMIUM FILTERS
 [data-theme="dark"] a {
   color: var(--text);
 }
+[data-theme="dark"] .hero,
+[data-theme="dark"] .featured-section,
+[data-theme="dark"] .shop-section,
+[data-theme="dark"] .about-section,
+[data-theme="dark"] .newsletter-section {
+  background: linear-gradient(
+    180deg,
+    #0f1115 0%,
+    #151923 100%
+  );
+}
+
+[data-theme="dark"] .top-bar {
+  background: #0b0d12;
+}
+
+[data-theme="dark"] .logo-main {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .primary-button {
+  background: #e6d8c4;
+  color: #111;
+}
+
+[data-theme="dark"] .secondary-button {
+  border: 1px solid rgba(255,255,255,.12);
+}
+
+[data-theme="dark"] .cursor-glow {
+  opacity: .5;
+}
+.app,
+.header,
+.top-bar,
+.product-card,
+.featured-card,
+.why-card,
+.testimonial-card,
+.cart-drawer,
+.checkout-modal,
+.search-modal,
+button,
+a {
+  transition:
+    background-color .35s ease,
+    color .35s ease,
+    border-color .35s ease,
+    box-shadow .35s ease;
+}
