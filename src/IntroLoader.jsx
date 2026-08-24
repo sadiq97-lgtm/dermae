@@ -45,7 +45,7 @@ export default function IntroLoader() {
 
       <motion.div
         className="intro-loader-content"
-        initial={{ opacity: 0, rotateX: 68, z: -420, scale: 0.72 }}
+        initial={{ opacity: 0, rotateX: 68, z: -420, scale: 1 }}
         animate={{ opacity: 1, rotateX: 0, z: 0, scale: 1 }}
         transition={{ duration: 1.25, ease: [0.16, 1, 0.3, 1] }}
         style={{
