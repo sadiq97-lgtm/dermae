@@ -1278,3 +1278,30 @@ opacity: 1 !important;
     grid-template-columns:1fr;
   }
 }
+@media (max-width:768px){
+
+  .mobile-bottom-nav .active-nav .mobile-nav-icon{
+    width:36px;
+    height:36px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:999px;
+
+    background:linear-gradient(
+      135deg,
+      #a855f7,
+      #7c3aed
+    );
+
+    color:#fff;
+
+    box-shadow:
+      0 8px 20px rgba(139,92,246,.45);
+
+    transform:translateY(-2px);
+  }
+
+}

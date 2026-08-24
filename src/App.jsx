@@ -205,6 +205,7 @@ useEffect(() => {
   const [cart,setCart]=useState([]), [wishlist,setWishlist]=useState([]), [placingOrder,setPlacingOrder]=useState(false);
   const [customerName,setCustomerName]=useState(""), [customerPhone,setCustomerPhone]=useState(""), [customerGovernorate,setCustomerGovernorate]=useState(""), [customerAddress,setCustomerAddress]=useState("");
   const [newsletterEmail,setNewsletterEmail]=useState("");
+  const [activeMobileTab,setActiveMobileTab]=useState("home");
   const isArabic=language==="ar"; const tr=(en,ar)=>isArabic?ar:en;
 
   useEffect(()=>{ (async()=>{ const {data,error}=await supabase.from("products").select("*").order("id",{ascending:false}); if(error){console.error("Products error:",error);return;} setDbProducts((data||[]).map(item=>({id:`db-${item.id}`,databaseId:item.id,name:item.name_en||item.name_ar||"Unnamed Product",name_en:item.name_en||"",name_ar:item.name_ar||"",description:item.description_en||item.description_ar||"",description_en:item.description_en||"",description_ar:item.description_ar||"",brand:"Dermaé",category:item.category||"Skincare",gender:item.gender||"Unisex",price:Number(item.price_iqd||0),oldPrice:null,rating:5,reviews:0,badge:"NEW",image:item.image_urls?.[0]||"",ingredients:[]}))); })(); },[]);
@@ -341,7 +342,20 @@ useEffect(() => {
 
     {checkoutOpen&&<motion.div className="modal-overlay" onClick={()=>setCheckoutOpen(false)} initial={{opacity:0}} animate={{opacity:1}}><motion.div className="checkout-modal" onClick={e=>e.stopPropagation()} initial={{opacity:0,y:35,scale:.96}} animate={{opacity:1,y:0,scale:1}}><button className="modal-close" onClick={()=>setCheckoutOpen(false)}><X size={22}/></button><h2>{tr("Checkout","إكمال الطلب")}</h2><input type="text" placeholder={tr("Full Name","الاسم الكامل")} value={customerName} onChange={e=>setCustomerName(e.target.value)}/><input type="tel" inputMode="tel" placeholder={tr("Phone Number","رقم الهاتف")} value={customerPhone} onChange={e=>setCustomerPhone(e.target.value)}/><input type="text" placeholder={tr("Governorate","المحافظة")} value={customerGovernorate} onChange={e=>setCustomerGovernorate(e.target.value)}/><textarea placeholder={tr("Full Address","العنوان الكامل")} value={customerAddress} onChange={e=>setCustomerAddress(e.target.value)}/><div className="checkout-summary"><span>{tr("Items","القطع")}: {cartCount}</span><strong>{formatIQD(orderTotal)}</strong></div><button className="checkout-button" disabled={placingOrder} onClick={placeOrder}>{placingOrder?tr("Sending...","جار الإرسال..."):tr("Place Order","إرسال الطلب")}</button></motion.div></motion.div>}
 
-    <nav className="mobile-bottom-nav" aria-label="Mobile navigation"><a href="#home"><Home size={21}/><span>{tr("Home","الرئيسية")}</span></a><button onClick={scrollToShop}><Grid2X2 size={21}/><span>{tr("Shop","المتجر")}</span></button><button onClick={scrollToShop}><Heart size={21}/><span>{tr("Wishlist","المفضلة")}</span>{wishlist.length>0&&<b>{wishlist.length}</b>}</button><button onClick={()=>setCartOpen(true)}><ShoppingBag size={21}/><span>{tr("Cart","السلة")}</span>{cartCount>0&&<b>{cartCount}</b>}</button></nav>
+    <nav className="mobile-bottom-nav" aria-label="Mobile navigation">
+      <motion.a href="/#home" className={activeMobileTab==="home"?"active-nav":""} onClick={()=>{setActiveMobileTab("home");if(isProductRoute){navigate("/");window.setTimeout(()=>document.getElementById("home")?.scrollIntoView({behavior:"smooth"}),80);}}} whileTap={{scale:.86}}>
+        <span className="mobile-nav-icon"><Home size={21}/></span><span>{tr("Home","الرئيسية")}</span>
+      </motion.a>
+      <motion.button className={activeMobileTab==="shop"?"active-nav":""} onClick={()=>{setActiveMobileTab("shop");if(isProductRoute){navigate("/");window.setTimeout(scrollToShop,80);}else{scrollToShop();}}} whileTap={{scale:.86}}>
+        <span className="mobile-nav-icon"><Grid2X2 size={21}/></span><span>{tr("Shop","المتجر")}</span>
+      </motion.button>
+      <motion.button className={activeMobileTab==="wishlist"?"active-nav":""} onClick={()=>{setActiveMobileTab("wishlist");if(isProductRoute){navigate("/");window.setTimeout(scrollToShop,80);}else{scrollToShop();}}} whileTap={{scale:.86}}>
+        <span className="mobile-nav-icon"><Heart size={21}/></span><span>{tr("Wishlist","المفضلة")}</span>{wishlist.length>0&&<b>{wishlist.length}</b>}
+      </motion.button>
+      <motion.button data-cart-target className={activeMobileTab==="cart"?"active-nav":""} onClick={()=>{setActiveMobileTab("cart");setCartOpen(true);}} whileTap={{scale:.86}}>
+        <span className="mobile-nav-icon"><ShoppingBag size={21}/></span><span>{tr("Cart","السلة")}</span>{cartCount>0&&<b>{cartCount}</b>}
+      </motion.button>
+    </nav>
   </div></MotionConfig>;
 }
 
