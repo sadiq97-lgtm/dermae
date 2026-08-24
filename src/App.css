@@ -1237,6 +1237,14 @@ opacity: 1 !important;
   min-height:56px;
   width:100%;
   border-radius:14px;
+
+  position: static !important;
+  inset: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  transform: none !important;
 }
 
 .product-page-back{
