@@ -1,6 +1,14 @@
 /* Mobile enhancements for Dermaé. Loaded after App.css. */
 .mobile-menu-button,.mobile-nav-close,.mobile-menu-overlay,.mobile-bottom-nav{display:none}
 .sort-select{padding:10px 12px;border-radius:10px;min-height:44px}
+@media (max-width:768px){
+
+  .sort-select{
+    margin-bottom:0 !important;
+    transform:translateY(-8px) !important;
+  }
+
+}
 .products-count{text-align:center;margin-bottom:20px;opacity:.8}
 .product-image-placeholder,.cart-thumb-placeholder{display:grid;place-items:center;background:#f3eee8;color:#75655b;font-weight:700}
 .checkout-modal{position:relative;width:min(520px,calc(100% - 32px));max-height:90vh;overflow:auto;background:#fff;color:#171717;border-radius:18px;padding:28px}
