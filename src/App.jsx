@@ -12,6 +12,7 @@ import "./premium.css";
 import "./featured.css";
 import "./community.css";
 import "./floating-card.css";
+import "./CartLuxury.css";
 import { supabase } from "./lib/supabase";
 import ScrollStory from "./ScrollStory";
 import heroVideo from "./assets/hero-video.mp4";
