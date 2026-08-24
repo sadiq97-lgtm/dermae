@@ -194,6 +194,9 @@ function App() {
   const navigate=useNavigate();
   const [language,setLanguage]=useState("en"), [dbProducts,setDbProducts]=useState([]), [activeCategory,setActiveCategory]=useState("All");
   const [showLoader, setShowLoader] = useState(true);
+  const [theme, setTheme] = useState(
+  localStorage.getItem("theme") || "light"
+);
 
 useEffect(() => {
   const timer = setTimeout(() => {
@@ -202,6 +205,10 @@ useEffect(() => {
 
   return () => clearTimeout(timer);
 }, []);
+useEffect(() => {
+  document.documentElement.setAttribute("data-theme", theme);
+  localStorage.setItem("theme", theme);
+}, [theme]);
   const [search,setSearch]=useState(""), [sortBy,setSortBy]=useState("default"), [gender,setGender]=useState("All");
   const [selectedProduct,setSelectedProduct]=useState(null), [mobileMenu,setMobileMenu]=useState(false), [cartOpen,setCartOpen]=useState(false), [checkoutOpen,setCheckoutOpen]=useState(false);
   const [cart,setCart]=useState([]), [wishlist,setWishlist]=useState([]), [placingOrder,setPlacingOrder]=useState(false);
@@ -269,7 +276,14 @@ useEffect(() => {
   onClick={() => setLanguage(isArabic ? "en" : "ar")}
 >
   {isArabic ? "EN" : "AR"}
-</button> <button className="icon-button desktop-only"><User size={20}/></button><motion.button whileTap={{scale:.88}} className="icon-button cart-button" data-cart-target onClick={()=>setCartOpen(true)}><ShoppingBag size={21}/>{cartCount>0&&<span className="cart-count">{cartCount}</span>}</motion.button></div></motion.header>
+</button> <button
+  className="icon-button"
+  onClick={() =>
+    setTheme(theme === "light" ? "dark" : "light")
+  }
+>
+  {theme === "light" ? "🌙" : "☀️"}
+</button><button className="icon-button desktop-only"><User size={20}/></button><motion.button whileTap={{scale:.88}} className="icon-button cart-button" data-cart-target onClick={()=>setCartOpen(true)}><ShoppingBag size={21}/>{cartCount>0&&<span className="cart-count">{cartCount}</span>}</motion.button></div></motion.header>
 
     <main>
       <section className="hero" id="home"><motion.div className="hero-content" variants={stagger} initial="hidden" animate="show"><motion.span variants={reveal} className="eyebrow"><Sparkles size={15}/>{tr("PREMIUM SKINCARE","عناية فائقة بالبشرة")}</motion.span><motion.h1 variants={reveal}>{tr("Care","عناية")}<br/><em>{tr("That Shows.","تظهر نتائجها.")}</em></motion.h1><motion.p variants={reveal}>{tr("Thoughtfully crafted skincare for every kind of skin. Discover a simple ritual designed to make your natural beauty visible.","عناية بالبشرة مصممة بعناية لكل أنواع البشرة. اكتشف روتيناً بسيطاً يساعد على إبراز جمالك الطبيعي.")}</motion.p><motion.div variants={reveal} className="hero-buttons"><MagneticLink href="#shop" className="primary-button">{tr("Shop Collection","تسوق المنتجات")}<ChevronRight size={18}/></MagneticLink><MagneticLink href="#about" className="secondary-button">{tr("Discover Dermaé","اكتشف Dermaé")}<ChevronRight size={18}/></MagneticLink></motion.div><motion.div variants={reveal} className="hero-features"><div><ShieldCheck size={19}/>{tr("Clean formulas","تركيبات نظيفة")}</div><div><Sparkles size={19}/>{tr("Premium care","عناية فاخرة")}</div><div><Truck size={19}/>{tr("Iraq delivery","توصيل داخل العراق")}</div></motion.div></motion.div><HeroImage product={featuredProducts[0]} isArabic={isArabic} tr={tr} addToCart={addToCart} setSelectedProduct={setSelectedProduct}/></section>

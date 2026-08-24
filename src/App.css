@@ -1543,3 +1543,43 @@ PREMIUM FILTERS
   justify-content:center !important;
   gap:120px !important;
 }
+/* =========================
+   DARK MODE
+========================= */
+
+[data-theme="dark"] {
+  --bg: #0f1115;
+  --card: #171a21;
+  --text: #f5f5f5;
+  --border: rgba(255,255,255,.08);
+}
+
+[data-theme="dark"] body,
+[data-theme="dark"] .app {
+  background: var(--bg);
+  color: var(--text);
+}
+
+[data-theme="dark"] .header,
+[data-theme="dark"] .top-bar,
+[data-theme="dark"] .product-card,
+[data-theme="dark"] .featured-card,
+[data-theme="dark"] .why-card,
+[data-theme="dark"] .testimonial-card,
+[data-theme="dark"] .cart-drawer,
+[data-theme="dark"] .checkout-modal,
+[data-theme="dark"] .search-modal {
+  background: var(--card);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] p,
+[data-theme="dark"] span,
+[data-theme="dark"] a {
+  color: var(--text);
+}
