@@ -1821,3 +1821,39 @@ a {
   }
 
 }
+/* =========================
+   RTL PRODUCT PAGE MOBILE FIX
+   Arabic only
+========================= */
+@media (max-width: 900px) {
+  [dir="rtl"] .product-page-overlay .routed-product-page .modal-close {
+    position: fixed !important;
+    top: 14px !important;
+    left: 14px !important;
+    right: auto !important;
+    width: 34px !important;
+    height: 34px !important;
+    padding: 0 !important;
+    display: grid !important;
+    place-items: center !important;
+    transform: none !important;
+  }
+
+  [dir="rtl"] .product-page-overlay .routed-product-page .modal-close svg {
+    width: 18px !important;
+    height: 18px !important;
+    transform: none !important;
+  }
+
+  [dir="rtl"] .product-page-overlay .routed-product-page .modal-add {
+    position: static !important;
+    inset: auto !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    margin: 20px 0 0 !important;
+  }
+}
