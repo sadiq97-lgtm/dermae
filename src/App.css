@@ -1390,3 +1390,69 @@ opacity: 1 !important;
   }
 
 }
+/* =========================
+PREMIUM FILTERS
+========================= */
+
+.shop-controls{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:18px;
+}
+
+.sort-select{
+  min-width:170px;
+  height:46px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.04);
+  color:#fff;
+  backdrop-filter:blur(14px);
+  transition:.3s ease;
+}
+
+.sort-select:hover{
+  border-color:#8b5cf6;
+  box-shadow:0 0 20px rgba(139,92,246,.25);
+}
+
+.gender-buttons{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:-4px;
+  margin-bottom:10px;
+}
+
+.gender-buttons button{
+  min-width:84px;
+  height:42px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.03);
+  color:#fff;
+  transition:all .3s cubic-bezier(.22,1,.36,1);
+}
+
+.gender-buttons button:hover{
+  transform:translateY(-3px);
+  border-color:#8b5cf6;
+  box-shadow:0 12px 25px rgba(139,92,246,.25);
+}
+
+.gender-buttons button.active{
+  background:linear-gradient(
+    135deg,
+    #a855f7,
+    #7c3aed
+  );
+  border-color:#a855f7;
+  color:#fff;
+  box-shadow:
+    0 10px 30px rgba(168,85,247,.35);
+}
+
+.category-list{
+  margin-top:8px;
+}
