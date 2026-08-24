@@ -1,15 +1,27 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 const brand = "Dermaé";
 
 export default function IntroLoader() {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setReady(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
   return (
     <motion.div
       className="intro-loader"
       initial={{ opacity: 1 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { duration: 0.65, ease: "easeInOut" } }}
-      style={{ perspective: 1400, overflow: "hidden" }}
+      style={{
+        perspective: 1400,
+        overflow: "hidden",
+        visibility: ready ? "visible" : "hidden",
+      }}
     >
       <motion.div
         aria-hidden="true"
@@ -45,8 +57,8 @@ export default function IntroLoader() {
 
       <motion.div
         className="intro-loader-content"
-        initial={{ opacity: 0, rotateX: 25, }}
-        animate={{ opacity: 1, rotateX: 0, z: 0, scale: 1 }}
+        initial={false}
+        animate={{ opacity: ready ? 1 : 0, rotateX: 0 }}
         transition={{ duration: 1.25, ease: [0.16, 1, 0.3, 1] }}
         style={{
           position: "relative",
@@ -58,8 +70,8 @@ export default function IntroLoader() {
         <motion.span
           className="intro-loader-logo"
           aria-label={brand}
-          initial="hidden"
-          animate="show"
+          initial={false}
+          animate={ready ? "show" : "hidden"}
           variants={{
             hidden: {},
             show: { transition: { delayChildren: 0.12, staggerChildren: 0.075 } },
@@ -75,9 +87,10 @@ export default function IntroLoader() {
             <motion.span
               key={`${letter}-${index}`}
               variants={{
-                hidden: { opacity: 0, y: 54, rotateX: 75, filter: "blur(12px)" },
+                hidden: { opacity: 0, y: 54, rotateX: 75, filter: "blur(12px)", visibility: "hidden" },
                 show: {
                   opacity: 1,
+                  visibility: "visible",
                   y: 0,
                   rotateX: 0,
                   filter: "blur(0px)",
