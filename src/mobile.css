@@ -339,3 +339,38 @@ MOBILE PRODUCT CARD - FINAL COMPACT FIX
     line-height:1 !important;
   }
 }
+@media (max-width:768px){
+
+  .footer-column h3{
+    font-size:11px !important;
+    letter-spacing:.15em !important;
+    margin-bottom:12px !important;
+  }
+
+  .footer-column a{
+    font-size:13px !important;
+    line-height:1.8 !important;
+  }
+
+  .footer-identity p{
+    font-size:14px !important;
+  }
+
+  .footer-identity span{
+    font-size:12px !important;
+  }
+
+}
+@media (max-width:768px){
+
+  .footer-main{
+    display:flex !important;
+    justify-content:center !important;
+    gap:60px !important;
+  }
+
+  .footer-column{
+    text-align:center !important;
+  }
+
+}
