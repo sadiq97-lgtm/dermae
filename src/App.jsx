@@ -209,6 +209,7 @@ useEffect(() => {
   const [newsletterEmail,setNewsletterEmail]=useState("");
   const [activeMobileTab,setActiveMobileTab]=useState("home");
   const [skinAdvisorOpen,setSkinAdvisorOpen]=useState(false);
+  const [searchOpen,setSearchOpen]=useState(false);
   const isArabic=language==="ar"; const tr=(en,ar)=>isArabic?ar:en;
 
   useEffect(()=>{ (async()=>{ const {data,error}=await supabase.from("products").select("*").order("id",{ascending:false}); if(error){console.error("Products error:",error);return;} setDbProducts((data||[]).map(item=>({id:`db-${item.id}`,databaseId:item.id,name:item.name_en||item.name_ar||"Unnamed Product",name_en:item.name_en||"",name_ar:item.name_ar||"",description:item.description_en||item.description_ar||"",description_en:item.description_en||"",description_ar:item.description_ar||"",brand:"Dermaé",category:item.category||"Skincare",gender:item.gender||"Unisex",price:Number(item.price_iqd||0),oldPrice:null,rating:5,reviews:0,badge:"NEW",image:item.image_urls?.[0]||"",ingredients:[]}))); })(); },[]);
@@ -257,8 +258,18 @@ useEffect(() => {
 
   return <MotionConfig reducedMotion="user"><div className="app" dir={isArabic?"rtl":"ltr"} onPointerMove={(event)=>{if(event.pointerType!=="mouse")return;document.documentElement.style.setProperty("--cursor-x",`${event.clientX}px`);document.documentElement.style.setProperty("--cursor-y",`${event.clientY}px`);}}>
     <motion.div className="cursor-glow" aria-hidden="true" initial={{opacity:0}} animate={{opacity:1}}/>
-    <motion.div className="top-bar" initial={{y:-40,opacity:0}} animate={{y:0,opacity:1}} transition={{duration:.6}}><span>{tr("Free delivery on orders over 100,000 IQD","توصيل مجاني للطلبات فوق 100,000 دينار")}</span><span className="top-bar-right"><span className="care-tagline">Care That Shows™</span><button className="language-button" onClick={()=>setLanguage(isArabic?"en":"ar")}>{isArabic?"English":"العربية"}</button><button className="admin-link" onClick={()=>{window.location.href="/admin"}}>Admin</button></span></motion.div>
-    <motion.header className="header" initial={{y:-30,opacity:0}} animate={{y:0,opacity:1}} transition={{duration:.65,delay:.15}}><button className="mobile-menu-button" onClick={()=>setMobileMenu(true)} aria-label="Open menu"><Menu size={23}/></button><a className="logo" href="#home"><span className="logo-main">Dermaé</span><span className="logo-sub">CARE THAT SHOWS</span></a><nav className={`nav ${mobileMenu?"nav-open":""}`}><button className="mobile-nav-close" onClick={()=>setMobileMenu(false)}><X/></button>{[["#home","Home","الرئيسية"],["#shop","Shop","المتجر"],["#about","Our Story","قصتنا"],["#contact","Contact","تواصل معنا"]].map(([h,e,a])=><a key={h} href={h} onClick={()=>setMobileMenu(false)}>{tr(e,a)}</a>)}</nav>{mobileMenu&&<button className="mobile-menu-overlay" onClick={()=>setMobileMenu(false)} aria-label="Close menu"/>}<div className="header-actions"><button className="icon-button desktop-only" onClick={()=>document.querySelector(".search-box input")?.focus()}><Search size={20}/></button><button className="icon-button desktop-only"><User size={20}/></button><motion.button whileTap={{scale:.88}} className="icon-button cart-button" data-cart-target onClick={()=>setCartOpen(true)}><ShoppingBag size={21}/>{cartCount>0&&<span className="cart-count">{cartCount}</span>}</motion.button></div></motion.header>
+    <motion.div className="top-bar" initial={{y:-40,opacity:0}} animate={{y:0,opacity:1}} transition={{duration:.6}}><span>{tr("Free delivery on orders over 100,000 IQD","توصيل مجاني للطلبات فوق 100,000 دينار")}</span><span className="top-bar-right"><span className="care-tagline">Care That Shows™</span></span></motion.div>
+    <motion.header className="header" initial={{y:-30,opacity:0}} animate={{y:0,opacity:1}} transition={{duration:.65,delay:.15}}><button className="mobile-menu-button" onClick={()=>setMobileMenu(true)} aria-label="Open menu"><Menu size={23}/></button><a className="logo" href="#home"><span className="logo-main">Dermaé</span><span className="logo-sub">CARE THAT SHOWS</span></a><nav className={`nav ${mobileMenu?"nav-open":""}`}><button className="mobile-nav-close" onClick={()=>setMobileMenu(false)}><X/></button>{[["#home","Home","الرئيسية"],["#shop","Shop","المتجر"],["#about","Our Story","قصتنا"],["#contact","Contact","تواصل معنا"]].map(([h,e,a])=><a key={h} href={h} onClick={()=>setMobileMenu(false)}>{tr(e,a)}</a>)}</nav>{mobileMenu&&<button className="mobile-menu-overlay" onClick={()=>setMobileMenu(false)} aria-label="Close menu"/>}<div className="header-actions"><button
+  className="icon-button"
+  onClick={() => setSearchOpen(true)}
+>
+  <Search size={20}/>
+</button> <button
+  className="lang-toggle"
+  onClick={() => setLanguage(isArabic ? "en" : "ar")}
+>
+  {isArabic ? "EN" : "AR"}
+</button> <button className="icon-button desktop-only"><User size={20}/></button><motion.button whileTap={{scale:.88}} className="icon-button cart-button" data-cart-target onClick={()=>setCartOpen(true)}><ShoppingBag size={21}/>{cartCount>0&&<span className="cart-count">{cartCount}</span>}</motion.button></div></motion.header>
 
     <main>
       <section className="hero" id="home"><motion.div className="hero-content" variants={stagger} initial="hidden" animate="show"><motion.span variants={reveal} className="eyebrow"><Sparkles size={15}/>{tr("PREMIUM SKINCARE","عناية فائقة بالبشرة")}</motion.span><motion.h1 variants={reveal}>{tr("Care","عناية")}<br/><em>{tr("That Shows.","تظهر نتائجها.")}</em></motion.h1><motion.p variants={reveal}>{tr("Thoughtfully crafted skincare for every kind of skin. Discover a simple ritual designed to make your natural beauty visible.","عناية بالبشرة مصممة بعناية لكل أنواع البشرة. اكتشف روتيناً بسيطاً يساعد على إبراز جمالك الطبيعي.")}</motion.p><motion.div variants={reveal} className="hero-buttons"><MagneticLink href="#shop" className="primary-button">{tr("Shop Collection","تسوق المنتجات")}<ChevronRight size={18}/></MagneticLink><MagneticLink href="#about" className="secondary-button">{tr("Discover Dermaé","اكتشف Dermaé")}<ChevronRight size={18}/></MagneticLink></motion.div><motion.div variants={reveal} className="hero-features"><div><ShieldCheck size={19}/>{tr("Clean formulas","تركيبات نظيفة")}</div><div><Sparkles size={19}/>{tr("Premium care","عناية فاخرة")}</div><div><Truck size={19}/>{tr("Iraq delivery","توصيل داخل العراق")}</div></motion.div></motion.div><HeroImage product={featuredProducts[0]} isArabic={isArabic} tr={tr} addToCart={addToCart} setSelectedProduct={setSelectedProduct}/></section>
@@ -366,7 +377,47 @@ useEffect(() => {
     {cartOpen&&<motion.div className="cart-overlay" onClick={()=>setCartOpen(false)} initial={{opacity:0}} animate={{opacity:1}}><motion.aside className="cart-drawer" onClick={e=>e.stopPropagation()} initial={{x:isArabic?"-100%":"100%"}} animate={{x:0}} transition={{type:"spring",stiffness:260,damping:30}}><div className="cart-header"><div><span className="eyebrow">{tr("YOUR BAG","سلتك")}</span><h2>{tr("Shopping Bag","سلة التسوق")}</h2></div><button onClick={()=>setCartOpen(false)}><X size={22}/></button></div>{cart.length===0?<div className="empty-cart"><ShoppingBag size={42}/><h3>{tr("Your bag is empty","سلتك فارغة")}</h3><button onClick={()=>setCartOpen(false)} className="primary-button">{tr("Continue Shopping","متابعة التسوق")}</button></div>:<><div className="cart-items">{cart.map(item=><div className="cart-item" key={item.id}>{item.image?<img src={item.image} alt={item.name}/>:<div className="cart-thumb-placeholder">Dermaé</div>}<div className="cart-item-info"><h4>{isArabic?item.name_ar||item.name:item.name_en||item.name}</h4><span>{formatIQD(item.price)}</span><div className="quantity"><button onClick={()=>updateQuantity(item.id,-1)}><Minus size={14}/></button><span>{item.quantity}</span><button onClick={()=>updateQuantity(item.id,1)}><Plus size={14}/></button></div></div><button className="remove-item" onClick={()=>removeFromCart(item.id)}><Trash2 size={17}/></button></div>)}</div><div className="cart-summary"><div><span>{tr("Subtotal","المجموع الفرعي")}</span><strong>{formatIQD(cartSubtotal)}</strong></div><div><span>{tr("Delivery","التوصيل")}</span><strong>{delivery===0?tr("FREE","مجاني"):formatIQD(delivery)}</strong></div><div className="cart-total"><span>{tr("Total","المجموع")}</span><strong>{formatIQD(orderTotal)}</strong></div><button className="checkout-button" onClick={()=>{setCartOpen(false);setCheckoutOpen(true)}}>{tr("Proceed to Checkout","إكمال الطلب")}<ChevronRight size={18}/></button></div></>}</motion.aside></motion.div>}
 
     {checkoutOpen&&<motion.div className="modal-overlay" onClick={()=>setCheckoutOpen(false)} initial={{opacity:0}} animate={{opacity:1}}><motion.div className="checkout-modal" onClick={e=>e.stopPropagation()} initial={{opacity:0,y:35,scale:.96}} animate={{opacity:1,y:0,scale:1}}><button className="modal-close" onClick={()=>setCheckoutOpen(false)}><X size={22}/></button><h2>{tr("Checkout","إكمال الطلب")}</h2><input type="text" placeholder={tr("Full Name","الاسم الكامل")} value={customerName} onChange={e=>setCustomerName(e.target.value)}/><input type="tel" inputMode="tel" placeholder={tr("Phone Number","رقم الهاتف")} value={customerPhone} onChange={e=>setCustomerPhone(e.target.value)}/><input type="text" placeholder={tr("Governorate","المحافظة")} value={customerGovernorate} onChange={e=>setCustomerGovernorate(e.target.value)}/><textarea placeholder={tr("Full Address","العنوان الكامل")} value={customerAddress} onChange={e=>setCustomerAddress(e.target.value)}/><div className="checkout-summary"><span>{tr("Items","القطع")}: {cartCount}</span><strong>{formatIQD(orderTotal)}</strong></div><button className="checkout-button" disabled={placingOrder} onClick={placeOrder}>{placingOrder?tr("Sending...","جار الإرسال..."):tr("Place Order","إرسال الطلب")}</button></motion.div></motion.div>}
+{searchOpen && (
+  <motion.div
+    className="search-modal-overlay"
+    onClick={() => setSearchOpen(false)}
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+  >
+    <motion.div
+      className="search-modal"
+      onClick={(e) => e.stopPropagation()}
+      initial={{ y: -30, opacity: 0, scale: .96 }}
+      animate={{ y: 0, opacity: 1, scale: 1 }}
+    >
+      <button
+        className="search-modal-close"
+        onClick={() => setSearchOpen(false)}
+      >
+        <X size={20}/>
+      </button>
 
+      <h3>
+        {tr("Search Products","البحث عن المنتجات")}
+      </h3>
+
+      <div className="search-modal-box">
+        <Search size={18}/>
+        <input
+          autoFocus
+          type="search"
+          value={search}
+          onChange={(e)=>setSearch(e.target.value)}
+          placeholder={tr(
+            "Search products...",
+            "ابحث عن المنتجات..."
+          )}
+        />
+      </div>
+    </motion.div>
+  </motion.div>
+)}
     <nav className="mobile-bottom-nav" aria-label="Mobile navigation">
       <motion.a href="/#home" className={activeMobileTab==="home"?"active-nav":""} onClick={()=>{setActiveMobileTab("home");if(isProductRoute){navigate("/");window.setTimeout(()=>document.getElementById("home")?.scrollIntoView({behavior:"smooth"}),80);}}} whileTap={{scale:.86}}>
         <span className="mobile-nav-icon"><Home size={21}/></span><span>{tr("Home","الرئيسية")}</span>
