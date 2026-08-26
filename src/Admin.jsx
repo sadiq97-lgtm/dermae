@@ -25,6 +25,11 @@ const buttonStyle = (background, loading = false) => ({
 });
 
 export default function Admin() {
+  const [adminLang, setAdminLang] = useState(() => localStorage.getItem("adminLang") || "en");
+  const isArabic = adminLang === "ar";
+  const tr = (en, ar) => (isArabic ? ar : en);
+  const toggleAdminLanguage = () => setAdminLang((current) => current === "en" ? "ar" : "en");
+  useEffect(() => { localStorage.setItem("adminLang", adminLang); }, [adminLang]);
   const [session, setSession] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [email, setEmail] = useState("");
@@ -403,7 +408,25 @@ export default function Admin() {
     );
     setUpdatingOrderId(null);
   };
+const deleteOrder = async (orderId) => {
+  if (!window.confirm("Delete this order?")) return;
 
+  const { error } = await supabase
+    .from("orders")
+    .delete()
+    .eq("id", orderId);
+
+  if (error) {
+    alert(`Delete failed: ${error.message}`);
+    return;
+  }
+
+  setOrders((items) =>
+    items.filter((order) => order.id !== orderId)
+  );
+
+  alert("Order deleted");
+};
   const getOrderTotal = (order) => Number(order.total || 0);
 
   const visibleProducts = products.filter((product) => {
@@ -443,19 +466,19 @@ export default function Admin() {
 
   if (!session) {
     return (
-      <div className="admin-login-page">
+      <div className="admin-login-page" dir={isArabic ? "rtl" : "ltr"} lang={adminLang}>
         <div className="admin-login-glow" />
         <motion.form className="admin-login-card" onSubmit={loginAdmin} initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65 }}>
           <div className="admin-login-brand"><Sparkles size={20} /><span>DERMAÉ</span></div>
-          <h1>Welcome back.</h1>
-          <p>Sign in to manage products, orders and the Dermaé experience.</p>
-          <label>Email address</label>
+          <h1>{tr("Welcome back.", "مرحباً بعودتك.")}</h1>
+          <p>{tr("Sign in to manage products, orders and the Dermaé experience.", "سجّل الدخول لإدارة المنتجات والطلبات وتجربة Dermaé.")}</p>
+          <label>{tr("Email address", "البريد الإلكتروني")}</label>
           <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="admin@example.com" autoComplete="email" required />
-          <label>Password</label>
-          <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Your password" autoComplete="current-password" required />
+          <label>{tr("Password", "كلمة المرور")}</label>
+          <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder={tr("Your password", "كلمة المرور")} autoComplete="current-password" required />
           {loginError && <p className="admin-error">{loginError}</p>}
-          <button className="admin-primary admin-login-button" type="submit" disabled={loginLoading}>{loginLoading ? "Signing in..." : "Sign In"}</button>
-          <a href="/">← Back to storefront</a>
+          <button className="admin-primary admin-login-button" type="submit" disabled={loginLoading}>{loginLoading ? tr("Signing in...", "جارٍ تسجيل الدخول...") : tr("Sign In", "تسجيل الدخول")}</button>
+          <a href="/">{tr("← Back to storefront", "العودة إلى المتجر →")}</a>
         </motion.form>
       </div>
     );
@@ -469,24 +492,24 @@ export default function Admin() {
   ];
 
   return (
-    <div className="admin-shell">
+    <div className="admin-shell" dir={isArabic ? "rtl" : "ltr"} lang={adminLang}>
       <aside className="admin-sidebar">
-        <a className="admin-logo" href="/"><strong>Dermaé</strong><span>ADMINISTRATION</span></a>
+        <a className="admin-logo" href="/"><strong>Dermaé</strong><span>{tr("ADMINISTRATION", "الإدارة")}</span></a>
         <nav>
-          <a className="active" href="#overview"><BarChart3 size={18} />Overview</a>
-          <a href="#products"><Box size={18} />Products</a>
-          <a href="#orders"><ShoppingBag size={18} />Orders <b>{pendingOrders}</b></a>
+          <a className="active" href="#overview"><BarChart3 size={18} />{tr("Overview", "نظرة عامة")}</a>
+          <a href="#products"><Box size={18} />{tr("Products", "المنتجات")}</a>
+          <a href="#orders"><ShoppingBag size={18} />{tr("Orders", "الطلبات")} <b>{pendingOrders}</b></a>
         </nav>
         <div className="admin-sidebar-bottom">
-          <span>Signed in as</span><strong>{session.user?.email}</strong>
-          <button type="button" onClick={logoutAdmin}><LogOut size={17} />Sign Out</button>
+          <span>{tr("Signed in as", "تم تسجيل الدخول باسم")}</span><strong>{session.user?.email}</strong>
+          <button type="button" onClick={logoutAdmin}><LogOut size={17} />{tr("Sign Out", "تسجيل الخروج")}</button>
         </div>
       </aside>
 
       <main className="admin-main">
         <header className="admin-topbar" id="overview">
-          <div><span className="admin-kicker">DERMAÉ CONTROL CENTER</span><h1>Dashboard overview</h1><p>Manage your catalogue and fulfil customer orders from one place.</p></div>
-          <div className="admin-top-actions"><button className="admin-secondary" type="button" onClick={refreshDashboard}><RefreshCw size={17} />Refresh</button><button className="admin-primary" type="button" onClick={startAddingProduct}><PackagePlus size={18} />New Product</button></div>
+          <div><span className="admin-kicker">{tr("DERMAÉ CONTROL CENTER", "مركز تحكم DERMAÉ")}</span><h1>{tr("Dashboard overview", "نظرة عامة على لوحة التحكم")}</h1><p>{tr("Manage your catalogue and fulfil customer orders from one place.", "أدر المنتجات ونفّذ طلبات العملاء من مكان واحد.")}</p></div>
+          <div className="admin-top-actions"><button className="admin-secondary admin-language-toggle" type="button" onClick={toggleAdminLanguage}>{isArabic ? "EN" : "AR"}</button><button className="admin-secondary" type="button" onClick={refreshDashboard}><RefreshCw size={17} />{tr("Refresh", "تحديث")}</button><button className="admin-primary" type="button" onClick={startAddingProduct}><PackagePlus size={18} />{tr("New Product", "منتج جديد")}</button></div>
         </header>
 
         <section className="admin-stats-grid">
@@ -495,31 +518,38 @@ export default function Admin() {
 
         {(addingProduct || editingProductId) && (
           <motion.section className="admin-form-panel" initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="admin-section-title"><div><span className="admin-kicker">CATALOGUE EDITOR</span><h2>{editingProductId ? "Edit product" : "Add a new product"}</h2></div><button className="admin-icon-button" type="button" onClick={closeProductForm} disabled={updateLoading}><X size={20} /></button></div>
+            <div className="admin-section-title"><div><span className="admin-kicker">{tr("CATALOGUE EDITOR", "محرر المنتجات")}</span><h2>{editingProductId ? tr("Edit product", "تعديل المنتج") : tr("Add a new product", "إضافة منتج جديد")}</h2></div><button className="admin-icon-button" type="button" onClick={closeProductForm} disabled={updateLoading}><X size={20} /></button></div>
             <div className="admin-form-grid">
-              <label><span>English name</span><input value={productNameEn} onChange={(event) => setProductNameEn(event.target.value)} placeholder="Hydra Glow Serum" /></label>
-              <label><span>Arabic name</span><input value={productNameAr} onChange={(event) => setProductNameAr(event.target.value)} placeholder="اسم المنتج" dir="rtl" /></label>
-              <label className="admin-form-wide"><span>English description</span><textarea value={descriptionEn} onChange={(event) => setDescriptionEn(event.target.value)} placeholder="Product description" rows="4" /></label>
-              <label className="admin-form-wide"><span>Arabic description</span><textarea value={descriptionAr} onChange={(event) => setDescriptionAr(event.target.value)} placeholder="وصف المنتج" rows="4" dir="rtl" /></label>
-              <label><span>Price in IQD</span><input type="number" min="0" value={productPrice} onChange={(event) => setProductPrice(event.target.value)} placeholder="45000" /></label>
-              <label className="admin-upload"><span>Product image</span><div><ImagePlus size={22} /><input key={imageInputKey} type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={handleImageChange} /><small>JPG, PNG, WEBP or GIF · Max 5 MB</small></div></label>
+              <label><span>{tr("English name", "الاسم بالإنكليزية")}</span><input value={productNameEn} onChange={(event) => setProductNameEn(event.target.value)} placeholder="Hydra Glow Serum" /></label>
+              <label><span>{tr("Arabic name", "الاسم بالعربية")}</span><input value={productNameAr} onChange={(event) => setProductNameAr(event.target.value)} placeholder="اسم المنتج" dir="rtl" /></label>
+              <label className="admin-form-wide"><span>{tr("English description", "الوصف بالإنكليزية")}</span><textarea value={descriptionEn} onChange={(event) => setDescriptionEn(event.target.value)} placeholder="Product description" rows="4" /></label>
+              <label className="admin-form-wide"><span>{tr("Arabic description", "الوصف بالعربية")}</span><textarea value={descriptionAr} onChange={(event) => setDescriptionAr(event.target.value)} placeholder="وصف المنتج" rows="4" dir="rtl" /></label>
+              <label><span>{tr("Price in IQD", "السعر بالدينار العراقي")}</span><input type="number" min="0" value={productPrice} onChange={(event) => setProductPrice(event.target.value)} placeholder="45000" /></label>
+              <label className="admin-upload"><span>{tr("Product image", "صورة المنتج")}</span><div><ImagePlus size={22} /><input key={imageInputKey} type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={handleImageChange} /><small>{tr("JPG, PNG, WEBP or GIF · Max 5 MB", "JPG أو PNG أو WEBP أو GIF · الحد الأقصى 5 MB")}</small></div></label>
             </div>
             {(imagePreviewUrl || (imageUrl && !productImage)) && <div className="admin-image-preview"><img src={imagePreviewUrl || imageUrl} alt="Product preview" /><div><strong>{imagePreviewUrl ? "New image selected" : "Current product image"}</strong><span>{imagePreviewUrl ? "This image will be uploaded when you save." : "Select a new image to replace the current one."}</span>{imagePreviewUrl && <button type="button" onClick={resetImageSelection}>Remove selected image</button>}</div></div>}
-            <div className="admin-form-actions"><button className="admin-primary" type="button" onClick={editingProductId ? updateProduct : createProduct} disabled={updateLoading}>{updateLoading ? "Saving..." : editingProductId ? "Save Changes" : "Add Product"}</button><button className="admin-secondary" type="button" onClick={closeProductForm} disabled={updateLoading}>Cancel</button></div>
+            <div className="admin-form-actions"><button className="admin-primary" type="button" onClick={editingProductId ? updateProduct : createProduct} disabled={updateLoading}>{updateLoading ? tr("Saving...", "جارٍ الحفظ...") : editingProductId ? tr("Save Changes", "حفظ التغييرات") : tr("Add Product", "إضافة المنتج")}</button><button className="admin-secondary" type="button" onClick={closeProductForm} disabled={updateLoading}>{tr("Cancel", "إلغاء")}</button></div>
           </motion.section>
         )}
 
         <section className="admin-section" id="products">
-          <div className="admin-section-title"><div><span className="admin-kicker">CATALOGUE</span><h2>Products</h2><p>{visibleProducts.length} of {products.length} products</p></div><button className="admin-primary" type="button" onClick={startAddingProduct}><PackagePlus size={17} />Add Product</button></div>
-          <div className="admin-toolbar"><div className="admin-search"><Search size={18} /><input type="search" placeholder="Search products..." value={productSearch} onChange={(event) => setProductSearch(event.target.value)} /></div></div>
-          {visibleProducts.length === 0 ? <div className="admin-empty"><Box size={34} /><h3>No products found</h3><p>Try a different search or add a new product.</p></div> : <div className="admin-products-grid">{visibleProducts.map((product) => <motion.article className="admin-product-card" key={product.id} whileHover={{ y: -6 }}><div className="admin-product-image">{product.image_urls?.[0] ? <img src={product.image_urls[0]} alt={product.name_en || product.name_ar || "Product"} /> : <div><ImagePlus size={28} /><span>No image</span></div>}<span className="admin-product-id">#{product.id}</span></div><div className="admin-product-body"><span className="admin-product-label">DERMAÉ PRODUCT</span><h3>{product.name_en || product.name_ar || "Unnamed product"}</h3>{product.name_ar && <p dir="rtl">{product.name_ar}</p>}<strong>{Number(product.price_iqd || 0).toLocaleString()} IQD</strong><div className="admin-card-actions"><button className="admin-edit" type="button" onClick={() => startEditingProduct(product)} disabled={deletingProductId === product.id}><Edit3 size={16} />Edit</button><button className="admin-delete" type="button" onClick={() => deleteProduct(product)} disabled={deletingProductId === product.id}><Trash2 size={16} />{deletingProductId === product.id ? "Deleting..." : "Delete"}</button></div></div></motion.article>)}</div>}
+          <div className="admin-section-title"><div><span className="admin-kicker">{tr("CATALOGUE", "المنتجات")}</span><h2>{tr("Products", "المنتجات")}</h2><p>{visibleProducts.length} {tr("of", "من")} {products.length} {tr("products", "منتج")}</p></div><button className="admin-primary" type="button" onClick={startAddingProduct}><PackagePlus size={17} />{tr("Add Product", "إضافة منتج")}</button></div>
+          <div className="admin-toolbar"><div className="admin-search"><Search size={18} /><input type="search" placeholder={tr("Search products...", "ابحث عن المنتجات...")} value={productSearch} onChange={(event) => setProductSearch(event.target.value)} /></div></div>
+          {visibleProducts.length === 0 ? <div className="admin-empty"><Box size={34} /><h3>{tr("No products found", "لم يتم العثور على منتجات")}</h3><p>{tr("Try a different search or add a new product.", "جرّب بحثاً مختلفاً أو أضف منتجاً جديداً.")}</p></div> : <div className="admin-products-grid">{visibleProducts.map((product) => <motion.article className="admin-product-card" key={product.id} whileHover={{ y: -6 }}><div className="admin-product-image">{product.image_urls?.[0] ? <img src={product.image_urls[0]} alt={product.name_en || product.name_ar || "Product"} /> : <div><ImagePlus size={28} /><span>{tr("No image", "لا توجد صورة")}</span></div>}<span className="admin-product-id">#{product.id}</span></div><div className="admin-product-body"><span className="admin-product-label">{tr("DERMAÉ PRODUCT", "منتج DERMAÉ")}</span><h3>{product.name_en || product.name_ar || "Unnamed product"}</h3>{product.name_ar && <p dir="rtl">{product.name_ar}</p>}<strong>{Number(product.price_iqd || 0).toLocaleString()} IQD</strong><div className="admin-card-actions"><button className="admin-edit" type="button" onClick={() => startEditingProduct(product)} disabled={deletingProductId === product.id}><Edit3 size={16} />{tr("Edit", "تعديل")}</button><button className="admin-delete" type="button" onClick={() => deleteProduct(product)} disabled={deletingProductId === product.id}><Trash2 size={16} />{deletingProductId === product.id ? tr("Deleting...", "جارٍ الحذف...") : tr("Delete", "حذف")}</button></div></div></motion.article>)}</div>}
         </section>
 
         <section className="admin-section" id="orders">
-          <div className="admin-section-title"><div><span className="admin-kicker">FULFILMENT</span><h2>Orders</h2><p>Review customer details and update fulfilment status.</p></div></div>
-          <div className="admin-status-summary"><button onClick={() => setOrderFilter("Pending")}><Clock3 size={16} /><span>Pending</span><b>{pendingOrders}</b></button><button onClick={() => setOrderFilter("Processing")}><Truck size={16} /><span>Processing</span><b>{processingOrders}</b></button><button onClick={() => setOrderFilter("Delivered")}><CircleCheck size={16} /><span>Delivered</span><b>{deliveredOrders}</b></button><button onClick={() => setOrderFilter("Cancelled")}><Ban size={16} /><span>Cancelled</span><b>{cancelledOrders}</b></button></div>
-          <div className="admin-toolbar admin-orders-toolbar"><div className="admin-search"><Search size={18} /><input type="search" placeholder="Search customer, phone or order..." value={orderSearch} onChange={(event) => setOrderSearch(event.target.value)} /></div><select value={orderFilter} onChange={(event) => setOrderFilter(event.target.value)}><option value="All">All Orders</option><option value="Pending">Pending</option><option value="Processing">Processing</option><option value="Delivered">Delivered</option><option value="Cancelled">Cancelled</option></select></div>
-          {orders.length === 0 ? <div className="admin-empty"><ShoppingBag size={34} /><h3>No orders yet</h3><p>New customer orders will appear here.</p></div> : visibleOrders.length === 0 ? <div className="admin-empty"><Search size={34} /><h3>No matching orders</h3><p>Change the search or selected status.</p></div> : <div className="admin-orders-grid">{visibleOrders.map((order) => { const status = order.status || "Pending"; return <motion.article className="admin-order-card" key={order.id} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}><div className="admin-order-head"><div><span>ORDER</span><strong>#{order.order_number || order.id}</strong></div><span className={statusClass(status)}>{status}</span></div><div className="admin-order-details"><div><span>Customer</span><strong>{order.customer_name || "-"}</strong></div><div><span>Phone</span><strong>{order.customer_phone || order.phone || "-"}</strong></div><div><span>Governorate</span><strong>{order.customer_governorate || "-"}</strong></div><div><span>Total</span><strong>{getOrderTotal(order).toLocaleString()} IQD</strong></div></div><div className="admin-order-footer"><label>Update status<select value={status} disabled={updatingOrderId === order.id} onChange={(event) => updateOrderStatus(order.id, event.target.value)}><option value="Pending">Pending</option><option value="Processing">Processing</option><option value="Delivered">Delivered</option><option value="Cancelled">Cancelled</option></select></label>{updatingOrderId === order.id && <span className="admin-saving">Updating...</span>}</div></motion.article>; })}</div>}
+          <div className="admin-section-title"><div><span className="admin-kicker">{tr("FULFILMENT", "تنفيذ الطلبات")}</span><h2>{tr("Orders", "الطلبات")}</h2><p>{tr("Review customer details and update fulfilment status.", "راجع تفاصيل العملاء وحدّث حالة تنفيذ الطلب.")}</p></div></div>
+          <div className="admin-status-summary"><button onClick={() => setOrderFilter("Pending")}><Clock3 size={16} /><span>{tr("Pending", "قيد الانتظار")}</span><b>{pendingOrders}</b></button><button onClick={() => setOrderFilter("Processing")}><Truck size={16} /><span>{tr("Processing", "قيد المعالجة")}</span><b>{processingOrders}</b></button><button onClick={() => setOrderFilter("Delivered")}><CircleCheck size={16} /><span>{tr("Delivered", "تم التوصيل")}</span><b>{deliveredOrders}</b></button><button onClick={() => setOrderFilter("Cancelled")}><Ban size={16} /><span>{tr("Cancelled", "ملغي")}</span><b>{cancelledOrders}</b></button></div>
+          <div className="admin-toolbar admin-orders-toolbar"><div className="admin-search"><Search size={18} /><input type="search" placeholder={tr("Search customer, phone or order...", "ابحث عن عميل أو هاتف أو طلب...")} value={orderSearch} onChange={(event) => setOrderSearch(event.target.value)} /></div><select value={orderFilter} onChange={(event) => setOrderFilter(event.target.value)}><option value="All">{tr("All Orders", "كل الطلبات")}</option><option value="Pending">{tr("Pending", "قيد الانتظار")}</option><option value="Processing">{tr("Processing", "قيد المعالجة")}</option><option value="Delivered">{tr("Delivered", "تم التوصيل")}</option><option value="Cancelled">{tr("Cancelled", "ملغي")}</option></select></div>
+          {orders.length === 0 ? <div className="admin-empty"><ShoppingBag size={34} /><h3>{tr("No orders yet", "لا توجد طلبات بعد")}</h3><p>{tr("New customer orders will appear here.", "ستظهر طلبات العملاء الجديدة هنا.")}</p></div> : visibleOrders.length === 0 ? <div className="admin-empty"><Search size={34} /><h3>{tr("No matching orders", "لا توجد طلبات مطابقة")}</h3><p>{tr("Change the search or selected status.", "غيّر البحث أو الحالة المحددة.")}</p></div> : <div className="admin-orders-grid">{visibleOrders.map((order) => { const status = order.status || "Pending"; return <motion.article className="admin-order-card" key={order.id} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}><div className="admin-order-head"><div><span>{tr("ORDER", "طلب")}</span><strong>#{order.order_number || order.id}</strong></div><span className={statusClass(status)}>{status}</span></div><div className="admin-order-details"><div><span>{tr("Customer", "العميل")}</span><strong>{order.customer_name || "-"}</strong></div><div><span>{tr("Phone", "الهاتف")}</span><strong>{order.customer_phone || order.phone || "-"}</strong></div><div><span>{tr("Governorate", "المحافظة")}</span><strong>{order.customer_governorate || "-"}</strong></div><div><span>{tr("Total", "المجموع")}</span><strong>{getOrderTotal(order).toLocaleString()} IQD</strong></div></div><button
+  className="admin-delete"
+  type="button"
+  onClick={() => deleteOrder(order.id)}
+>
+  <Trash2 size={16} />
+  Delete
+</button><div className="admin-order-footer"><label>{tr("Update status", "تحديث الحالة")}<select value={status} disabled={updatingOrderId === order.id} onChange={(event) => updateOrderStatus(order.id, event.target.value)}><option value="Pending">{tr("Pending", "قيد الانتظار")}</option><option value="Processing">{tr("Processing", "قيد المعالجة")}</option><option value="Delivered">{tr("Delivered", "تم التوصيل")}</option><option value="Cancelled">{tr("Cancelled", "ملغي")}</option></select></label>{updatingOrderId === order.id && <span className="admin-saving">{tr("Updating...", "جارٍ التحديث...")}</span>}</div></motion.article>; })}</div>}
         </section>
       </main>
     </div>
