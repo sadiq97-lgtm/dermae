@@ -374,3 +374,40 @@ input[type="search"]{
   background:#fffaf4 !important;
   color:#6b7068 !important;
 }
+.whatsapp-button{
+  position: fixed !important;
+
+  right: 24px !important;
+  bottom: 24px !important;
+
+  width: 56px !important;
+  height: 56px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  border-radius: 50% !important;
+
+  background: linear-gradient(
+    135deg,
+    #91a88a,
+    #5f7558
+  ) !important;
+
+  color: #fff !important;
+
+  box-shadow:
+    0 12px 30px rgba(83,105,77,.25) !important;
+
+  z-index: 9999 !important;
+}
+
+.whatsapp-button svg{
+  width: 24px !important;
+  height: 24px !important;
+
+  display: block !important;
+
+  color: #fff !important;
+}
