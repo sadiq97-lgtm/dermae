@@ -19,6 +19,7 @@ import ScrollStory from "./ScrollStory";
 import heroVideo from "./assets/hero-video.mp4";
 import IntroLoader from "./IntroLoader";
 import SkinAdvisor from "./SkinAdvisor";
+import luxurySerum from "./assets/luxury-serum.mp4";
 
 const fallbackProducts = [
   { id:"demo-1", name:"Hydra Glow Serum", name_en:"Hydra Glow Serum", name_ar:"سيروم الإشراقة والترطيب", brand:"Dermaé", category:"Serums", gender:"Women", price:45000, oldPrice:55000, rating:4.9, reviews:128, badge:"BESTSELLER", image:"https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=900&q=85", description:"A lightweight hydrating serum designed to restore moisture and give the skin a natural glow.", description_ar:"سيروم خفيف للترطيب واستعادة نضارة البشرة الطبيعية.", ingredients:["Hyaluronic Acid","Niacinamide","Vitamin B5"] },
@@ -135,6 +136,140 @@ function HeroImage({ product, isArabic, tr, addToCart, setSelectedProduct }) {
       )}
     </motion.div>
   </motion.div>;
+}
+
+function FloatingProduct3D({ product, isArabic }) {
+  const pointerX = useMotionValue(0);
+  const pointerY = useMotionValue(0);
+  const smoothX = useSpring(pointerX, { stiffness: 130, damping: 18 });
+  const smoothY = useSpring(pointerY, { stiffness: 130, damping: 18 });
+  const rotateY = useTransform(smoothX, [-0.5, 0.5], [-14, 14]);
+  const rotateX = useTransform(smoothY, [-0.5, 0.5], [12, -12]);
+  const imageX = useTransform(smoothX, [-0.5, 0.5], [-9, 9]);
+  const imageY = useTransform(smoothY, [-0.5, 0.5], [-7, 7]);
+  const shadowX = useTransform(smoothX, [-0.5, 0.5], [16, -16]);
+
+  const handlePointerMove = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    pointerX.set((event.clientX - rect.left) / rect.width - 0.5);
+    pointerY.set((event.clientY - rect.top) / rect.height - 0.5);
+  };
+
+  const resetTilt = () => {
+    pointerX.set(0);
+    pointerY.set(0);
+  };
+
+  if (!product?.image) return null;
+
+  const productName = isArabic
+    ? product.name_ar || product.name
+    : product.name_en || product.name;
+
+  return (
+    <motion.div
+      className="about-image floating-product-stage"
+      variants={{
+        hidden: { opacity: 0, x: -70 },
+        show: { opacity: 1, x: 0, transition: { duration: 0.85 } },
+      }}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={resetTilt}
+      onPointerCancel={resetTilt}
+      style={{
+        position: "relative",
+        minHeight: "430px",
+        display: "grid",
+        placeItems: "center",
+        overflow: "hidden",
+        perspective: "1100px",
+        touchAction: "pan-y",
+        cursor: "grab",
+        background: "radial-gradient(circle at 50% 42%, rgba(172, 192, 164, .42), rgba(244, 238, 225, .88) 48%, rgba(229, 218, 198, .96) 100%)",
+      }}
+    >
+      <motion.div
+        aria-hidden="true"
+        animate={{ scale: [1, 1.08, 1], opacity: [0.55, 0.8, 0.55] }}
+        transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}
+        style={{
+          position: "absolute",
+          width: "70%",
+          aspectRatio: "1",
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(255,255,255,.9) 0%, rgba(151,177,143,.28) 45%, transparent 72%)",
+          filter: "blur(18px)",
+        }}
+      />
+
+      <motion.div
+        style={{
+          rotateX,
+          rotateY,
+          x: imageX,
+          y: imageY,
+          transformStyle: "preserve-3d",
+          position: "relative",
+          zIndex: 2,
+          width: "min(72%, 330px)",
+        }}
+        animate={{ translateY: [0, -16, 0], rotateZ: [-1.2, 1.2, -1.2] }}
+        transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
+        whileTap={{ scale: 0.97 }}
+      >
+        <motion.img
+          src={product.image}
+          alt={productName || "Dermaé product"}
+          draggable="false"
+          style={{
+            display: "block",
+            width: "100%",
+            maxHeight: "350px",
+            objectFit: "contain",
+            borderRadius: "26px",
+            userSelect: "none",
+            filter: "drop-shadow(0 30px 28px rgba(48, 62, 43, .24))",
+            transform: "translateZ(55px)",
+          }}
+        />
+      </motion.div>
+
+      <motion.div
+        aria-hidden="true"
+        style={{
+          x: shadowX,
+          position: "absolute",
+          bottom: "13%",
+          width: "42%",
+          height: "24px",
+          borderRadius: "50%",
+          background: "rgba(48, 62, 43, .24)",
+          filter: "blur(14px)",
+        }}
+        animate={{ scaleX: [1, 0.78, 1], opacity: [0.42, 0.24, 0.42] }}
+        transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      <span
+        style={{
+          position: "absolute",
+          left: "18px",
+          bottom: "16px",
+          zIndex: 3,
+          padding: "8px 12px",
+          border: "1px solid rgba(255,255,255,.55)",
+          borderRadius: "999px",
+          color: "#53694d",
+          background: "rgba(255,255,255,.48)",
+          backdropFilter: "blur(12px)",
+          fontSize: "11px",
+          letterSpacing: ".08em",
+        }}
+      >
+        {isArabic ? "حرّك المنتج" : "MOVE THE PRODUCT"}
+      </span>
+    </motion.div>
+  );
 }
 
 function launchCartFlight(product, sourceElement) {
@@ -407,9 +542,31 @@ useEffect(() => {
         </div>
       </motion.section>
 
-      <motion.section className="promise-section" initial="hidden" whileInView="show" viewport={{once:true,amount:.2}} variants={stagger}>
-        <motion.div className="promise-visual" variants={{hidden:{opacity:0,scale:.94},show:{opacity:1,scale:1,transition:{duration:1,ease:[.22,1,.36,1]}}}}>
-          <motion.img src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=1400&q=88" alt="Dermaé skincare ritual" loading="lazy" whileHover={{scale:1.035}} transition={{duration:.7}}/>
+      <motion.section
+  className="promise-section"
+  initial="hidden"
+  whileInView="show"
+  viewport={{ once: true, amount: .2 }}
+  variants={stagger}
+>
+  <motion.div
+    className="promise-visual"
+    variants={{
+      hidden:{opacity:0,scale:.94},
+      show:{
+        opacity:1,
+        scale:1,
+        transition:{duration:1,ease:[.22,1,.36,1]}
+      }
+    }}
+  >
+    <motion.img
+      src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=1400&q=88"
+      alt="Dermaé skincare ritual"
+      loading="lazy"
+      whileHover={{scale:1.035}}
+      transition={{duration:.7}}
+    />
           <div className="promise-stamp"><span>DERMAÉ</span><small>{tr("CARE THAT SHOWS","عناية تظهر نتائجها")}</small></div>
         </motion.div>
         <motion.div className="promise-copy" variants={{hidden:{opacity:0,x:isArabic?-70:70},show:{opacity:1,x:0,transition:{duration:.9,ease:[.22,1,.36,1]}}}}>
@@ -427,7 +584,61 @@ useEffect(() => {
         {filteredProducts.length===0?<div className="empty-products"><h3>{tr("No products found","لا توجد منتجات مطابقة")}</h3><p>{tr("Try another search or category.","جرّب بحثاً أو تصنيفاً آخر.")}</p></div>:<motion.div className="products-grid" variants={stagger} initial="hidden" whileInView="show" viewport={{once:true,amount:.08}}>{filteredProducts.map(product=>{const liked=wishlist.includes(product.id),displayName=isArabic?product.name_ar||product.name:product.name_en||product.name;return <motion.article variants={reveal} whileHover={{y:-10}} transition={{type:"spring",stiffness:220,damping:22}} className="product-card" key={product.id} onClick={()=>openProductPage(product)}><div className="product-image">{product.image?<motion.img whileHover={{scale:1.06}} transition={{duration:.45}} src={product.image} alt={displayName} loading="lazy"/>:<div className="product-image-placeholder">Dermaé</div>}<span className="product-badge">{product.badge}</span><motion.button whileTap={{scale:.78}} className={`wishlist-button ${liked?"liked":""}`} onClick={e=>{e.stopPropagation();toggleWishlist(product.id)}} aria-label="Wishlist"><Heart size={18} fill={liked?"currentColor":"none"}/></motion.button><button className="quick-view" onClick={e=>{e.stopPropagation();setSelectedProduct(product)}}>{tr("Quick View","عرض سريع")}</button></div><div className="product-info"><span className="product-category">{isArabic?categoryAr[product.category]||product.category:product.category}</span><h3>{displayName}</h3><div className="rating"><Star size={14} fill="currentColor"/><span>{product.rating}</span><small>({product.reviews})</small></div><div className="product-bottom"><div className="price"><strong>{formatIQD(product.price)}</strong>{product.oldPrice&&<del>{formatIQD(product.oldPrice)}</del>}</div><motion.button whileHover={{scale:1.06}} whileTap={{scale:.92}} className="add-button" onClick={e=>{e.stopPropagation();addToCart(product,e.currentTarget.closest(".product-card"))}}><Plus size={18}/><span>{tr("Add","إضافة")}</span></motion.button></div></div></motion.article>})}</motion.div>}
       </section>
 
-      <motion.section className="about-section" id="about" initial="hidden" whileInView="show" viewport={{once:true,amount:.2}} variants={stagger}><motion.div variants={{hidden:{opacity:0,x:-70},show:{opacity:1,x:0,transition:{duration:.85}}}} className="about-image"><motion.img whileHover={{scale:1.04}} transition={{duration:.55}} src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=1600&q=90" alt="Skincare ritual" loading="lazy"/></motion.div><motion.div variants={{hidden:{opacity:0,x:70},show:{opacity:1,x:0,transition:{duration:.85}}}} className="about-content"><span className="eyebrow">{tr("OUR PHILOSOPHY","فلسفتنا")}</span><h2>{tr("Beautiful skin starts with care.","بشرة جميلة تبدأ مع العناية.")}</h2><p>{tr("Dermaé was created around one simple idea: skincare should feel considered, effective and beautiful.","تم إنشاء Dermaé حول فكرة بسيطة: يجب أن تكون العناية بالبشرة فعالة وجميلة ومصممة بعناية.")}</p><a href="#shop" className="text-link">{tr("Explore our products","استكشف منتجاتنا")}<ChevronRight size={17}/></a></motion.div></motion.section>
+      <motion.section
+  className="about-section"
+  id="about"
+  initial="hidden"
+  whileInView="show"
+  viewport={{once:true,amount:.2}}
+  variants={stagger}
+>
+  <motion.div
+    variants={{
+      hidden:{opacity:0,x:-70},
+      show:{opacity:1,x:0,transition:{duration:.85}}
+    }}
+    className="about-image"
+  >
+    <video
+  className="about-video"
+  src={luxurySerum}
+  autoPlay
+  muted
+  loop
+  playsInline
+/>
+  </motion.div>
+
+  <motion.div
+    variants={{
+      hidden:{opacity:0,x:70},
+      show:{opacity:1,x:0,transition:{duration:.85}}
+    }}
+    className="about-content"
+  >
+    <span className="eyebrow">{tr("OUR PHILOSOPHY","فلسفتنا")}</span>
+
+    <h2>
+      {tr(
+        "Beautiful skin starts with care.",
+        "بشرة جميلة تبدأ مع العناية."
+      )}
+    </h2>
+
+    <p>
+      {tr(
+        "Dermaé was created around one simple idea: skincare should feel considered, effective and beautiful.",
+        "تم إنشاء Dermaé حول فكرة بسيطة: يجب أن تكون العناية بالبشرة فعالة وجميلة ومصممة بعناية."
+      )}
+    </p>
+
+    <a href="#shop" className="text-link">
+      {tr("Explore our products","استكشف منتجاتنا")}
+      <ChevronRight size={17}/>
+    </a>
+  </motion.div>
+</motion.section>
+
     </main>
 <ScrollStory tr={tr} />
     <motion.section className="testimonials-section" initial="hidden" whileInView="show" viewport={{once:true,amount:.16}} variants={stagger}>

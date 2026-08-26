@@ -1923,3 +1923,36 @@ a {
 .text-link:hover{
   color:#53694d !important;
 }
+.about-video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+
+  border-radius:32px;
+
+  box-shadow:
+    0 30px 60px rgba(0,0,0,.12);
+
+  transition:transform .5s ease;
+}
+
+.about-video:hover{
+  transform:scale(1.03);
+}
+.about-video{
+  width:100%;
+  height:500px;
+
+  object-fit:cover;
+
+  border-radius:32px;
+  display:block;
+
+  box-shadow:0 30px 60px rgba(0,0,0,.15);
+}
+
+@media (max-width:768px){
+  .about-video{
+    height:320px;
+  }
+}

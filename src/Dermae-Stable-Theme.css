@@ -375,11 +375,21 @@ input[type="search"]{
   color:#6b7068 !important;
 }
 
-  .whatsapp-button{
+ .whatsapp-button{
   position: fixed !important;
   right: 24px !important;
   bottom: 24px !important;
+}
 
+html[dir="rtl"] .whatsapp-button{
+  right: auto !important;
+  left: 24px !important;
+}
+
+.whatsapp-button{
+  position: fixed !important;
+  right: 24px !important;
+  bottom: 24px !important;
 
   width: 49px !important;
   height: 49px !important;
@@ -398,10 +408,19 @@ input[type="search"]{
 
   color: #fff !important;
 
-  box-shadow:
-    0 12px 30px rgba(83,105,77,.25) !important;
+  box-shadow: 0 12px 30px rgba(83,105,77,.25) !important;
 
   z-index: 9999 !important;
+}
+
+html[dir="rtl"] .whatsapp-button{
+  right: auto !important;
+  left: 24px !important;
+}
+
+html[dir="ltr"] .whatsapp-button{
+  left: auto !important;
+  right: 24px !important;
 }
 
 .whatsapp-button svg{
