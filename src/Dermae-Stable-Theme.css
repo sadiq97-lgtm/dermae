@@ -351,3 +351,26 @@ input[type="search"]{
   }
 
 }}
+.sort-select{
+  background: rgba(255,253,248,.76) !important;
+
+  border: 1px solid rgba(113,133,107,.20) !important;
+
+  color: #6b7068 !important;
+
+  font-size: 12px !important;
+  font-weight: 500 !important;
+
+  border-radius: 12px !important;
+
+  box-shadow: none !important;
+}
+
+.sort-select:hover{
+  border-color: rgba(113,133,107,.35) !important;
+}
+
+.sort-select option{
+  background:#fffaf4 !important;
+  color:#6b7068 !important;
+}
