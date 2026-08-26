@@ -256,7 +256,85 @@ useEffect(() => {
   const removeFromCart=id=>setCart(a=>a.filter(i=>i.id!==id));
   const toggleWishlist=id=>setWishlist(a=>a.includes(id)?a.filter(i=>i!==id):[...a,id]);
   const cartCount=cart.reduce((s,i)=>s+i.quantity,0), cartSubtotal=cart.reduce((s,i)=>s+i.price*i.quantity,0), delivery=cartSubtotal>=100000?0:5000, orderTotal=cartSubtotal+delivery;
-  const placeOrder=async()=>{if(!customerName.trim()||!customerPhone.trim()||!customerGovernorate.trim()||!customerAddress.trim()){alert(tr("Please complete all checkout fields.","يرجى إكمال جميع حقول الطلب."));return}if(!cart.length||placingOrder)return;setPlacingOrder(true);const {error}=await supabase.from("orders").insert([{customer_name:customerName.trim(),customer_phone:customerPhone.trim(),customer_governorate:customerGovernorate.trim(),customer_address:customerAddress.trim(),items:cart,total:orderTotal,status:"Pending"}]);if(error){console.error("Order error:",error);alert(error.message||tr("Order failed","فشل إرسال الطلب"));setPlacingOrder(false);return}alert(tr("Order placed successfully","تم إرسال الطلب بنجاح"));setCart([]);setCustomerName("");setCustomerPhone("");setCustomerGovernorate("");setCustomerAddress("");setCheckoutOpen(false);setCartOpen(false);setPlacingOrder(false)};
+  const placeOrder = async () => {
+  if (
+    !customerName.trim() ||
+    !customerPhone.trim() ||
+    !customerGovernorate.trim() ||
+    !customerAddress.trim()
+  ) {
+    alert(
+      tr(
+        "Please complete all checkout fields.",
+        "يرجى إكمال جميع حقول الطلب."
+      )
+    );
+    return;
+  }
+
+  if (!cart.length || placingOrder) return;
+
+  setPlacingOrder(true);
+
+  const orderPayload = {
+    customer_name: customerName.trim(),
+    customer_phone: customerPhone.trim(),
+    customer_governorate: customerGovernorate.trim(),
+    customer_address: customerAddress.trim(),
+    items: cart,
+    total: orderTotal,
+    status: "Pending",
+  };
+
+  const { data, error } = await supabase
+    .from("orders")
+    .insert([orderPayload])
+    .select("*")
+    .single();
+
+  if (error) {
+    console.error("Order error:", error);
+
+    alert(
+      error.message ||
+        tr("Order failed", "فشل إرسال الطلب")
+    );
+
+    setPlacingOrder(false);
+    return;
+  }
+
+  const { error: notificationError } =
+    await supabase.functions.invoke(
+      "telegram-order-notify",
+      {
+        body: data || orderPayload,
+      }
+    );
+
+  if (notificationError) {
+    console.error(
+      "Telegram notification error:",
+      notificationError
+    );
+  }
+
+  alert(
+    tr(
+      "Order placed successfully",
+      "تم إرسال الطلب بنجاح"
+    )
+  );
+
+  setCart([]);
+  setCustomerName("");
+  setCustomerPhone("");
+  setCustomerGovernorate("");
+  setCustomerAddress("");
+  setCheckoutOpen(false);
+  setCartOpen(false);
+  setPlacingOrder(false);
+};
   const scrollToShop=()=>document.getElementById("shop")?.scrollIntoView({behavior:"smooth"});
   const subscribeNewsletter=(event)=>{event.preventDefault();const email=newsletterEmail.trim();if(!email||!email.includes("@")){alert(tr("Please enter a valid email address.","يرجى إدخال بريد إلكتروني صحيح."));return;}alert(tr("Thank you for joining Dermaé.","شكراً لانضمامك إلى مجتمع Dermaé."));setNewsletterEmail("");};
 
