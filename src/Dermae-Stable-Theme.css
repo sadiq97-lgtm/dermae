@@ -374,11 +374,12 @@ input[type="search"]{
   background:#fffaf4 !important;
   color:#6b7068 !important;
 }
-.whatsapp-button{
-  position: fixed !important;
 
+  .whatsapp-button{
+  position: fixed !important;
   right: 24px !important;
-  bottom: 88px !important;
+  bottom: 24px !important;
+
 
   width: 49px !important;
   height: 49px !important;
@@ -411,3 +412,95 @@ input[type="search"]{
 
   color: #fff !important;
 }
+@media (min-width:769px){
+
+  .wishlist-button{
+    transform: scale(.85) !important;
+  }
+
+  .quick-view{
+    transform: scale(.85) !important;
+    margin-left: 6px !important;
+  }
+
+  .whatsapp-button{
+    bottom:24px !important;
+  }
+
+  .skin-advisor-launch{
+    bottom:24px !important;
+  }
+
+}
+@media (min-width:769px){
+
+  .product-info{
+    min-height:170px !important;
+    padding:10px 18px 12px !important;
+  }
+
+  .product-info h3{
+    min-height:40px !important;
+    margin:4px 0 !important;
+  }
+
+  .rating{
+    margin:0 0 6px !important;
+  }
+
+  .price{
+    margin:0 0 6px !important;
+  }
+
+  .product-bottom{
+    margin-top:auto !important;
+  }
+
+}
+@media (min-width:769px){
+
+  .wishlist-button{
+    transform: scale(.82) !important;
+    margin-right: -4px !important;
+  }
+
+  .quick-view{
+    transform: scale(.82) !important;
+    margin-left: -6px !important;
+  }
+
+}
+@media (min-width:769px){
+
+  .product-image{
+    position:relative !important;
+  }
+
+  .wishlist-button{
+    position:absolute !important;
+    top:14px !important;
+    right:14px !important;
+    z-index:20 !important;
+  }
+@media (min-width:769px){
+
+  .quick-view{
+    width:110px !important;
+    height:34px !important;
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+
+    font-size:12px !important;
+    line-height:1 !important;
+
+    white-space:nowrap !important;
+
+    margin-top:6px !important;
+  }
+.quick-view{
+  left:50% !important;
+  transform:translateX(110%) !important;
+}
+}}

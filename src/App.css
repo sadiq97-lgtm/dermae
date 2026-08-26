@@ -396,7 +396,7 @@ body {
 
 .hero-image-card {
   width: 100%;
-  overflow: hidden;
+  overflow: visible;
   border-radius: 20px;
 }
 
@@ -564,8 +564,8 @@ input[type="search"] {
 }
 
 .product-modal {
-  background: #111827;
-  color: white;
+  background: #fffaf4 !important;
+color: #252b25 !important;
   width: 90%;
   max-width: 900px;
   border-radius: 20px;
@@ -742,7 +742,7 @@ input[type="search"] {
   box-shadow:
     0 40px 80px rgba(0,0,0,.25);
 
-  overflow: hidden;
+  overflow: visible;
 }
 
 .product-card {
