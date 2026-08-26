@@ -1,11 +1,161 @@
-.advisor-overlay{position:fixed;inset:0;z-index:10020;display:grid;place-items:center;padding:20px;background:rgba(5,6,9,.78);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
-.advisor-panel{position:relative;width:min(980px,100%);max-height:92vh;overflow:auto;box-sizing:border-box;padding:clamp(28px,5vw,58px);border:1px solid rgba(255,255,255,.11);border-radius:30px;background:radial-gradient(circle at 85% 10%,rgba(113,133,107,.18),transparent 30%),#0d0e13;color:#fff;box-shadow:0 45px 120px rgba(0,0,0,.5)}
-.advisor-close{position:absolute;top:18px;right:18px;width:42px;height:42px;padding:0;border:1px solid rgba(255,255,255,.12);border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.04);color:#fff}[dir="rtl"] .advisor-close{right:auto;left:18px}
-.advisor-brand{display:flex;align-items:center;gap:8px;color:#a8c3a0;font-size:9px;font-weight:700;letter-spacing:.18em}.advisor-progress{height:2px;margin:20px 0 42px;background:rgba(255,255,255,.08);overflow:hidden}.advisor-progress span{display:block;height:100%;background:linear-gradient(90deg,#71856b,#dce7d8)}
-.advisor-step{color:#71856b;font-size:9px;font-weight:700;letter-spacing:.18em}.advisor-question h2,.advisor-results h2{max-width:760px;margin:12px 0 14px;font-size:clamp(38px,5vw,68px);line-height:1;letter-spacing:-.055em;font-weight:500}.advisor-question>p,.advisor-results>p{max-width:690px;margin:0 0 28px;color:#9997a1;font-size:14px;line-height:1.7}
-.advisor-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.advisor-options button{min-height:96px;padding:18px;border:1px solid rgba(255,255,255,.09);border-radius:16px;background:rgba(255,255,255,.025);color:#fff;text-align:left;display:flex;flex-direction:column;justify-content:center;gap:7px;transition:.25s}[dir="rtl"] .advisor-options button{text-align:right}.advisor-options button:hover,.advisor-options button.selected{border-color:rgba(113,133,107,.7);background:rgba(113,133,107,.12);box-shadow:0 14px 35px rgba(83,105,77,.16);transform:translateY(-2px)}.advisor-options strong{font-size:17px}.advisor-options small{color:#85838d;font-size:11px}
-.advisor-navigation{display:flex;justify-content:space-between;gap:12px;margin-top:28px}.advisor-navigation button,.advisor-restart{min-height:46px;padding:0 18px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:7px}.advisor-back,.advisor-restart{border:1px solid rgba(255,255,255,.1);background:transparent;color:#b8b6c0}.advisor-next{border:0;background:linear-gradient(135deg,#71856b,#5f7558);color:#fff;box-shadow:0 12px 30px rgba(95,117,88,.25)}.advisor-navigation button:disabled{opacity:.35;cursor:not-allowed}
-.advisor-product-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.advisor-product-card{overflow:hidden;border:1px solid rgba(255,255,255,.09);border-radius:18px;background:#14151b}.advisor-product-media{position:relative;width:100%;aspect-ratio:1/1;padding:0;border:0;border-radius:0;background:#1b1c23;overflow:hidden}.advisor-product-media img{width:100%;height:100%;object-fit:cover}.advisor-product-media b{position:absolute;top:10px;left:10px;padding:5px 7px;border-radius:99px;background:rgba(0,0,0,.55);color:#fff;font-size:9px}.advisor-product-card>div{padding:14px}.advisor-product-card small{color:#71856b;font-size:8px;letter-spacing:.13em}.advisor-product-card h3{min-height:40px;margin:7px 0;color:#fff;font-size:15px;line-height:1.25}.advisor-product-card strong{font-size:12px}.advisor-add{width:calc(100% - 28px);min-height:40px;margin:0 14px 14px;border:0;border-radius:10px;background:rgba(113,133,107,.16);color:#dce7d8;display:flex;align-items:center;justify-content:center;gap:6px}.advisor-disclaimer{margin:22px 0 14px;padding:13px;border:1px solid rgba(255,255,255,.07);border-radius:12px;color:#7f7d87;font-size:10px;line-height:1.6}.advisor-restart{margin:auto}
-.skin-advisor-launch{position:fixed;left:22px;bottom:22px;z-index:850;min-height:50px;padding:0 17px;border:1px solid rgba(255,255,255,.16);border-radius:999px;background:linear-gradient(135deg,rgba(113,133,107,.92),rgba(83,105,77,.92));color:#fff;display:flex;align-items:center;gap:8px;box-shadow:0 18px 42px rgba(83,105,77,.32);backdrop-filter:blur(14px)}[dir="rtl"] .skin-advisor-launch{left:auto;right:22px}
-@media(max-width:768px){.advisor-overlay{align-items:end;padding:0}.advisor-panel{width:100%;max-height:94dvh;padding:28px 16px calc(28px + env(safe-area-inset-bottom));border:0;border-radius:24px 24px 0 0}.advisor-progress{margin-bottom:28px}.advisor-question h2,.advisor-results h2{font-size:clamp(36px,11vw,52px)}.advisor-options{grid-template-columns:1fr}.advisor-options button{min-height:78px}.advisor-product-grid{display:flex;overflow-x:auto;gap:10px;scroll-snap-type:x mandatory;padding-bottom:8px}.advisor-product-card{flex:0 0 74%;scroll-snap-align:start}.skin-advisor-launch{left:14px;bottom:92px;width:48px;height:48px;min-height:0;padding:0;justify-content:center}[dir="rtl"] .skin-advisor-launch{left:auto;right:14px}.skin-advisor-launch span{display:none}}
+/* Dermae Smart Advisor - Cream + Sage theme */
+.advisor-overlay{
+  position:fixed;
+  inset:0;
+  z-index:10020;
+  display:grid;
+  place-items:center;
+  padding:20px;
+  background:rgba(41,51,41,.48);
+  backdrop-filter:blur(18px) saturate(135%);
+  -webkit-backdrop-filter:blur(18px) saturate(135%);
+}
+
+.advisor-panel{
+  position:relative;
+  width:min(980px,100%);
+  max-height:92vh;
+  overflow:auto;
+  box-sizing:border-box;
+  padding:clamp(28px,5vw,58px);
+  border:1px solid rgba(255,255,255,.68);
+  border-radius:30px;
+  background:
+    radial-gradient(circle at 85% 10%,rgba(113,133,107,.18),transparent 32%),
+    linear-gradient(145deg,rgba(255,253,248,.96),rgba(239,231,220,.94));
+  color:#252b25;
+  box-shadow:
+    0 45px 120px rgba(67,78,64,.22),
+    inset 0 1px 0 rgba(255,255,255,.82);
+}
+
+.advisor-close{
+  position:absolute;
+  top:18px;
+  right:18px;
+  width:42px;
+  height:42px;
+  padding:0;
+  border:1px solid rgba(63,76,61,.14);
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:rgba(255,253,248,.68);
+  color:#344232;
+  cursor:pointer;
+  transition:.25s;
+}
+.advisor-close:hover{background:rgba(113,133,107,.14);border-color:rgba(113,133,107,.38)}
+[dir="rtl"] .advisor-close{right:auto;left:18px}
+
+.advisor-brand{display:flex;align-items:center;gap:8px;color:#71856b;font-size:9px;font-weight:700;letter-spacing:.18em}
+.advisor-progress{height:2px;margin:20px 0 42px;background:rgba(63,76,61,.12);overflow:hidden}
+.advisor-progress span{display:block;height:100%;background:linear-gradient(90deg,#71856b,#a8c3a0)}
+.advisor-step{color:#71856b;font-size:9px;font-weight:700;letter-spacing:.18em}
+
+.advisor-question h2,.advisor-results h2{
+  max-width:760px;
+  margin:12px 0 14px;
+  color:#252b25;
+  font-size:clamp(38px,5vw,68px);
+  line-height:1;
+  letter-spacing:-.055em;
+  font-weight:500;
+}
+.advisor-question>p,.advisor-results>p{max-width:690px;margin:0 0 28px;color:#6b7068;font-size:14px;line-height:1.7}
+
+.advisor-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.advisor-options button{
+  min-height:96px;
+  padding:18px;
+  border:1px solid rgba(63,76,61,.14);
+  border-radius:16px;
+  background:rgba(255,253,248,.72);
+  color:#252b25;
+  text-align:left;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:7px;
+  cursor:pointer;
+  box-shadow:0 10px 28px rgba(67,78,64,.05);
+  transition:.25s;
+}
+[dir="rtl"] .advisor-options button{text-align:right}
+.advisor-options button:hover,.advisor-options button.selected{
+  border-color:rgba(113,133,107,.62);
+  background:rgba(113,133,107,.13);
+  box-shadow:0 14px 35px rgba(83,105,77,.14);
+  transform:translateY(-2px);
+}
+.advisor-options strong{font-size:17px}
+.advisor-options small{color:#737970;font-size:11px}
+
+.advisor-navigation{display:flex;justify-content:space-between;gap:12px;margin-top:28px}
+.advisor-navigation button,.advisor-restart{min-height:46px;padding:0 18px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer}
+.advisor-back,.advisor-restart{border:1px solid rgba(63,76,61,.14);background:rgba(255,253,248,.48);color:#536052}
+.advisor-next{border:0;background:linear-gradient(135deg,#91a88a,#5f7558);color:#fff;box-shadow:0 12px 30px rgba(95,117,88,.25)}
+.advisor-navigation button:disabled{opacity:.35;cursor:not-allowed}
+
+.advisor-product-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.advisor-product-card{overflow:hidden;border:1px solid rgba(63,76,61,.14);border-radius:18px;background:rgba(255,250,242,.90);box-shadow:0 18px 46px rgba(67,78,64,.08)}
+.advisor-product-media{position:relative;width:100%;aspect-ratio:1/1;padding:0;border:0;border-radius:0;background:#e8ded1;overflow:hidden}
+.advisor-product-media img{width:100%;height:100%;object-fit:cover}
+.advisor-product-media b{position:absolute;top:10px;left:10px;padding:5px 7px;border-radius:99px;background:rgba(41,51,41,.68);backdrop-filter:blur(8px);color:#fff;font-size:9px}
+.advisor-product-card>div{padding:14px}
+.advisor-product-card small{color:#71856b;font-size:8px;letter-spacing:.13em}
+.advisor-product-card h3{min-height:40px;margin:7px 0;color:#252b25;font-size:15px;line-height:1.25}
+.advisor-product-card strong{color:#344232;font-size:12px}
+.advisor-add{width:calc(100% - 28px);min-height:40px;margin:0 14px 14px;border:0;border-radius:10px;background:rgba(113,133,107,.16);color:#53694d;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer}
+.advisor-disclaimer{margin:22px 0 14px;padding:13px;border:1px solid rgba(63,76,61,.12);border-radius:12px;background:rgba(255,253,248,.45);color:#737970;font-size:10px;line-height:1.6}
+.advisor-restart{margin:auto}
+
+.skin-advisor-launch{
+  position:fixed;
+  left:22px;
+  bottom:22px;
+  z-index:850;
+  min-height:50px;
+  padding:0 17px;
+  border:1px solid rgba(255,255,255,.36);
+  border-radius:999px;
+  background:linear-gradient(135deg,rgba(145,168,138,.96),rgba(83,105,77,.96));
+  color:#fff;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  box-shadow:0 18px 42px rgba(83,105,77,.28);
+  backdrop-filter:blur(14px);
+}
+[dir="rtl"] .skin-advisor-launch{left:auto;right:22px}
+
+[data-theme="dark"] .advisor-overlay{background:rgba(5,8,6,.72)}
+[data-theme="dark"] .advisor-panel{
+  border-color:rgba(225,235,221,.12);
+  background:radial-gradient(circle at 85% 10%,rgba(168,195,160,.14),transparent 32%),#172019;
+  color:#f4f1ea;
+  box-shadow:0 45px 120px rgba(0,0,0,.52);
+}
+[data-theme="dark"] .advisor-question h2,[data-theme="dark"] .advisor-results h2,[data-theme="dark"] .advisor-product-card h3{color:#f4f1ea}
+[data-theme="dark"] .advisor-question>p,[data-theme="dark"] .advisor-results>p,[data-theme="dark"] .advisor-options small{color:#c7d0c4}
+[data-theme="dark"] .advisor-options button,[data-theme="dark"] .advisor-product-card{background:rgba(255,255,255,.035);border-color:rgba(225,235,221,.10);color:#f4f1ea}
+[data-theme="dark"] .advisor-close,[data-theme="dark"] .advisor-back,[data-theme="dark"] .advisor-restart{background:rgba(255,255,255,.045);border-color:rgba(225,235,221,.12);color:#f4f1ea}
+[data-theme="dark"] .advisor-product-media{background:#202b22}
+[data-theme="dark"] .advisor-product-card strong{color:#f4f1ea}
+[data-theme="dark"] .advisor-disclaimer{background:rgba(255,255,255,.025);border-color:rgba(225,235,221,.08);color:#c7d0c4}
+
+@media(max-width:768px){
+  .advisor-overlay{align-items:end;padding:0}
+  .advisor-panel{width:100%;max-height:94dvh;padding:28px 16px calc(28px + env(safe-area-inset-bottom));border:0;border-radius:24px 24px 0 0}
+  .advisor-progress{margin-bottom:28px}
+  .advisor-question h2,.advisor-results h2{font-size:clamp(36px,11vw,52px)}
+  .advisor-options{grid-template-columns:1fr}
+  .advisor-options button{min-height:78px}
+  .advisor-product-grid{display:flex;overflow-x:auto;gap:10px;scroll-snap-type:x mandatory;padding-bottom:8px}
+  .advisor-product-card{flex:0 0 74%;scroll-snap-align:start}
+  .skin-advisor-launch{left:14px;bottom:92px;width:48px;height:48px;min-height:0;padding:0;justify-content:center}
+  [dir="rtl"] .skin-advisor-launch{left:auto;right:14px}
+  .skin-advisor-launch span{display:none}
+}
+
 @media(prefers-reduced-motion:reduce){.advisor-options button{transform:none!important}}
