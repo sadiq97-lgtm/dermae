@@ -320,7 +320,7 @@ input[type="search"]{
     margin-bottom:0 !important;
   }
 }
-`@media (max-width:768px){
+@media (max-width:768px){
 
   .mobile-bottom-nav{
     background: rgba(255,255,255,.55) !important;
@@ -331,9 +331,8 @@ input[type="search"]{
     border: 1px solid rgba(255,255,255,.35) !important;
 
     box-shadow:
-      0 -10px 40px rgba(67,78,64,.12) !important,
-      inset 0 1px 0 rgba(255,255,255,.45) !important;
-  }
+  0 -10px 40px rgba(67,78,64,.12),
+  inset 0 1px 0 rgba(255,255,255,.45) !important;
 
   .mobile-bottom-nav a,
   .mobile-bottom-nav button{
@@ -351,4 +350,4 @@ input[type="search"]{
     margin-bottom:0 !important;
   }
 
-}
+}}
