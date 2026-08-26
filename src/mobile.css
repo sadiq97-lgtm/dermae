@@ -124,27 +124,37 @@
   .about-content{text-align:center}
   .about-content h2{font-size:34px}
   .footer{padding:36px 18px 100px;text-align:center}
-  .whatsapp-button{
-  position:fixed;
-  right:14px;
-  bottom:88px;
+ .whatsapp-button{
+  position: fixed;
+
+  inset-inline-end: 14px;
+
+  bottom: 88px;
   transform: translateY(-65px) !important;
 
-  width:48px;
-  height:48px;
+  width: 48px;
+  height: 48px;
 
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  border-radius:50%;
+  border-radius: 50%;
 
-  background:#71856b;
-  color:#fff;
+  background: #71856b;
+  color: #fff;
 
-  box-shadow:0 10px 25px rgba(83,105,77,.25);
+  box-shadow: 0 10px 25px rgba(83,105,77,.25);
 
-  z-index:100;
+  z-index: 100;
+}
+html[dir="rtl"] .whatsapp-button{
+  right: auto;
+  left: 14px;
+}
+html[dir="rtl"] .whatsapp-button{
+  right: auto !important;
+  left: 14px !important;
 }
 
   .modal-overlay{align-items:flex-end;padding:0;z-index:110}
