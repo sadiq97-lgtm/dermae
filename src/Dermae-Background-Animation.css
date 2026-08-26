@@ -1,0 +1,84 @@
+/* DERMAE LUXURY MESH BACKGROUND */
+
+.app{
+  position: relative;
+  isolation: isolate;
+}
+
+.app::before{
+  content:"";
+  position:fixed;
+  inset:-20%;
+  z-index:-2;
+  pointer-events:none;
+
+  background:
+    radial-gradient(circle at 15% 25%,
+      rgba(113,133,107,.20),
+      transparent 35%),
+
+    radial-gradient(circle at 85% 20%,
+      rgba(232,220,203,.45),
+      transparent 32%),
+
+    radial-gradient(circle at 50% 75%,
+      rgba(113,133,107,.12),
+      transparent 38%);
+
+  filter: blur(80px);
+
+  animation: dermaeMeshMove 30s ease-in-out infinite;
+}
+
+.app::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+
+  background-image:
+    radial-gradient(
+      rgba(113,133,107,.08) 1px,
+      transparent 1px
+    );
+
+  background-size:40px 40px;
+
+  opacity:.25;
+
+  animation: dermaeParticles 50s linear infinite;
+}
+
+@keyframes dermaeMeshMove{
+  0%,100%{
+    transform:translate3d(0,0,0) scale(1);
+  }
+
+  50%{
+    transform:translate3d(0,-40px,0) scale(1.08);
+  }
+}
+
+@keyframes dermaeParticles{
+  from{
+    transform:translateY(0);
+  }
+
+  to{
+    transform:translateY(-120px);
+  }
+}
+
+@media(max-width:768px){
+
+  .app::before{
+    filter:blur(60px);
+    opacity:.8;
+  }
+
+  .app::after{
+    opacity:.12;
+  }
+
+}

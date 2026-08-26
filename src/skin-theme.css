@@ -1,0 +1,140 @@
+/* Dermae Cream + Sage theme. Load this file LAST. */
+:root,
+[data-theme="light"] {
+  --bg: #efe7dc;
+  --card: #fffdf8;
+  --surface: #fffdf8;
+  --text: #6b7068;
+  --text-h: #252b25;
+  --border: rgba(63, 76, 61, .14);
+  --accent: #71856b;
+  --accent-dark: #53694d;
+  --accent-bg: rgba(113, 133, 107, .12);
+  --accent-border: rgba(113, 133, 107, .44);
+  --shadow: 0 18px 50px rgba(67, 78, 64, .13);
+  color-scheme: light;
+}
+
+body, .app { background: var(--bg) !important; color: var(--text) !important; }
+.header {
+  background: transparent !important;
+  border-color: rgba(113,133,107,.12) !important;
+  backdrop-filter: blur(14px);
+}
+.top-bar { background: #eee7dc !important; color: var(--text-h) !important; border-color: var(--border) !important; }
+.hero,
+.shop-section,
+.about-section,
+.why-section,
+.testimonials-section {
+  background: linear-gradient(180deg,#efe7dc 0%,#e6ddd0 100%) !important;
+}
+.hero-image::before { background: radial-gradient(circle,rgba(113,133,107,.30),transparent 70%) !important; }
+
+.product-card,
+.why-card,
+.testimonial-card,
+.search-modal,
+.checkout-modal {
+  background: rgba(255,253,248,.92) !important;
+  color: var(--text-h) !important;
+  border-color: var(--border) !important;
+  box-shadow: 0 18px 50px rgba(67,78,64,.10) !important;
+}
+.product-card:hover,
+.why-card:hover { border-color: rgba(113,133,107,.45) !important; }
+
+h1,h2,h3,h4,.logo-main,.featured-info h3,.section-heading h2,
+.why-heading h2,.testimonials-heading h2 { color: var(--text-h) !important; }
+p,.brand-strip span,.products-count,.featured-heading p,.why-heading p { color: var(--text) !important; }
+.eyebrow,.product-category,.rating,.testimonial-stars { color: var(--accent) !important; }
+
+.primary-button,.add-button,.modal-add,.checkout-button,
+.gender-buttons button.active,.category-list button.active {
+  background: linear-gradient(135deg,#82977b,#5f7558) !important;
+  border-color: #71856b !important;
+  color: #fff !important;
+  box-shadow: 0 14px 34px rgba(95,117,88,.24) !important;
+}
+.secondary-button,.category-list button,.gender-buttons button,.sort-select,
+.search-box,input,textarea,select {
+  background: rgba(255,253,248,.76) !important;
+  border-color: var(--border) !important;
+  color: var(--text-h) !important;
+}
+
+.featured-section { background: linear-gradient(180deg,#e9e2d8 0%,#f8f5f0 100%) !important; }
+.featured-section::before,.why-section::before { color: rgba(83,105,77,.045) !important; }
+.featured-action button { background: #71856b !important; border-color:#71856b !important; color:#fff !important; }
+
+.promise-section { background:#53694d !important; border-color:rgba(255,255,255,.16) !important; }
+.promise-copy h2,.promise-copy p,.promise-copy .text-link,.promise-points b { color:#fff !important; }
+.newsletter-section { background: linear-gradient(135deg,#82977b,#5f7558) !important; }
+.newsletter-form button { background:#fffdf8 !important; color:#344232 !important; }
+.premium-footer { background:#293329 !important; }
+
+.search-modal-overlay,.modal-overlay,.cart-overlay { background:rgba(35,43,34,.52) !important; }
+.search-modal { background:rgba(255,253,248,.98) !important; }
+.search-modal h3,.search-modal-box input { color:var(--text-h) !important; }
+.search-modal-box { background:rgba(113,133,107,.06) !important; border-color:var(--border) !important; }
+
+.cart-drawer {
+  color:#273027 !important;
+  background: radial-gradient(circle at 85% 0,rgba(113,133,107,.18),transparent 30%),linear-gradient(180deg,#fffdf8,#f0ebe2) !important;
+  border-color:var(--border) !important;
+}
+.cart-header,.cart-summary { background:rgba(248,245,240,.86) !important; border-color:var(--border) !important; }
+.cart-header h2,.cart-item-info h4,.cart-summary .cart-total,.cart-summary .cart-total strong,.quantity>span { color:var(--text-h) !important; }
+.cart-header .eyebrow { color:var(--accent) !important; }
+.cart-item { background:rgba(255,255,255,.66) !important; border-color:var(--border) !important; }
+.quantity { background:rgba(113,133,107,.08) !important; border-color:var(--border) !important; }
+.quantity button { color:var(--text-h) !important; }
+
+.product-page-overlay { background:rgba(239,234,225,.96) !important; }
+.routed-product-page { background:radial-gradient(circle at 12% 12%,rgba(113,133,107,.13),transparent 30%),#fffdf8 !important; border-color:var(--border) !important; }
+.routed-product-page .modal-content h2,.routed-product-page .modal-price,.product-page-details h4 { color:var(--text-h) !important; }
+.routed-product-page .modal-content>p,.product-page-details p,.product-page-back { color:var(--text) !important; }
+.product-page-details { background:var(--border) !important; border-color:var(--border) !important; }
+.product-page-details>div { background:#f5f1e9 !important; }
+
+.intro-loader { background:#f8f5f0 !important; }
+.intro-loader-logo { color:#344232 !important; text-shadow:0 0 18px rgba(113,133,107,.30),0 0 48px rgba(113,133,107,.20) !important; }
+.intro-loader-line { background:#71856b !important; }
+.intro-loader-content small { color:#6b7068 !important; }
+.cart-flight-item { background:linear-gradient(145deg,#91a88a,#5f7558) !important; }
+
+@media (max-width:768px) {
+  .header,.nav,.mobile-bottom-nav { background:rgba(248,245,240,.97) !important; }
+  .nav a,.mobile-bottom-nav a,.mobile-bottom-nav button { color:#293329 !important; }
+  .mobile-nav-close { background:#e9e2d8 !important; color:#293329 !important; }
+  .wishlist-button { background:rgba(41,51,41,.74) !important; color:#fff !important; }
+}
+
+/* Keep dark mode as a sage-charcoal alternate instead of the old purple theme. */
+[data-theme="dark"] {
+  --bg:#172019;
+  --card:#202b22;
+  --text:#c7d0c4;
+  --text-h:#f4f1ea;
+  --border:rgba(225,235,221,.12);
+  --accent:#a8c3a0;
+  --accent-dark:#82977b;
+  --accent-bg:rgba(168,195,160,.12);
+  --accent-border:rgba(168,195,160,.42);
+  color-scheme:dark;
+}
+[data-theme="dark"] body,[data-theme="dark"] .app { background:#172019 !important; }
+[data-theme="dark"] .hero,[data-theme="dark"] .shop-section,[data-theme="dark"] .about-section,
+[data-theme="dark"] .why-section,[data-theme="dark"] .testimonials-section,[data-theme="dark"] .featured-section {
+  background:linear-gradient(180deg,#172019,#202b22) !important;
+}
+[data-theme="dark"] .header { background:rgba(23,32,25,.82) !important; }
+[data-theme="dark"] .top-bar { background:#202b22 !important; }
+[data-theme="dark"] .product-card,[data-theme="dark"] .why-card,[data-theme="dark"] .testimonial-card,
+[data-theme="dark"] .search-modal,[data-theme="dark"] .checkout-modal { background:#202b22 !important; }
+[data-theme="dark"] .secondary-button,[data-theme="dark"] .category-list button,[data-theme="dark"] .gender-buttons button,
+[data-theme="dark"] .sort-select,[data-theme="dark"] .search-box,[data-theme="dark"] input,[data-theme="dark"] textarea,[data-theme="dark"] select {
+  background:rgba(255,255,255,.045) !important;color:#f4f1ea !important;
+}
+[data-theme="dark"] .mobile-bottom-nav,[data-theme="dark"] .nav { background:rgba(23,32,25,.97) !important; }
+[data-theme="dark"] .mobile-bottom-nav a,[data-theme="dark"] .mobile-bottom-nav button,[data-theme="dark"] .nav a { color:#f4f1ea !important; }

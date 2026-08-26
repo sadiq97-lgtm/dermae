@@ -382,3 +382,214 @@ MOBILE PRODUCT CARD - FINAL COMPACT FIX
   }
 
 }
+
+/* DERMAE FINAL MOBILE LIQUID GLASS NAV */
+@media (max-width: 768px) {
+  body {
+    padding-bottom: 88px !important;
+  }
+
+  .mobile-bottom-nav {
+    display: grid !important;
+    position: fixed !important;
+    left: 12px !important;
+    right: 12px !important;
+    bottom: 12px !important;
+    z-index: 90 !important;
+    isolation: isolate !important;
+    overflow: hidden !important;
+
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    width: auto !important;
+    height: 64px !important;
+    min-height: 64px !important;
+    padding: 5px 8px !important;
+    box-sizing: border-box !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.72) !important;
+    border-radius: 28px !important;
+
+    background:
+      linear-gradient(135deg,
+        rgba(255, 255, 255, 0.38) 0%,
+        rgba(255, 253, 248, 0.18) 42%,
+        rgba(168, 195, 160, 0.12) 100%) !important;
+
+    -webkit-backdrop-filter: blur(26px) saturate(190%) contrast(105%) !important;
+    backdrop-filter: blur(26px) saturate(190%) contrast(105%) !important;
+
+    box-shadow:
+      0 14px 38px rgba(67, 78, 64, 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.88),
+      inset 0 -1px 0 rgba(113, 133, 107, 0.10),
+      inset 10px 0 28px rgba(255, 255, 255, 0.10),
+      inset -10px 0 28px rgba(113, 133, 107, 0.08) !important;
+  }
+
+  .mobile-bottom-nav::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: inherit;
+
+    background:
+      radial-gradient(circle at 18% 10%, rgba(255,255,255,.72), transparent 32%),
+      radial-gradient(circle at 82% 105%, rgba(113,133,107,.20), transparent 38%),
+      linear-gradient(110deg, transparent 20%, rgba(255,255,255,.34) 48%, transparent 72%);
+
+    background-size: 100% 100%, 100% 100%, 220% 100%;
+    animation: dermaeLiquidSheen 8s ease-in-out infinite;
+  }
+
+  .mobile-bottom-nav::after {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: 27px;
+    border: 1px solid rgba(255,255,255,.26);
+    box-shadow: inset 0 0 18px rgba(255,255,255,.12);
+  }
+
+  @keyframes dermaeLiquidSheen {
+    0%, 100% { background-position: 0 0, 0 0, 100% 0; }
+    50% { background-position: 0 0, 0 0, -100% 0; }
+  }
+
+  .mobile-bottom-nav > a,
+  .mobile-bottom-nav > button {
+    position: relative !important;
+    z-index: 2 !important;
+    width: 100% !important;
+    height: 54px !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 1px 0 0 !important;
+
+    display: grid !important;
+    grid-template-rows: 36px 10px !important;
+    row-gap: 0 !important;
+    align-content: center !important;
+    justify-items: center !important;
+
+    border: 0 !important;
+    border-radius: 18px !important;
+    background: transparent !important;
+    color: #293329 !important;
+    box-shadow: none !important;
+    text-decoration: none !important;
+    font: inherit !important;
+    line-height: 1 !important;
+  }
+
+  .mobile-bottom-nav .mobile-nav-icon {
+    width: 36px !important;
+    height: 36px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: grid !important;
+    place-items: center !important;
+    border-radius: 50% !important;
+    background: transparent !important;
+    color: #293329 !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  .mobile-bottom-nav .mobile-nav-icon svg {
+    width: 20px !important;
+    height: 20px !important;
+    display: block !important;
+    margin: 0 !important;
+    transform: none !important;
+  }
+
+  .mobile-bottom-nav > a > span:last-child,
+  .mobile-bottom-nav > button > span:last-child {
+    display: block !important;
+    margin: -2px 0 0 !important;
+    padding: 0 !important;
+    color: #536052 !important;
+    font-size: 9px !important;
+    font-weight: 500 !important;
+    line-height: 10px !important;
+    white-space: nowrap !important;
+    transform: none !important;
+  }
+
+  .mobile-bottom-nav .active-nav {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .mobile-bottom-nav .active-nav .mobile-nav-icon {
+    background: linear-gradient(145deg, rgba(145,168,138,.92), rgba(95,117,88,.96)) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255,255,255,.38) !important;
+    box-shadow:
+      0 7px 18px rgba(83,105,77,.24),
+      inset 0 1px 0 rgba(255,255,255,.42) !important;
+  }
+
+  .mobile-bottom-nav .active-nav > span:last-child {
+    color: #53694d !important;
+    font-weight: 700 !important;
+  }
+
+  .mobile-bottom-nav b {
+    position: absolute !important;
+    top: 1px !important;
+    right: calc(50% - 20px) !important;
+    min-width: 17px !important;
+    height: 17px !important;
+    padding: 0 3px !important;
+    display: grid !important;
+    place-items: center !important;
+    border-radius: 10px !important;
+    background: #71856b !important;
+    color: #ffffff !important;
+    font-size: 9px !important;
+    line-height: 1 !important;
+  }
+
+  [data-theme="dark"] .mobile-bottom-nav {
+    border-color: rgba(225,235,221,.20) !important;
+    background:
+      linear-gradient(135deg,
+        rgba(255,255,255,.10),
+        rgba(23,32,25,.34) 48%,
+        rgba(168,195,160,.10)) !important;
+    box-shadow:
+      0 14px 38px rgba(0,0,0,.28),
+      inset 0 1px 0 rgba(255,255,255,.14),
+      inset 0 -1px 0 rgba(168,195,160,.08) !important;
+  }
+
+  [data-theme="dark"] .mobile-bottom-nav::before {
+    opacity: .55;
+  }
+
+  [data-theme="dark"] .mobile-bottom-nav > a,
+  [data-theme="dark"] .mobile-bottom-nav > button,
+  [data-theme="dark"] .mobile-bottom-nav .mobile-nav-icon {
+    color: #f4f1ea !important;
+  }
+
+  [data-theme="dark"] .mobile-bottom-nav > a > span:last-child,
+  [data-theme="dark"] .mobile-bottom-nav > button > span:last-child {
+    color: #c7d0c4 !important;
+  }
+
+  [data-theme="dark"] .mobile-bottom-nav .active-nav > span:last-child {
+    color: #a8c3a0 !important;
+  }
+}
+
+@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
+  .mobile-bottom-nav::before {
+    animation: none !important;
+  }
+}

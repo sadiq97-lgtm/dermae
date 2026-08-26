@@ -33,9 +33,9 @@ export default function IntroLoader() {
           width: "min(68vw, 620px)",
           aspectRatio: "1",
           borderRadius: "50%",
-          border: "1px solid rgba(196, 139, 255, 0.24)",
+          border: "1px solid rgba(168,195,160,.24)",
           boxShadow:
-            "0 0 90px rgba(139, 92, 246, 0.14), inset 0 0 90px rgba(139, 92, 246, 0.08)",
+            "0 0 90px rgba(113,133,107,.18), inset 0 0 90px rgba(113,133,107,.10)",
         }}
       />
 
@@ -50,7 +50,7 @@ export default function IntroLoader() {
           aspectRatio: "1",
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(168,85,247,.24) 0%, rgba(109,40,217,.08) 42%, transparent 72%)",
+            "radial-gradient(circle, rgba(168,195,160,.24) 0%, rgba(113,133,107,.10) 42%, transparent 72%)",
           filter: "blur(8px)",
         }}
       />
@@ -74,7 +74,12 @@ export default function IntroLoader() {
           animate={ready ? "show" : "hidden"}
           variants={{
             hidden: {},
-            show: { transition: { delayChildren: 0.12, staggerChildren: 0.075 } },
+            show: {
+              transition: {
+                delayChildren: 0.12,
+                staggerChildren: 0.075,
+              },
+            },
           }}
           style={{
             display: "flex",
@@ -87,17 +92,30 @@ export default function IntroLoader() {
             <motion.span
               key={`${letter}-${index}`}
               variants={{
-                hidden: { opacity: 0, y: 54, rotateX: 75, filter: "blur(12px)", visibility: "hidden" },
+                hidden: {
+                  opacity: 0,
+                  y: 54,
+                  rotateX: 75,
+                  filter: "blur(12px)",
+                  visibility: "hidden",
+                },
                 show: {
                   opacity: 1,
                   visibility: "visible",
                   y: 0,
                   rotateX: 0,
                   filter: "blur(0px)",
-                  transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+                  transition: {
+                    duration: 0.8,
+                    ease: [0.16, 1, 0.3, 1],
+                  },
                 },
               }}
-              style={{ display: "inline-block", marginRight: index === brand.length - 1 ? 0 : "0.01em" }}
+              style={{
+                display: "inline-block",
+                marginRight:
+                  index === brand.length - 1 ? 0 : "0.01em",
+              }}
             >
               {letter}
             </motion.span>
@@ -108,7 +126,11 @@ export default function IntroLoader() {
           aria-hidden="true"
           initial={{ x: "-135%", opacity: 0 }}
           animate={{ x: "135%", opacity: [0, 0.95, 0] }}
-          transition={{ delay: 0.72, duration: 1.05, ease: "easeInOut" }}
+          transition={{
+            delay: 0.72,
+            duration: 1.05,
+            ease: "easeInOut",
+          }}
           style={{
             position: "absolute",
             top: "20%",
@@ -116,7 +138,8 @@ export default function IntroLoader() {
             width: "42%",
             height: "45%",
             background:
-              "linear-gradient(100deg, transparent, rgba(255,255,255,.8), rgba(202,156,255,.55), transparent)",
+            
+  "linear-gradient(100deg, transparent, rgba(168,195,160,.08), rgba(168,195,160,.28), transparent)",
             filter: "blur(7px)",
             transform: "skewX(-18deg)",
             pointerEvents: "none",
@@ -127,15 +150,34 @@ export default function IntroLoader() {
         <motion.div
           className="intro-loader-line"
           initial={{ scaleX: 0, opacity: 0 }}
-          animate={{ scaleX: [0, 1, 0.42], opacity: [0, 1, 0.65] }}
-          transition={{ delay: 0.55, duration: 1.35, ease: [0.22, 1, 0.36, 1] }}
+          animate={{
+            scaleX: [0, 1, 0.42],
+            opacity: [0, 1, 0.65],
+          }}
+          transition={{
+            delay: 0.55,
+            duration: 1.35,
+            ease: [0.22, 1, 0.36, 1],
+          }}
           style={{ transformOrigin: "center" }}
         />
 
         <motion.small
-          initial={{ opacity: 0, y: 12, letterSpacing: "0.5em" }}
-          animate={{ opacity: 1, y: 0, letterSpacing: "0.28em" }}
-          transition={{ delay: 0.95, duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+          initial={{
+            opacity: 0,
+            y: 12,
+            letterSpacing: "0.5em",
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+            letterSpacing: "0.28em",
+          }}
+          transition={{
+            delay: 0.95,
+            duration: 0.75,
+            ease: [0.22, 1, 0.36, 1],
+          }}
         >
           CARE THAT SHOWS
         </motion.small>
@@ -145,14 +187,20 @@ export default function IntroLoader() {
         aria-hidden="true"
         initial={{ scaleX: 0, opacity: 0 }}
         animate={{ scaleX: [0, 1, 0], opacity: [0, 0.55, 0] }}
-        transition={{ delay: 1.35, duration: 0.85, ease: "easeInOut" }}
+        transition={{
+          delay: 1.35,
+          duration: 0.85,
+          ease: "easeInOut",
+        }}
         style={{
           position: "absolute",
           left: "8%",
           right: "8%",
           height: 1,
-          background: "linear-gradient(90deg, transparent, #c084fc, transparent)",
-          boxShadow: "0 0 22px rgba(192,132,252,.9)",
+          background:
+            "linear-gradient(90deg, transparent, #a8c3a0, transparent)",
+          boxShadow:
+            "0 0 22px rgba(168,195,160,.55)",
         }}
       />
     </motion.div>

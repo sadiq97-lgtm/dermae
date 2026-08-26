@@ -7,7 +7,7 @@
 [dir="rtl"] .marquee-track{animation-direction:reverse}
 @keyframes dermaeMarquee{to{transform:translateX(-50%)}}
 
-.why-section{padding:clamp(80px,10vw,150px) 48px;background:linear-gradient(180deg,var(--bg),rgba(139,92,246,.035));position:relative;overflow:hidden}
+.why-section{padding:clamp(80px,10vw,150px) 48px;background:linear-gradient(180deg,var(--bg),rgba(113,133,107,.035));position:relative;overflow:hidden}
 .why-section::before{
     animation: dermaePulse 6s ease-in-out infinite;
   content:"Dermaé";
@@ -29,7 +29,7 @@
 .why-heading p{max-width:620px;margin:22px auto 0;line-height:1.8;color:var(--text)}
 .why-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;max-width:1400px;margin:auto;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08)}
 .why-card{min-height:290px;padding:30px;background:var(--bg);display:flex;flex-direction:column;transition:background .35s ease,color .35s ease}
-.why-card:hover{background:rgba(139,92,246,.09)}
+.why-card:hover{background:rgba(113,133,107,.09)}
 .why-card-top{display:flex;justify-content:space-between;align-items:center;color:var(--accent);margin-bottom:auto}
 .why-card-top span{font-size:11px;letter-spacing:.18em;color:var(--text)}
 .why-card h3{font-size:24px;letter-spacing:-.03em;margin:44px 0 12px;color:var(--text-h)}
