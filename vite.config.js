@@ -8,6 +8,7 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
+        id: "/",
         name: "Dermaé",
         short_name: "Dermaé",
         description: "Premium skincare products across Iraq",

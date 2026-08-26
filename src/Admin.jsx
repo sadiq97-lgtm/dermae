@@ -30,6 +30,58 @@ export default function Admin() {
   const tr = (en, ar) => (isArabic ? ar : en);
   const toggleAdminLanguage = () => setAdminLang((current) => current === "en" ? "ar" : "en");
   useEffect(() => { localStorage.setItem("adminLang", adminLang); }, [adminLang]);
+  useEffect(() => {
+  const manifestLink =
+    document.querySelector('link[rel="manifest"]') ||
+    document.createElement("link");
+
+  const previousManifest = manifestLink.getAttribute("href");
+  const previousTitle = document.title;
+
+  manifestLink.setAttribute("rel", "manifest");
+  manifestLink.setAttribute(
+    "href",
+    "/admin-manifest.webmanifest"
+  );
+
+  if (!manifestLink.parentNode) {
+    document.head.appendChild(manifestLink);
+  }
+
+  document.title = "Dermaé Admin";
+
+  let themeMeta =
+    document.querySelector('meta[name="theme-color"]');
+
+  if (!themeMeta) {
+    themeMeta = document.createElement("meta");
+    themeMeta.setAttribute("name", "theme-color");
+    document.head.appendChild(themeMeta);
+  }
+
+  const previousTheme =
+    themeMeta.getAttribute("content");
+
+  themeMeta.setAttribute("content", "#71856b");
+
+  return () => {
+    if (previousManifest) {
+      manifestLink.setAttribute(
+        "href",
+        previousManifest
+      );
+    }
+
+    document.title = previousTitle;
+
+    if (previousTheme) {
+      themeMeta.setAttribute(
+        "content",
+        previousTheme
+      );
+    }
+  };
+}, []);
   const [session, setSession] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [email, setEmail] = useState("");
