@@ -128,6 +128,7 @@
   position:fixed;
   right:14px;
   bottom:88px;
+  transform: translateY(-65px) !important;
 
   width:48px;
   height:48px;
