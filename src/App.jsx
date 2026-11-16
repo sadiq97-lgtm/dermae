@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Search, Heart, ShoppingBag, User, Menu, X, Star, ChevronRight,
@@ -22,14 +22,14 @@ import SkinAdvisor from "./SkinAdvisor";
 import luxurySerum from "./assets/luxury-serum.mp4";
 
 const fallbackProducts = [
-  { id:"demo-1", name:"Hydra Glow Serum", name_en:"Hydra Glow Serum", name_ar:"Ø³ÙŠØ±ÙˆÙ… Ø§Ù„Ø¥Ø´Ø±Ø§Ù‚Ø© ÙˆØ§Ù„ØªØ±Ø·ÙŠØ¨", brand:"Tamraya", category:"Serums", gender:"Women", price:45000, oldPrice:55000, rating:4.9, reviews:128, badge:"BESTSELLER", image:"https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=900&q=85", description:"A lightweight hydrating serum designed to restore moisture and give the skin a natural glow.", description_ar:"Ø³ÙŠØ±ÙˆÙ… Ø®ÙÙŠÙ Ù„Ù„ØªØ±Ø·ÙŠØ¨ ÙˆØ§Ø³ØªØ¹Ø§Ø¯Ø© Ù†Ø¶Ø§Ø±Ø© Ø§Ù„Ø¨Ø´Ø±Ø© Ø§Ù„Ø·Ø¨ÙŠØ¹ÙŠØ©.", ingredients:["Hyaluronic Acid","Niacinamide","Vitamin B5"] },
-  { id:"demo-2", name:"Pure Balance Cleanser", name_en:"Pure Balance Cleanser", name_ar:"ØºØ³ÙˆÙ„ Ø§Ù„ØªÙˆØ§Ø²Ù† Ø§Ù„Ù†Ù‚ÙŠ", brand:"Tamraya", category:"Cleansers", gender:"Unisex", price:32000, oldPrice:null, rating:4.8, reviews:94, badge:"NEW", image:"https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=900&q=85", description:"A gentle daily cleanser that removes impurities while respecting the skin barrier.", description_ar:"ØºØ³ÙˆÙ„ ÙŠÙˆÙ…ÙŠ Ù„Ø·ÙŠÙ ÙŠØ²ÙŠÙ„ Ø§Ù„Ø´ÙˆØ§Ø¦Ø¨ ÙˆÙŠØ­Ø§ÙØ¸ Ø¹Ù„Ù‰ Ø­Ø§Ø¬Ø² Ø§Ù„Ø¨Ø´Ø±Ø©.", ingredients:["Amino Acids","Aloe Vera","Glycerin"] },
-  { id:"demo-3", name:"Radiance Cream", name_en:"Radiance Cream", name_ar:"ÙƒØ±ÙŠÙ… Ø§Ù„Ø¥Ø´Ø±Ø§Ù‚Ø©", brand:"Tamraya", category:"Moisturizers", gender:"Women", price:52000, oldPrice:62000, rating:4.9, reviews:176, badge:"POPULAR", image:"https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?auto=format&fit=crop&w=900&q=85", description:"A rich moisturizer formulated to support a smooth, refreshed complexion.", description_ar:"Ù…Ø±Ø·Ø¨ ØºÙ†ÙŠ ÙŠØ¯Ø¹Ù… Ù†Ø¹ÙˆÙ…Ø© Ø§Ù„Ø¨Ø´Ø±Ø© ÙˆÙŠÙ…Ù†Ø­Ù‡Ø§ Ù…Ø¸Ù‡Ø±Ø§Ù‹ Ù…Ù†ØªØ¹Ø´Ø§Ù‹.", ingredients:["Ceramides","Shea Butter","Vitamin E"] },
+  { id:"demo-1", name:"Hydra Glow Serum", name_en:"Hydra Glow Serum", name_ar:"سيروم الإشراقة والترطيب", brand:"Tamraya", category:"Serums", gender:"Women", price:45000, oldPrice:55000, rating:4.9, reviews:128, badge:"BESTSELLER", image:"https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=900&q=85", description:"A lightweight hydrating serum designed to restore moisture and give the skin a natural glow.", description_ar:"سيروم خفيف للترطيب واستعادة نضارة البشرة الطبيعية.", ingredients:["Hyaluronic Acid","Niacinamide","Vitamin B5"] },
+  { id:"demo-2", name:"Pure Balance Cleanser", name_en:"Pure Balance Cleanser", name_ar:"غسول التوازن النقي", brand:"Tamraya", category:"Cleansers", gender:"Unisex", price:32000, oldPrice:null, rating:4.8, reviews:94, badge:"NEW", image:"https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=900&q=85", description:"A gentle daily cleanser that removes impurities while respecting the skin barrier.", description_ar:"غسول يومي لطيف يزيل الشوائب ويحافظ على حاجز البشرة.", ingredients:["Amino Acids","Aloe Vera","Glycerin"] },
+  { id:"demo-3", name:"Radiance Cream", name_en:"Radiance Cream", name_ar:"كريم الإشراقة", brand:"Tamraya", category:"Moisturizers", gender:"Women", price:52000, oldPrice:62000, rating:4.9, reviews:176, badge:"POPULAR", image:"https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?auto=format&fit=crop&w=900&q=85", description:"A rich moisturizer formulated to support a smooth, refreshed complexion.", description_ar:"مرطب غني يدعم نعومة البشرة ويمنحها مظهراً منتعشاً.", ingredients:["Ceramides","Shea Butter","Vitamin E"] },
 ];
 
 const categories = ["All","Serums","Cleansers","Moisturizers","Sun Care","Treatments","Skincare"];
-const categoryAr = { All:"Ø§Ù„ÙƒÙ„", Serums:"Ø³ÙŠØ±ÙˆÙ…Ø§Øª", Cleansers:"Ù…Ù†Ø¸ÙØ§Øª", Moisturizers:"Ù…Ø±Ø·Ø¨Ø§Øª", "Sun Care":"Ø¹Ù†Ø§ÙŠØ© Ø´Ù…Ø³ÙŠØ©", Treatments:"Ø¹Ù„Ø§Ø¬Ø§Øª", Skincare:"Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø©" };
-const genderOptions = [{value:"All",en:"All",ar:"Ø§Ù„ÙƒÙ„"},{value:"Women",en:"Women",ar:"Ù†Ø³Ø§Ø¡"},{value:"Men",en:"Men",ar:"Ø±Ø¬Ø§Ù„"}];
+const categoryAr = { All:"الكل", Serums:"سيرومات", Cleansers:"منظفات", Moisturizers:"مرطبات", "Sun Care":"عناية شمسية", Treatments:"علاجات", Skincare:"العناية بالبشرة" };
+const genderOptions = [{value:"All",en:"All",ar:"الكل"},{value:"Women",en:"Women",ar:"نساء"},{value:"Men",en:"Men",ar:"رجال"}];
 const formatIQD = (price) => `${Number(price || 0).toLocaleString("en-US")} IQD`;
 
 const reveal = { hidden:{opacity:0,y:55}, show:{opacity:1,y:0,transition:{duration:.75,ease:[.22,1,.36,1]}} };
@@ -107,19 +107,19 @@ function HeroImage({ product, isArabic, tr, addToCart, setSelectedProduct }) {
           }}
         >
           <div className="hero-floating-top">
-            <span className="hero-floating-badge">{tr("BEST SELLER", "Ø§Ù„Ø£ÙƒØ«Ø± Ù…Ø¨ÙŠØ¹Ø§Ù‹")}</span>
+            <span className="hero-floating-badge">{tr("BEST SELLER", "الأكثر مبيعاً")}</span>
             <span className="hero-floating-rating"><Star size={12} fill="currentColor" /> {product.rating || 5}</span>
           </div>
           <div className="hero-floating-main">
             {product.image && <img src={product.image} alt="" aria-hidden="true" />}
             <div>
-              <small>{tr("FEATURED RITUAL", "Ø±ÙˆØªÙŠÙ† Ù…Ø®ØªØ§Ø±")}</small>
+              <small>{tr("FEATURED RITUAL", "روتين مختار")}</small>
               <h3>{isArabic ? product.name_ar || product.name : product.name_en || product.name}</h3>
               <strong>{formatIQD(product.price)}</strong>
             </div>
           </div>
           <div className="hero-floating-actions">
-            <span>{tr("View details", "Ø¹Ø±Ø¶ Ø§Ù„ØªÙØ§ØµÙŠÙ„")} <ChevronRight size={14} /></span>
+            <span>{tr("View details", "عرض التفاصيل")} <ChevronRight size={14} /></span>
             <motion.button
               type="button"
               whileTap={{ scale: 0.88 }}
@@ -127,7 +127,7 @@ function HeroImage({ product, isArabic, tr, addToCart, setSelectedProduct }) {
                 event.stopPropagation();
                 addToCart(product, event.currentTarget.closest(".hero-floating-card"));
               }}
-              aria-label={tr("Add featured product to cart", "Ø£Ø¶Ù Ø§Ù„Ù…Ù†ØªØ¬ Ø§Ù„Ù…Ø®ØªØ§Ø± Ø¥Ù„Ù‰ Ø§Ù„Ø³Ù„Ø©")}
+              aria-label={tr("Add featured product to cart", "أضف المنتج المختار إلى السلة")}
             >
               <Plus size={17} />
             </motion.button>
@@ -266,7 +266,7 @@ function FloatingProduct3D({ product, isArabic }) {
           letterSpacing: ".08em",
         }}
       >
-        {isArabic ? "Ø­Ø±Ù‘Ùƒ Ø§Ù„Ù…Ù†ØªØ¬" : "MOVE THE PRODUCT"}
+        {isArabic ? "حرّك المنتج" : "MOVE THE PRODUCT"}
       </span>
     </motion.div>
   );
@@ -401,7 +401,7 @@ useEffect(() => {
     alert(
       tr(
         "Please complete all checkout fields.",
-        "ÙŠØ±Ø¬Ù‰ Ø¥ÙƒÙ…Ø§Ù„ Ø¬Ù…ÙŠØ¹ Ø­Ù‚ÙˆÙ„ Ø§Ù„Ø·Ù„Ø¨."
+        "يرجى إكمال جميع حقول الطلب."
       )
     );
     return;
@@ -432,7 +432,7 @@ useEffect(() => {
 
     alert(
       error.message ||
-        tr("Order failed", "ÙØ´Ù„ Ø¥Ø±Ø³Ø§Ù„ Ø§Ù„Ø·Ù„Ø¨")
+        tr("Order failed", "فشل إرسال الطلب")
     );
 
     setPlacingOrder(false);
@@ -457,7 +457,7 @@ useEffect(() => {
   alert(
     tr(
       "Order placed successfully",
-      "ØªÙ… Ø¥Ø±Ø³Ø§Ù„ Ø§Ù„Ø·Ù„Ø¨ Ø¨Ù†Ø¬Ø§Ø­"
+      "تم إرسال الطلب بنجاح"
     )
   );
 
@@ -471,7 +471,7 @@ useEffect(() => {
   setPlacingOrder(false);
 };
   const scrollToShop=()=>document.getElementById("shop")?.scrollIntoView({behavior:"smooth"});
-  const subscribeNewsletter=(event)=>{event.preventDefault();const email=newsletterEmail.trim();if(!email||!email.includes("@")){alert(tr("Please enter a valid email address.","ÙŠØ±Ø¬Ù‰ Ø¥Ø¯Ø®Ø§Ù„ Ø¨Ø±ÙŠØ¯ Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ ØµØ­ÙŠØ­."));return;}alert(tr("Thank you for joining Tamraya.","Ø´ÙƒØ±Ø§Ù‹ Ù„Ø§Ù†Ø¶Ù…Ø§Ù…Ùƒ Ø¥Ù„Ù‰ Ù…Ø¬ØªÙ…Ø¹ Tamraya."));setNewsletterEmail("");};
+  const subscribeNewsletter=(event)=>{event.preventDefault();const email=newsletterEmail.trim();if(!email||!email.includes("@")){alert(tr("Please enter a valid email address.","يرجى إدخال بريد إلكتروني صحيح."));return;}alert(tr("Thank you for joining Tamraya.","شكراً لانضمامك إلى مجتمع Tamraya."));setNewsletterEmail("");};
 
   if (showLoader) {
     return <IntroLoader />;
@@ -479,8 +479,9 @@ useEffect(() => {
 
   return <MotionConfig reducedMotion="user"><div className="app" dir={isArabic?"rtl":"ltr"} onPointerMove={(event)=>{if(event.pointerType!=="mouse")return;document.documentElement.style.setProperty("--cursor-x",`${event.clientX}px`);document.documentElement.style.setProperty("--cursor-y",`${event.clientY}px`);}}>
     <motion.div className="cursor-glow" aria-hidden="true" initial={{opacity:0}} animate={{opacity:1}}/>
-    <motion.div className="top-bar" initial={{y:-40,opacity:0}} animate={{y:0,opacity:1}} transition={{duration:.6}}><span>{tr("Free delivery on orders over 100,000 IQD","ØªÙˆØµÙŠÙ„ Ù…Ø¬Ø§Ù†ÙŠ Ù„Ù„Ø·Ù„Ø¨Ø§Øª ÙÙˆÙ‚ 100,000 Ø¯ÙŠÙ†Ø§Ø±")}</span><span className="top-bar-right"><span className="care-tagline">Care That Showsâ„¢</span></span></motion.div>
-    <motion.header className="header" initial={{y:-30,opacity:0}} animate={{y:0,opacity:1}} transition={{duration:.65,delay:.15}}><button className="mobile-menu-button" onClick={()=>setMobileMenu(true)} aria-label="Open menu"><Menu size={23}/></button><a className="logo" href="#home"><span className="logo-main">Tamraya</span><span className="logo-sub">CARE THAT SHOWS</span></a><nav className={`nav ${mobileMenu?"nav-open":""}`}><button className="mobile-nav-close" onClick={()=>setMobileMenu(false)}><X/></button>{[["#home","Home","Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©"],["#shop","Shop","Ø§Ù„Ù…ØªØ¬Ø±"],["#about","Our Story","Ù‚ØµØªÙ†Ø§"],["#contact","Contact","ØªÙˆØ§ØµÙ„ Ù…Ø¹Ù†Ø§"]].map(([h,e,a])=><a key={h} href={h} onClick={()=>setMobileMenu(false)}>{tr(e,a)}</a>)}</nav>{mobileMenu&&<button className="mobile-menu-overlay" onClick={()=>setMobileMenu(false)} aria-label="Close menu"/>}<div className="header-actions"><button
+    <motion.div className="top-bar" initial={{y:-40,opacity:0}} animate={{y:0,opacity:1}} transition={{duration:.6}}><span>{tr("Free delivery on orders over 100,000 IQD","توصيل مجاني للطلبات فوق 100,000 دينار")}</span><span className="top-bar-right"><span className="care-tagline">TAMRAYA • PREMIUM SKINCARE</span>
+</span></motion.div>
+    <motion.header className="header" initial={{y:-30,opacity:0}} animate={{y:0,opacity:1}} transition={{duration:.65,delay:.15}}><button className="mobile-menu-button" onClick={()=>setMobileMenu(true)} aria-label="Open menu"><Menu size={23}/></button><a className="logo" href="#home"><span className="logo-main">Tamraya</span><span className="logo-sub">CARE THAT SHOWS</span></a><nav className={`nav ${mobileMenu?"nav-open":""}`}><button className="mobile-nav-close" onClick={()=>setMobileMenu(false)}><X/></button>{[["#home","Home","الرئيسية"],["#shop","Shop","المتجر"],["#about","Our Story","قصتنا"],["#contact","Contact","تواصل معنا"]].map(([h,e,a])=><a key={h} href={h} onClick={()=>setMobileMenu(false)}>{tr(e,a)}</a>)}</nav>{mobileMenu&&<button className="mobile-menu-overlay" onClick={()=>setMobileMenu(false)} aria-label="Close menu"/>}<div className="header-actions"><button
   className="icon-button"
   onClick={() => setSearchOpen(true)}
 >
@@ -496,43 +497,43 @@ useEffect(() => {
     setTheme(theme === "light" ? "dark" : "light")
   }
 >
-  {theme === "light" ? "ðŸŒ™" : "â˜€ï¸"}
+  {theme === "light" ? "🌙" : "☀️"}
 </button><button className="icon-button desktop-only"><User size={20}/></button><motion.button whileTap={{scale:.88}} className="icon-button cart-button" data-cart-target onClick={()=>setCartOpen(true)}><ShoppingBag size={21}/>{cartCount>0&&<span className="cart-count">{cartCount}</span>}</motion.button></div></motion.header>
 
     <main>
-      <section className="hero" id="home"><motion.div className="hero-content" variants={stagger} initial="hidden" animate="show"><motion.span variants={reveal} className="eyebrow"><Sparkles size={15}/>{tr("PREMIUM SKINCARE","Ø¹Ù†Ø§ÙŠØ© ÙØ§Ø¦Ù‚Ø© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø©")}</motion.span><motion.h1 variants={reveal}>{tr("Care","Ø¹Ù†Ø§ÙŠØ©")}<br/><em>{tr("That Shows.","ØªØ¸Ù‡Ø± Ù†ØªØ§Ø¦Ø¬Ù‡Ø§.")}</em></motion.h1><motion.p variants={reveal}>{tr("Thoughtfully crafted skincare for every kind of skin. Discover a simple ritual designed to make your natural beauty visible.","Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø© Ù…ØµÙ…Ù…Ø© Ø¨Ø¹Ù†Ø§ÙŠØ© Ù„ÙƒÙ„ Ø£Ù†ÙˆØ§Ø¹ Ø§Ù„Ø¨Ø´Ø±Ø©. Ø§ÙƒØªØ´Ù Ø±ÙˆØªÙŠÙ†Ø§Ù‹ Ø¨Ø³ÙŠØ·Ø§Ù‹ ÙŠØ³Ø§Ø¹Ø¯ Ø¹Ù„Ù‰ Ø¥Ø¨Ø±Ø§Ø² Ø¬Ù…Ø§Ù„Ùƒ Ø§Ù„Ø·Ø¨ÙŠØ¹ÙŠ.")}</motion.p><motion.div variants={reveal} className="hero-buttons"><MagneticLink href="#shop" className="primary-button">{tr("Shop Collection","ØªØ³ÙˆÙ‚ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª")}<ChevronRight size={18}/></MagneticLink><MagneticLink href="#about" className="secondary-button">{tr("Discover Tamraya","Ø§ÙƒØªØ´Ù Tamraya")}<ChevronRight size={18}/></MagneticLink></motion.div><motion.div variants={reveal} className="hero-features"><div><ShieldCheck size={19}/>{tr("Clean formulas","ØªØ±ÙƒÙŠØ¨Ø§Øª Ù†Ø¸ÙŠÙØ©")}</div><div><Sparkles size={19}/>{tr("Premium care","Ø¹Ù†Ø§ÙŠØ© ÙØ§Ø®Ø±Ø©")}</div><div><Truck size={19}/>{tr("Iraq delivery","ØªÙˆØµÙŠÙ„ Ø¯Ø§Ø®Ù„ Ø§Ù„Ø¹Ø±Ø§Ù‚")}</div></motion.div></motion.div><HeroImage product={featuredProducts[0]} isArabic={isArabic} tr={tr} addToCart={addToCart} setSelectedProduct={setSelectedProduct}/></section>
+      <section className="hero" id="home"><motion.div className="hero-content" variants={stagger} initial="hidden" animate="show"><motion.span variants={reveal} className="eyebrow"><Sparkles size={15}/>{tr("PREMIUM SKINCARE","عناية فائقة بالبشرة")}</motion.span><motion.h1 variants={reveal}>{tr("Care","عناية")}<br/><em>{tr("That Shows.","تظهر نتائجها.")}</em></motion.h1><motion.p variants={reveal}>{tr("Thoughtfully crafted skincare for every kind of skin. Discover a simple ritual designed to make your natural beauty visible.","عناية بالبشرة مصممة بعناية لكل أنواع البشرة. اكتشف روتيناً بسيطاً يساعد على إبراز جمالك الطبيعي.")}</motion.p><motion.div variants={reveal} className="hero-buttons"><MagneticLink href="#shop" className="primary-button">{tr("Shop Collection","تسوق المنتجات")}<ChevronRight size={18}/></MagneticLink><MagneticLink href="#about" className="secondary-button">{tr("Discover Tamraya","اكتشف Tamraya")}<ChevronRight size={18}/></MagneticLink></motion.div><motion.div variants={reveal} className="hero-features"><div><ShieldCheck size={19}/>{tr("Clean formulas","تركيبات نظيفة")}</div><div><Sparkles size={19}/>{tr("Premium care","عناية فاخرة")}</div><div><Truck size={19}/>{tr("Iraq delivery","توصيل داخل العراق")}</div></motion.div></motion.div><HeroImage product={featuredProducts[0]} isArabic={isArabic} tr={tr} addToCart={addToCart} setSelectedProduct={setSelectedProduct}/></section>
 
-      <motion.section className="brand-strip premium-marquee" initial={{opacity:0}} whileInView={{opacity:1}} viewport={{once:true,amount:.5}} transition={{duration:.8}} aria-label={tr("Tamraya values","Ù‚ÙŠÙ… Tamraya")}>
+      <motion.section className="brand-strip premium-marquee" initial={{opacity:0}} whileInView={{opacity:1}} viewport={{once:true,amount:.5}} transition={{duration:.8}} aria-label={tr("Tamraya values","قيم Tamraya")}>
         <div className="marquee-track">
           {[0,1].map((copy) => (
             <div className="marquee-group" key={copy} aria-hidden={copy === 1}>
-              <span>{tr("THOUGHTFUL FORMULAS","ØªØ±ÙƒÙŠØ¨Ø§Øª Ù…Ø¯Ø±ÙˆØ³Ø©")}</span><b>âœ¦</b>
-              <span>{tr("PREMIUM DAILY CARE","Ø¹Ù†Ø§ÙŠØ© ÙŠÙˆÙ…ÙŠØ© ÙØ§Ø®Ø±Ø©")}</span><b>âœ¦</b>
-              <span>{tr("MADE FOR EVERY RITUAL","Ù…ØµÙ…Ù… Ù„ÙƒÙ„ Ø±ÙˆØªÙŠÙ†")}</span><b>âœ¦</b>
-              <span>{tr("DELIVERY ACROSS IRAQ","ØªÙˆØµÙŠÙ„ Ø¥Ù„Ù‰ Ø£Ù†Ø­Ø§Ø¡ Ø§Ù„Ø¹Ø±Ø§Ù‚")}</span><b>âœ¦</b>
+              <span>{tr("THOUGHTFUL FORMULAS","تركيبات مدروسة")}</span><b>✦</b>
+              <span>{tr("PREMIUM DAILY CARE","عناية يومية فاخرة")}</span><b>✦</b>
+              <span>{tr("MADE FOR EVERY RITUAL","مصمم لكل روتين")}</span><b>✦</b>
+              <span>{tr("DELIVERY ACROSS IRAQ","توصيل إلى أنحاء العراق")}</span><b>✦</b>
             </div>
           ))}
         </div>
       </motion.section>
 
       <motion.section className="featured-section" initial="hidden" whileInView="show" viewport={{once:true,amount:.12}} variants={stagger}>
-        <motion.div className="featured-heading" variants={reveal}><div><span className="eyebrow">{tr("FEATURED EDIT","Ù…Ø®ØªØ§Ø±Ø§Øª Tamraya")}</span><h2>{tr("The ritual, in focus.","Ø±ÙˆØªÙŠÙ†ÙƒØŒ Ø¨ØµÙˆØ±Ø© Ø£ÙˆØ¶Ø­.")}</h2></div><p>{tr("Three essentials selected to turn everyday care into a considered ritual.","Ø«Ù„Ø§Ø«Ø© Ù…Ù†ØªØ¬Ø§Øª Ù…Ø®ØªØ§Ø±Ø© Ù„ØªØ­ÙˆÙ‘Ù„ Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø§Ù„ÙŠÙˆÙ…ÙŠØ© Ø¥Ù„Ù‰ Ø±ÙˆØªÙŠÙ† Ù…ØªÙƒØ§Ù…Ù„.")}</p></motion.div>
-        <div className="featured-stack">{featuredProducts.map((product,index)=>{const displayName=isArabic?product.name_ar||product.name:product.name_en||product.name;return <motion.article className={`featured-card featured-card-${index+1}`} key={`featured-${product.id}`} variants={reveal} whileHover={{y:-8}} transition={{type:"spring",stiffness:180,damping:22}}><button className="featured-media" onClick={()=>openProductPage(product)} aria-label={tr(`View ${displayName}`,`Ø¹Ø±Ø¶ ${displayName}`)}><motion.img src={product.image} alt={displayName} loading="lazy" whileHover={{scale:1.055}} transition={{duration:.65,ease:[.22,1,.36,1]}}/><span className="featured-number">0{index+1}</span><span className="featured-view">{tr("View product","Ø¹Ø±Ø¶ Ø§Ù„Ù…Ù†ØªØ¬")} <ChevronRight size={15}/></span></button><div className="featured-info"><div><span>{isArabic?categoryAr[product.category]||product.category:product.category}</span><h3>{displayName}</h3></div><div className="featured-action"><strong>{formatIQD(product.price)}</strong><motion.button whileTap={{scale:.9}} onClick={(event)=>addToCart(product,event.currentTarget.closest(".featured-card"))} aria-label={tr(`Add ${displayName} to cart`,`Ø£Ø¶Ù ${displayName} Ø¥Ù„Ù‰ Ø§Ù„Ø³Ù„Ø©`)}><Plus size={18}/></motion.button></div></div></motion.article>})}</div>
-        <motion.a variants={reveal} whileHover={{x:isArabic?-6:6}} className="featured-shop-link" href="#shop">{tr("Shop the full collection","ØªØ³ÙˆÙ‘Ù‚ Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹Ø© Ø§Ù„ÙƒØ§Ù…Ù„Ø©")} <ChevronRight size={18}/></motion.a>
+        <motion.div className="featured-heading" variants={reveal}><div><span className="eyebrow">{tr("FEATURED EDIT","مختارات Tamraya")}</span><h2>{tr("The ritual, in focus.","روتينك، بصورة أوضح.")}</h2></div><p>{tr("Three essentials selected to turn everyday care into a considered ritual.","ثلاثة منتجات مختارة لتحوّل العناية اليومية إلى روتين متكامل.")}</p></motion.div>
+        <div className="featured-stack">{featuredProducts.map((product,index)=>{const displayName=isArabic?product.name_ar||product.name:product.name_en||product.name;return <motion.article className={`featured-card featured-card-${index+1}`} key={`featured-${product.id}`} variants={reveal} whileHover={{y:-8}} transition={{type:"spring",stiffness:180,damping:22}}><button className="featured-media" onClick={()=>openProductPage(product)} aria-label={tr(`View ${displayName}`,`عرض ${displayName}`)}><motion.img src={product.image} alt={displayName} loading="lazy" whileHover={{scale:1.055}} transition={{duration:.65,ease:[.22,1,.36,1]}}/><span className="featured-number">0{index+1}</span><span className="featured-view">{tr("View product","عرض المنتج")} <ChevronRight size={15}/></span></button><div className="featured-info"><div><span>{isArabic?categoryAr[product.category]||product.category:product.category}</span><h3>{displayName}</h3></div><div className="featured-action"><strong>{formatIQD(product.price)}</strong><motion.button whileTap={{scale:.9}} onClick={(event)=>addToCart(product,event.currentTarget.closest(".featured-card"))} aria-label={tr(`Add ${displayName} to cart`,`أضف ${displayName} إلى السلة`)}><Plus size={18}/></motion.button></div></div></motion.article>})}</div>
+        <motion.a variants={reveal} whileHover={{x:isArabic?-6:6}} className="featured-shop-link" href="#shop">{tr("Shop the full collection","تسوّق المجموعة الكاملة")} <ChevronRight size={18}/></motion.a>
       </motion.section>
 
       <motion.section className="why-section" initial="hidden" whileInView="show" viewport={{once:true,amount:.18}} variants={stagger}>
         <motion.div className="why-heading" variants={reveal}>
-          <span className="eyebrow">{tr("WHY TAMRAYA","Ù„Ù…Ø§Ø°Ø§ Tamraya")}</span>
-          <h2>{tr("Skincare, made more intentional.","Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø© Ø¨ØªÙØ§ØµÙŠÙ„ Ø£ÙƒØ«Ø± ÙˆØ¹Ù†Ø§ÙŠØ© Ø£ÙƒØ¨Ø±.")}</h2>
-          <p>{tr("A refined ritual built around clarity, comfort and products that belong together.","Ø±ÙˆØªÙŠÙ† Ø£Ù†ÙŠÙ‚ ÙŠØ¬Ù…Ø¹ Ø§Ù„ÙˆØ¶ÙˆØ­ ÙˆØ§Ù„Ø±Ø§Ø­Ø© ÙˆÙ…Ù†ØªØ¬Ø§Øª Ù…ØµÙ…Ù…Ø© Ù„ØªÙƒÙ…Ù„ Ø¨Ø¹Ø¶Ù‡Ø§.")}</p>
+          <span className="eyebrow">{tr("WHY TAMRAYA","لماذا Tamraya")}</span>
+          <h2>{tr("Skincare, made more intentional.","عناية بالبشرة بتفاصيل أكثر وعناية أكبر.")}</h2>
+          <p>{tr("A refined ritual built around clarity, comfort and products that belong together.","روتين أنيق يجمع الوضوح والراحة ومنتجات مصممة لتكمل بعضها.")}</p>
         </motion.div>
         <div className="why-grid">
           {[
-            { icon: ShieldCheck, no:"01", en:"Thoughtful selection", ar:"Ø§Ø®ØªÙŠØ§Ø± Ù…Ø¯Ø±ÙˆØ³", enText:"A focused collection designed to keep your routine simple.", arText:"Ù…Ø¬Ù…ÙˆØ¹Ø© Ù…Ø±ÙƒØ²Ø© ØªØ¬Ø¹Ù„ Ø±ÙˆØªÙŠÙ† Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø£Ø¨Ø³Ø·." },
-            { icon: Sparkles, no:"02", en:"Premium experience", ar:"ØªØ¬Ø±Ø¨Ø© ÙØ§Ø®Ø±Ø©", enText:"Considered details from discovery to daily use.", arText:"ØªÙØ§ØµÙŠÙ„ Ù…Ø¯Ø±ÙˆØ³Ø© Ù…Ù† Ù„Ø­Ø¸Ø© Ø§Ù„Ø§ÙƒØªØ´Ø§Ù Ø­ØªÙ‰ Ø§Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø§Ù„ÙŠÙˆÙ…ÙŠ." },
-            { icon: Grid2X2, no:"03", en:"Ritual-first care", ar:"Ø¹Ù†Ø§ÙŠØ© Ù…Ø¨Ù†ÙŠØ© Ø¹Ù„Ù‰ Ø§Ù„Ø±ÙˆØªÙŠÙ†", enText:"Products presented to help you build a coherent ritual.", arText:"Ù…Ù†ØªØ¬Ø§Øª ØªØ³Ø§Ø¹Ø¯Ùƒ Ø¹Ù„Ù‰ Ø¨Ù†Ø§Ø¡ Ø±ÙˆØªÙŠÙ† Ù…ØªÙƒØ§Ù…Ù„ ÙˆÙˆØ§Ø¶Ø­." },
-            { icon: Truck, no:"04", en:"Iraq delivery", ar:"ØªÙˆØµÙŠÙ„ Ø¯Ø§Ø®Ù„ Ø§Ù„Ø¹Ø±Ø§Ù‚", enText:"A local shopping experience with delivery across Iraq.", arText:"ØªØ¬Ø±Ø¨Ø© ØªØ³ÙˆÙ‚ Ù…Ø­Ù„ÙŠØ© Ù…Ø¹ ØªÙˆØµÙŠÙ„ Ø¥Ù„Ù‰ Ø£Ù†Ø­Ø§Ø¡ Ø§Ù„Ø¹Ø±Ø§Ù‚." },
+            { icon: ShieldCheck, no:"01", en:"Thoughtful selection", ar:"اختيار مدروس", enText:"A focused collection designed to keep your routine simple.", arText:"مجموعة مركزة تجعل روتين العناية أبسط." },
+            { icon: Sparkles, no:"02", en:"Premium experience", ar:"تجربة فاخرة", enText:"Considered details from discovery to daily use.", arText:"تفاصيل مدروسة من لحظة الاكتشاف حتى الاستخدام اليومي." },
+            { icon: Grid2X2, no:"03", en:"Ritual-first care", ar:"عناية مبنية على الروتين", enText:"Products presented to help you build a coherent ritual.", arText:"منتجات تساعدك على بناء روتين متكامل وواضح." },
+            { icon: Truck, no:"04", en:"Iraq delivery", ar:"توصيل داخل العراق", enText:"A local shopping experience with delivery across Iraq.", arText:"تجربة تسوق محلية مع توصيل إلى أنحاء العراق." },
           ].map(({icon:Icon,no,en,ar,enText,arText}) => (
             <motion.article className="why-card" variants={reveal} whileHover={{y:-8}} key={no}>
               <div className="why-card-top"><span>{no}</span><Icon size={24}/></div>
@@ -567,21 +568,21 @@ useEffect(() => {
       whileHover={{scale:1.035}}
       transition={{duration:.7}}
     />
-          <div className="promise-stamp"><span>TAMRAYA</span><small>{tr("CARE THAT SHOWS","Ø¹Ù†Ø§ÙŠØ© ØªØ¸Ù‡Ø± Ù†ØªØ§Ø¦Ø¬Ù‡Ø§")}</small></div>
+          <div className="promise-stamp"><span>TAMRAYA</span><small>{tr("CARE THAT SHOWS","عناية تظهر نتائجها")}</small></div>
         </motion.div>
         <motion.div className="promise-copy" variants={{hidden:{opacity:0,x:isArabic?-70:70},show:{opacity:1,x:0,transition:{duration:.9,ease:[.22,1,.36,1]}}}}>
-          <span className="eyebrow">{tr("OUR PROMISE","ÙˆØ¹Ø¯Ù†Ø§")}</span>
-          <h2>{tr("Less noise. More meaningful care.","Ø¶Ø¬ÙŠØ¬ Ø£Ù‚Ù„. Ø¹Ù†Ø§ÙŠØ© Ø£ÙƒØ«Ø± Ù…Ø¹Ù†Ù‰.")}</h2>
-          <p>{tr("Tamraya brings products, education and an elevated shopping experience into one calm destination. Every detail is designed to help skincare feel easier to understand and more beautiful to use.","ØªØ¬Ù…Ø¹ Tamraya Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª ÙˆØ§Ù„Ù…Ø¹Ù„ÙˆÙ…Ø§Øª ÙˆØªØ¬Ø±Ø¨Ø© ØªØ³ÙˆÙ‚ Ø±Ø§Ù‚ÙŠØ© ÙÙŠ ÙˆØ¬Ù‡Ø© Ù‡Ø§Ø¯Ø¦Ø© ÙˆØ§Ø­Ø¯Ø©. ØµÙÙ…Ù…Øª ÙƒÙ„ Ø§Ù„ØªÙØ§ØµÙŠÙ„ Ù„ØªØ¬Ø¹Ù„ Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø© Ø£ÙˆØ¶Ø­ ÙˆØ£Ø³Ù‡Ù„ ÙˆØ£ÙƒØ«Ø± Ø¬Ù…Ø§Ù„Ø§Ù‹ ÙÙŠ Ø§Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù….")}</p>
-          <div className="promise-points"><span>01 <b>{tr("Discover","Ø§ÙƒØªØ´Ù")}</b></span><span>02 <b>{tr("Choose","Ø§Ø®ØªØ±")}</b></span><span>03 <b>{tr("Build your ritual","Ø§Ø¨Ù†Ù Ø±ÙˆØªÙŠÙ†Ùƒ")}</b></span></div>
-          <motion.a whileHover={{x:isArabic?-6:6}} href="#shop" className="text-link">{tr("Explore the collection","Ø§Ø³ØªÙƒØ´Ù Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹Ø©")}<ChevronRight size={17}/></motion.a>
+          <span className="eyebrow">{tr("OUR PROMISE","وعدنا")}</span>
+          <h2>{tr("Less noise. More meaningful care.","ضجيج أقل. عناية أكثر معنى.")}</h2>
+          <p>{tr("Tamraya brings products, education and an elevated shopping experience into one calm destination. Every detail is designed to help skincare feel easier to understand and more beautiful to use.","تجمع Tamraya المنتجات والمعلومات وتجربة تسوق راقية في وجهة هادئة واحدة. صُممت كل التفاصيل لتجعل العناية بالبشرة أوضح وأسهل وأكثر جمالاً في الاستخدام.")}</p>
+          <div className="promise-points"><span>01 <b>{tr("Discover","اكتشف")}</b></span><span>02 <b>{tr("Choose","اختر")}</b></span><span>03 <b>{tr("Build your ritual","ابنِ روتينك")}</b></span></div>
+          <motion.a whileHover={{x:isArabic?-6:6}} href="#shop" className="text-link">{tr("Explore the collection","استكشف المجموعة")}<ChevronRight size={17}/></motion.a>
         </motion.div>
       </motion.section>
 
-      <section className="shop-section" id="shop"><motion.div className="section-heading" variants={reveal} initial="hidden" whileInView="show" viewport={{once:true,amount:.25}}><div><span className="eyebrow">{tr("THE COLLECTION","Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹Ø©")}</span><h2>{tr("Find your ritual.","Ø§ÙƒØªØ´Ù Ø±ÙˆØªÙŠÙ†Ùƒ Ø§Ù„Ù…Ø«Ø§Ù„ÙŠ")}</h2></div><p>{tr("High-performance essentials designed to work beautifully together.","Ù…Ù†ØªØ¬Ø§Øª Ø£Ø³Ø§Ø³ÙŠØ© Ø¹Ø§Ù„ÙŠØ© Ø§Ù„Ø£Ø¯Ø§Ø¡ Ù…ØµÙ…Ù…Ø© Ù„ØªØ¹Ù…Ù„ Ø¨ØªÙ†Ø§ØºÙ… ØªØ§Ù….")}</p></motion.div>
-        <div className="shop-controls mobile-shop-controls"><div className="search-box"><Search size={18}/><input type="search" placeholder={tr("Search products...","Ø§Ø¨Ø­Ø« Ø¹Ù† Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª...")} value={search} onChange={e=>setSearch(e.target.value)}/></div><select className="sort-select" value={sortBy} onChange={e=>setSortBy(e.target.value)} aria-label="Sort products"><option value="default">{tr("Recommended","Ù…Ù‚ØªØ±Ø­Ø©")}</option><option value="low-high">{tr("Price: Low to High","Ø§Ù„Ø³Ø¹Ø±: Ù…Ù† Ø§Ù„Ø£Ù‚Ù„")}</option><option value="high-low">{tr("Price: High to Low","Ø§Ù„Ø³Ø¹Ø±: Ù…Ù† Ø§Ù„Ø£Ø¹Ù„Ù‰")}</option></select><div className="gender-buttons">{genderOptions.map(o=><button key={o.value} className={gender===o.value?"active":""} onClick={()=>setGender(o.value)}>{isArabic?o.ar:o.en}</button>)}</div></div>
-        <div className="category-list">{categories.map(c=><motion.button whileTap={{scale:.94}} key={c} className={activeCategory===c?"active":""} onClick={()=>setActiveCategory(c)}>{isArabic?categoryAr[c]||c:c}</motion.button>)}</div><p className="products-count">{tr(`Showing ${filteredProducts.length} products`,`Ø¹Ø±Ø¶ ${filteredProducts.length} Ù…Ù†ØªØ¬`)}</p>
-        {filteredProducts.length===0?<div className="empty-products"><h3>{tr("No products found","Ù„Ø§ ØªÙˆØ¬Ø¯ Ù…Ù†ØªØ¬Ø§Øª Ù…Ø·Ø§Ø¨Ù‚Ø©")}</h3><p>{tr("Try another search or category.","Ø¬Ø±Ù‘Ø¨ Ø¨Ø­Ø«Ø§Ù‹ Ø£Ùˆ ØªØµÙ†ÙŠÙØ§Ù‹ Ø¢Ø®Ø±.")}</p></div>:<motion.div className="products-grid" variants={stagger} initial="hidden" whileInView="show" viewport={{once:true,amount:.08}}>{filteredProducts.map(product=>{const liked=wishlist.includes(product.id),displayName=isArabic?product.name_ar||product.name:product.name_en||product.name;return <motion.article variants={reveal} whileHover={{y:-10}} transition={{type:"spring",stiffness:220,damping:22}} className="product-card" key={product.id} onClick={()=>openProductPage(product)}><div className="product-image">{product.image?<motion.img whileHover={{scale:1.06}} transition={{duration:.45}} src={product.image} alt={displayName} loading="lazy"/>:<div className="product-image-placeholder">Tamraya</div>}<span className="product-badge">{product.badge}</span><motion.button whileTap={{scale:.78}} className={`wishlist-button ${liked?"liked":""}`} onClick={e=>{e.stopPropagation();toggleWishlist(product.id)}} aria-label="Wishlist"><Heart size={18} fill={liked?"currentColor":"none"}/></motion.button><button className="quick-view" onClick={e=>{e.stopPropagation();setSelectedProduct(product)}}>{tr("Quick View","Ø¹Ø±Ø¶ Ø³Ø±ÙŠØ¹")}</button></div><div className="product-info"><span className="product-category">{isArabic?categoryAr[product.category]||product.category:product.category}</span><h3>{displayName}</h3><div className="rating"><Star size={14} fill="currentColor"/><span>{product.rating}</span><small>({product.reviews})</small></div><div className="product-bottom"><div className="price"><strong>{formatIQD(product.price)}</strong>{product.oldPrice&&<del>{formatIQD(product.oldPrice)}</del>}</div><motion.button whileHover={{scale:1.06}} whileTap={{scale:.92}} className="add-button" onClick={e=>{e.stopPropagation();addToCart(product,e.currentTarget.closest(".product-card"))}}><Plus size={18}/><span>{tr("Add","Ø¥Ø¶Ø§ÙØ©")}</span></motion.button></div></div></motion.article>})}</motion.div>}
+      <section className="shop-section" id="shop"><motion.div className="section-heading" variants={reveal} initial="hidden" whileInView="show" viewport={{once:true,amount:.25}}><div><span className="eyebrow">{tr("THE COLLECTION","المجموعة")}</span><h2>{tr("Find your ritual.","اكتشف روتينك المثالي")}</h2></div><p>{tr("High-performance essentials designed to work beautifully together.","منتجات أساسية عالية الأداء مصممة لتعمل بتناغم تام.")}</p></motion.div>
+        <div className="shop-controls mobile-shop-controls"><div className="search-box"><Search size={18}/><input type="search" placeholder={tr("Search products...","ابحث عن المنتجات...")} value={search} onChange={e=>setSearch(e.target.value)}/></div><select className="sort-select" value={sortBy} onChange={e=>setSortBy(e.target.value)} aria-label="Sort products"><option value="default">{tr("Recommended","مقترحة")}</option><option value="low-high">{tr("Price: Low to High","السعر: من الأقل")}</option><option value="high-low">{tr("Price: High to Low","السعر: من الأعلى")}</option></select><div className="gender-buttons">{genderOptions.map(o=><button key={o.value} className={gender===o.value?"active":""} onClick={()=>setGender(o.value)}>{isArabic?o.ar:o.en}</button>)}</div></div>
+        <div className="category-list">{categories.map(c=><motion.button whileTap={{scale:.94}} key={c} className={activeCategory===c?"active":""} onClick={()=>setActiveCategory(c)}>{isArabic?categoryAr[c]||c:c}</motion.button>)}</div><p className="products-count">{tr(`Showing ${filteredProducts.length} products`,`عرض ${filteredProducts.length} منتج`)}</p>
+        {filteredProducts.length===0?<div className="empty-products"><h3>{tr("No products found","لا توجد منتجات مطابقة")}</h3><p>{tr("Try another search or category.","جرّب بحثاً أو تصنيفاً آخر.")}</p></div>:<motion.div className="products-grid" variants={stagger} initial="hidden" whileInView="show" viewport={{once:true,amount:.08}}>{filteredProducts.map(product=>{const liked=wishlist.includes(product.id),displayName=isArabic?product.name_ar||product.name:product.name_en||product.name;return <motion.article variants={reveal} whileHover={{y:-10}} transition={{type:"spring",stiffness:220,damping:22}} className="product-card" key={product.id} onClick={()=>openProductPage(product)}><div className="product-image">{product.image?<motion.img whileHover={{scale:1.06}} transition={{duration:.45}} src={product.image} alt={displayName} loading="lazy"/>:<div className="product-image-placeholder">Tamraya</div>}<span className="product-badge">{product.badge}</span><motion.button whileTap={{scale:.78}} className={`wishlist-button ${liked?"liked":""}`} onClick={e=>{e.stopPropagation();toggleWishlist(product.id)}} aria-label="Wishlist"><Heart size={18} fill={liked?"currentColor":"none"}/></motion.button><button className="quick-view" onClick={e=>{e.stopPropagation();setSelectedProduct(product)}}>{tr("Quick View","عرض سريع")}</button></div><div className="product-info"><span className="product-category">{isArabic?categoryAr[product.category]||product.category:product.category}</span><h3>{displayName}</h3><div className="rating"><Star size={14} fill="currentColor"/><span>{product.rating}</span><small>({product.reviews})</small></div><div className="product-bottom"><div className="price"><strong>{formatIQD(product.price)}</strong>{product.oldPrice&&<del>{formatIQD(product.oldPrice)}</del>}</div><motion.button whileHover={{scale:1.06}} whileTap={{scale:.92}} className="add-button" onClick={e=>{e.stopPropagation();addToCart(product,e.currentTarget.closest(".product-card"))}}><Plus size={18}/><span>{tr("Add","إضافة")}</span></motion.button></div></div></motion.article>})}</motion.div>}
       </section>
 
       <motion.section
@@ -616,24 +617,24 @@ useEffect(() => {
     }}
     className="about-content"
   >
-    <span className="eyebrow">{tr("OUR PHILOSOPHY","ÙÙ„Ø³ÙØªÙ†Ø§")}</span>
+    <span className="eyebrow">{tr("OUR PHILOSOPHY","فلسفتنا")}</span>
 
     <h2>
       {tr(
         "Beautiful skin starts with care.",
-        "Ø¨Ø´Ø±Ø© Ø¬Ù…ÙŠÙ„Ø© ØªØ¨Ø¯Ø£ Ù…Ø¹ Ø§Ù„Ø¹Ù†Ø§ÙŠØ©."
+        "بشرة جميلة تبدأ مع العناية."
       )}
     </h2>
 
     <p>
       {tr(
         "Tamraya was created around one simple idea: skincare should feel considered, effective and beautiful.",
-        "ØªÙ… Ø¥Ù†Ø´Ø§Ø¡ Tamraya Ø­ÙˆÙ„ ÙÙƒØ±Ø© Ø¨Ø³ÙŠØ·Ø©: ÙŠØ¬Ø¨ Ø£Ù† ØªÙƒÙˆÙ† Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø© ÙØ¹Ø§Ù„Ø© ÙˆØ¬Ù…ÙŠÙ„Ø© ÙˆÙ…ØµÙ…Ù…Ø© Ø¨Ø¹Ù†Ø§ÙŠØ©."
+        "تم إنشاء Tamraya حول فكرة بسيطة: يجب أن تكون العناية بالبشرة فعالة وجميلة ومصممة بعناية."
       )}
     </p>
 
     <a href="#shop" className="text-link">
-      {tr("Explore our products","Ø§Ø³ØªÙƒØ´Ù Ù…Ù†ØªØ¬Ø§ØªÙ†Ø§")}
+      {tr("Explore our products","استكشف منتجاتنا")}
       <ChevronRight size={17}/>
     </a>
   </motion.div>
@@ -642,20 +643,20 @@ useEffect(() => {
     </main>
 <ScrollStory tr={tr} />
     <motion.section className="testimonials-section" initial="hidden" whileInView="show" viewport={{once:true,amount:.16}} variants={stagger}>
-      <motion.div className="testimonials-heading" variants={reveal}><span className="eyebrow">{tr("COMMUNITY NOTES","Ø¢Ø±Ø§Ø¡ Ø§Ù„Ù…Ø¬ØªÙ…Ø¹")}</span><h2>{tr("Care, reflected back.","Ø§Ù„Ø¹Ù†Ø§ÙŠØ© ÙƒÙ…Ø§ ÙŠØµÙÙ‡Ø§ Ø¹Ù…Ù„Ø§Ø¤Ù†Ø§.")}</h2><p>{tr("Sample review cards for the design preview. Replace these with verified customer feedback before publishing.","Ù†Ù…Ø§Ø°Ø¬ Ù…Ø±Ø§Ø¬Ø¹Ø§Øª Ù„Ù…Ø¹Ø§ÙŠÙ†Ø© Ø§Ù„ØªØµÙ…ÙŠÙ…. Ø§Ø³ØªØ¨Ø¯Ù„Ù‡Ø§ Ø¨Ø¢Ø±Ø§Ø¡ Ù…ÙˆØ«Ù‚Ø© Ù…Ù† Ø§Ù„Ø¹Ù…Ù„Ø§Ø¡ Ù‚Ø¨Ù„ Ø§Ù„Ù†Ø´Ø±.")}</p></motion.div>
-      <div className="testimonials-grid">{[{quoteEn:"The routine feels clear, elegant and easy to follow.",quoteAr:"Ø§Ù„Ø±ÙˆØªÙŠÙ† ÙˆØ§Ø¶Ø­ ÙˆØ£Ù†ÙŠÙ‚ ÙˆØ³Ù‡Ù„ Ø§Ù„Ù…ØªØ§Ø¨Ø¹Ø©.",name:"Sample 01"},{quoteEn:"A calm shopping experience with thoughtful product details.",quoteAr:"ØªØ¬Ø±Ø¨Ø© ØªØ³ÙˆÙ‚ Ù‡Ø§Ø¯Ø¦Ø© Ù…Ø¹ ØªÙØ§ØµÙŠÙ„ Ù…Ø¯Ø±ÙˆØ³Ø© Ù„Ù„Ù…Ù†ØªØ¬Ø§Øª.",name:"Sample 02"},{quoteEn:"The collection makes daily skincare feel more intentional.",quoteAr:"Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹Ø© ØªØ¬Ø¹Ù„ Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø§Ù„ÙŠÙˆÙ…ÙŠØ© Ø£ÙƒØ«Ø± ØªØ±ØªÙŠØ¨Ø§Ù‹ ÙˆÙˆØ¶ÙˆØ­Ø§Ù‹.",name:"Sample 03"}].map((item,index)=><motion.article className="testimonial-card" variants={reveal} whileHover={{y:-8}} key={item.name}><div className="testimonial-top"><span className="testimonial-stars" aria-label="5 stars">â˜…â˜…â˜…â˜…â˜…</span><span className="sample-label">{tr("SAMPLE","Ù†Ù…ÙˆØ°Ø¬")}</span></div><blockquote>â€œ{tr(item.quoteEn,item.quoteAr)}â€</blockquote><div className="testimonial-person"><span>0{index+1}</span><strong>{item.name}</strong></div></motion.article>)}</div>
+      <motion.div className="testimonials-heading" variants={reveal}><span className="eyebrow">{tr("COMMUNITY NOTES","آراء المجتمع")}</span><h2>{tr("Care, reflected back.","العناية كما يصفها عملاؤنا.")}</h2><p>{tr("Sample review cards for the design preview. Replace these with verified customer feedback before publishing.","نماذج مراجعات لمعاينة التصميم. استبدلها بآراء موثقة من العملاء قبل النشر.")}</p></motion.div>
+      <div className="testimonials-grid">{[{quoteEn:"The routine feels clear, elegant and easy to follow.",quoteAr:"الروتين واضح وأنيق وسهل المتابعة.",name:"Sample 01"},{quoteEn:"A calm shopping experience with thoughtful product details.",quoteAr:"تجربة تسوق هادئة مع تفاصيل مدروسة للمنتجات.",name:"Sample 02"},{quoteEn:"The collection makes daily skincare feel more intentional.",quoteAr:"المجموعة تجعل العناية اليومية أكثر ترتيباً ووضوحاً.",name:"Sample 03"}].map((item,index)=><motion.article className="testimonial-card" variants={reveal} whileHover={{y:-8}} key={item.name}><div className="testimonial-top"><span className="testimonial-stars" aria-label="5 stars">★★★★★</span><span className="sample-label">{tr("SAMPLE","نموذج")}</span></div><blockquote>“{tr(item.quoteEn,item.quoteAr)}”</blockquote><div className="testimonial-person"><span>0{index+1}</span><strong>{item.name}</strong></div></motion.article>)}</div>
     </motion.section>
-    <motion.section className="newsletter-section" initial={{opacity:0,y:50}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.25}} transition={{duration:.85,ease:[.22,1,.36,1]}}><div className="newsletter-orb" aria-hidden="true"/><div className="newsletter-copy"><span className="eyebrow">{tr("THE TAMRAYA LETTER","Ø±Ø³Ø§Ø¦Ù„ Tamraya")}</span><h2>{tr("Stay close to whatâ€™s next.","ÙƒÙ† Ø£ÙˆÙ„ Ù…Ù† ÙŠØ¹Ø±Ù Ø§Ù„Ø¬Ø¯ÙŠØ¯.")}</h2><p>{tr("New arrivals, considered rituals and occasional notes from Tamraya.","Ø¥ØµØ¯Ø§Ø±Ø§Øª Ø¬Ø¯ÙŠØ¯Ø© ÙˆØ±ÙˆØªÙŠÙ†Ø§Øª Ù…Ø®ØªØ§Ø±Ø© ÙˆØ±Ø³Ø§Ø¦Ù„ Ù…Ù…ÙŠØ²Ø© Ù…Ù† Tamraya.")}</p></div><form className="newsletter-form" onSubmit={subscribeNewsletter}><label htmlFor="newsletter-email">{tr("Email address","Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ")}</label><div><input id="newsletter-email" type="email" autoComplete="email" placeholder="name@example.com" value={newsletterEmail} onChange={event=>setNewsletterEmail(event.target.value)}/><motion.button whileHover={{scale:1.02}} whileTap={{scale:.97}} type="submit">{tr("Join the community","Ø§Ù†Ø¶Ù… Ø¥Ù„Ù‰ Ø§Ù„Ù…Ø¬ØªÙ…Ø¹")}<ChevronRight size={18}/></motion.button></div><small>{tr("By subscribing, you agree to receive Tamraya updates.","Ø¨Ø§Ù„Ø§Ø´ØªØ±Ø§ÙƒØŒ Ø£Ù†Øª ØªÙˆØ§ÙÙ‚ Ø¹Ù„Ù‰ Ø§Ø³ØªÙ„Ø§Ù… ØªØ­Ø¯ÙŠØ«Ø§Øª Tamraya.")}</small></form></motion.section>
-    <footer className="premium-footer" id="contact"><div className="footer-main"><div className="footer-identity"><a className="footer-logo" href="#home">Tamraya</a><p>{tr("Care that shows, in every detail.","Ø¹Ù†Ø§ÙŠØ© ØªØ¸Ù‡Ø± ÙÙŠ ÙƒÙ„ Ø§Ù„ØªÙØ§ØµÙŠÙ„.")}</p><span>{tr("Iraq Â· Online skincare destination","Ø§Ù„Ø¹Ø±Ø§Ù‚ Â· ÙˆØ¬Ù‡Ø© Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠØ© Ù„Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø©")}</span></div><div className="footer-column"><h3>{tr("Explore","Ø§Ø³ØªÙƒØ´Ù")}</h3><a href="#home">{tr("Home","Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©")}</a><a href="#shop">{tr("Shop","Ø§Ù„Ù…ØªØ¬Ø±")}</a><a href="#about">{tr("Our story","Ù‚ØµØªÙ†Ø§")}</a></div><div className="footer-column"><h3>{tr("Connect","ØªÙˆØ§ØµÙ„")}</h3><a href="#contact">Instagram</a><a href="#contact">Facebook</a><a href="#contact">TikTok</a></div><div className="footer-column footer-service"><h3>{tr("Care","Ø§Ù„Ø®Ø¯Ù…Ø©")}</h3><a href="#shop">{tr("Delivery","Ø§Ù„ØªÙˆØµÙŠÙ„")}</a><a href="#shop">{tr("Product guide","Ø¯Ù„ÙŠÙ„ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª")}</a><a href="https://wa.me/9640000000000" target="_blank" rel="noreferrer">WhatsApp</a></div></div><div className="footer-wordmark" aria-hidden="true">Tamraya</div><div className="footer-bottom"><span>{tr("Â© 2026 Tamraya. All rights reserved.","Â© 2026 Tamraya. Ø¬Ù…ÙŠØ¹ Ø§Ù„Ø­Ù‚ÙˆÙ‚ Ù…Ø­ÙÙˆØ¸Ø©.")}</span><a href="#home">{tr("Back to top","Ø§Ù„Ø¹ÙˆØ¯Ø© Ù„Ù„Ø£Ø¹Ù„Ù‰")} â†‘</a></div></footer>
+    <motion.section className="newsletter-section" initial={{opacity:0,y:50}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.25}} transition={{duration:.85,ease:[.22,1,.36,1]}}><div className="newsletter-orb" aria-hidden="true"/><div className="newsletter-copy"><span className="eyebrow">{tr("THE TAMRAYA LETTER","رسائل Tamraya")}</span><h2>{tr("Stay close to what’s next.","كن أول من يعرف الجديد.")}</h2><p>{tr("New arrivals, considered rituals and occasional notes from Tamraya.","إصدارات جديدة وروتينات مختارة ورسائل مميزة من Tamraya.")}</p></div><form className="newsletter-form" onSubmit={subscribeNewsletter}><label htmlFor="newsletter-email">{tr("Email address","البريد الإلكتروني")}</label><div><input id="newsletter-email" type="email" autoComplete="email" placeholder="name@example.com" value={newsletterEmail} onChange={event=>setNewsletterEmail(event.target.value)}/><motion.button whileHover={{scale:1.02}} whileTap={{scale:.97}} type="submit">{tr("Join the community","انضم إلى المجتمع")}<ChevronRight size={18}/></motion.button></div><small>{tr("By subscribing, you agree to receive Tamraya updates.","بالاشتراك، أنت توافق على استلام تحديثات Tamraya.")}</small></form></motion.section>
+    <footer className="premium-footer" id="contact"><div className="footer-main"><div className="footer-identity"><a className="footer-logo" href="#home">Tamraya</a><p>{tr("Care that shows, in every detail.","عناية تظهر في كل التفاصيل.")}</p><span>{tr("Iraq · Online skincare destination","العراق · وجهة إلكترونية للعناية بالبشرة")}</span></div><div className="footer-column"><h3>{tr("Explore","استكشف")}</h3><a href="#home">{tr("Home","الرئيسية")}</a><a href="#shop">{tr("Shop","المتجر")}</a><a href="#about">{tr("Our story","قصتنا")}</a></div><div className="footer-column"><h3>{tr("Connect","تواصل")}</h3><a href="#contact">Instagram</a><a href="#contact">Facebook</a><a href="#contact">TikTok</a></div><div className="footer-column footer-service"><h3>{tr("Care","الخدمة")}</h3><a href="#shop">{tr("Delivery","التوصيل")}</a><a href="#shop">{tr("Product guide","دليل المنتجات")}</a><a href="https://wa.me/9640000000000" target="_blank" rel="noreferrer">WhatsApp</a></div></div><div className="footer-wordmark" aria-hidden="true">Tamraya</div><div className="footer-bottom"><span>{tr("© 2026 Tamraya. All rights reserved.","© 2026 Tamraya. جميع الحقوق محفوظة.")}</span><a href="#home">{tr("Back to top","العودة للأعلى")} ↑</a></div></footer>
     <motion.button
       type="button"
       className="skin-advisor-launch"
       onClick={()=>setSkinAdvisorOpen(true)}
       whileHover={{scale:1.04,y:-3}}
       whileTap={{scale:.96}}
-      aria-label={tr("Open Tamraya skin advisor","Ø§ÙØªØ­ Ù…Ø³ØªØ´Ø§Ø± Tamraya Ù„Ù„Ø¹Ù†Ø§ÙŠØ©")}
+      aria-label={tr("Open Tamraya skin advisor","افتح مستشار Tamraya للعناية")}
     >
-      <Sparkles size={19}/><span>{tr("Skin Advisor","Ù…Ø³ØªØ´Ø§Ø± Ø§Ù„Ø¨Ø´Ø±Ø©")}</span>
+      <Sparkles size={19}/><span>{tr("Skin Advisor","مستشار البشرة")}</span>
     </motion.button>
 
     <SkinAdvisor
@@ -672,16 +673,16 @@ useEffect(() => {
     <motion.a whileHover={{scale:1.1,y:-3}} whileTap={{scale:.92}} className="whatsapp-button" href="https://wa.me/9640000000000" target="_blank" rel="noreferrer" aria-label="WhatsApp"><MessageCircle size={24}/></motion.a>
     
 
-    {selectedProduct&&<motion.div className={`modal-overlay ${isProductRoute?"product-page-overlay":""}`} onClick={closeProductView} initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}><motion.div className={`product-modal mobile-product-modal ${isProductRoute?"routed-product-page":""}`} onClick={e=>e.stopPropagation()} initial={{opacity:0,y:35,scale:.96}} animate={{opacity:1,y:0,scale:1}}><button className="modal-close" onClick={closeProductView}><X size={12}/></button><div className="modal-image">{selectedProduct.image?<img src={selectedProduct.image} alt={selectedProduct.name}/>:<div className="product-image-placeholder">Tamraya</div>}</div><div className="modal-content"><span className="product-category">{selectedProduct.category}</span><h2>{isArabic?selectedProduct.name_ar||selectedProduct.name:selectedProduct.name_en||selectedProduct.name}</h2><div className="rating"><Star size={15} fill="currentColor"/><span>{selectedProduct.rating}</span><small>({selectedProduct.reviews})</small></div><div className="modal-price">{formatIQD(selectedProduct.price)}</div><p>{isArabic?selectedProduct.description_ar||selectedProduct.description:selectedProduct.description_en||selectedProduct.description}</p>{selectedProduct.ingredients?.length>0&&<div className="ingredients"><h4>{tr("Key ingredients","Ø§Ù„Ù…ÙƒÙˆÙ†Ø§Øª Ø§Ù„Ø£Ø³Ø§Ø³ÙŠØ©")}</h4><div>{selectedProduct.ingredients.map(i=><span key={i}>{i}</span>)}</div></div>}{isProductRoute&&<div className="product-page-details">
-  <div><span>01</span><h4>{tr("The ritual","Ø§Ù„Ø±ÙˆØªÙŠÙ†")}</h4><p>{tr("Use this product as part of a consistent skincare routine and follow the directions on its label.","Ø§Ø³ØªØ®Ø¯Ù… Ù‡Ø°Ø§ Ø§Ù„Ù…Ù†ØªØ¬ Ø¶Ù…Ù† Ø±ÙˆØªÙŠÙ† Ø¹Ù†Ø§ÙŠØ© Ù…Ù†ØªØ¸Ù… ÙˆØ§ØªØ¨Ø¹ Ø§Ù„ØªØ¹Ù„ÙŠÙ…Ø§Øª Ø§Ù„Ù…ÙˆØ¬ÙˆØ¯Ø© Ø¹Ù„Ù‰ Ø§Ù„Ø¹Ø¨ÙˆØ©.")}</p></div>
-  <div><span>02</span><h4>{tr("Delivery","Ø§Ù„ØªÙˆØµÙŠÙ„")}</h4><p>{tr("Available for delivery across Iraq. Delivery is free on orders over 100,000 IQD.","Ù…ØªØ§Ø­ Ù„Ù„ØªÙˆØµÙŠÙ„ Ø¯Ø§Ø®Ù„ Ø§Ù„Ø¹Ø±Ø§Ù‚ØŒ ÙˆØ§Ù„ØªÙˆØµÙŠÙ„ Ù…Ø¬Ø§Ù†ÙŠ Ù„Ù„Ø·Ù„Ø¨Ø§Øª Ø§Ù„ØªÙŠ ØªØªØ¬Ø§ÙˆØ² 100,000 Ø¯ÙŠÙ†Ø§Ø±.")}</p></div>
+    {selectedProduct&&<motion.div className={`modal-overlay ${isProductRoute?"product-page-overlay":""}`} onClick={closeProductView} initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}><motion.div className={`product-modal mobile-product-modal ${isProductRoute?"routed-product-page":""}`} onClick={e=>e.stopPropagation()} initial={{opacity:0,y:35,scale:.96}} animate={{opacity:1,y:0,scale:1}}><button className="modal-close" onClick={closeProductView}><X size={12}/></button><div className="modal-image">{selectedProduct.image?<img src={selectedProduct.image} alt={selectedProduct.name}/>:<div className="product-image-placeholder">Tamraya</div>}</div><div className="modal-content"><span className="product-category">{selectedProduct.category}</span><h2>{isArabic?selectedProduct.name_ar||selectedProduct.name:selectedProduct.name_en||selectedProduct.name}</h2><div className="rating"><Star size={15} fill="currentColor"/><span>{selectedProduct.rating}</span><small>({selectedProduct.reviews})</small></div><div className="modal-price">{formatIQD(selectedProduct.price)}</div><p>{isArabic?selectedProduct.description_ar||selectedProduct.description:selectedProduct.description_en||selectedProduct.description}</p>{selectedProduct.ingredients?.length>0&&<div className="ingredients"><h4>{tr("Key ingredients","المكونات الأساسية")}</h4><div>{selectedProduct.ingredients.map(i=><span key={i}>{i}</span>)}</div></div>}{isProductRoute&&<div className="product-page-details">
+  <div><span>01</span><h4>{tr("The ritual","الروتين")}</h4><p>{tr("Use this product as part of a consistent skincare routine and follow the directions on its label.","استخدم هذا المنتج ضمن روتين عناية منتظم واتبع التعليمات الموجودة على العبوة.")}</p></div>
+  <div><span>02</span><h4>{tr("Delivery","التوصيل")}</h4><p>{tr("Available for delivery across Iraq. Delivery is free on orders over 100,000 IQD.","متاح للتوصيل داخل العراق، والتوصيل مجاني للطلبات التي تتجاوز 100,000 دينار.")}</p></div>
 </div>}
-<button className="modal-add" onClick={(event)=>{addToCart(selectedProduct,event.currentTarget.closest(".product-modal"));if(!isProductRoute)setSelectedProduct(null)}}>{tr("Add to Shopping Bag","Ø£Ø¶Ù Ø¥Ù„Ù‰ Ø³Ù„Ø© Ø§Ù„ØªØ³ÙˆÙ‚")}</button>
-{isProductRoute&&<button className="product-page-back" type="button" onClick={()=>navigate("/")}>{tr("Back to the collection","Ø§Ù„Ø¹ÙˆØ¯Ø© Ø¥Ù„Ù‰ Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹Ø©")} <ChevronRight size={16}/></button>}</div></motion.div></motion.div>}
+<button className="modal-add" onClick={(event)=>{addToCart(selectedProduct,event.currentTarget.closest(".product-modal"));if(!isProductRoute)setSelectedProduct(null)}}>{tr("Add to Shopping Bag","أضف إلى سلة التسوق")}</button>
+{isProductRoute&&<button className="product-page-back" type="button" onClick={()=>navigate("/")}>{tr("Back to the collection","العودة إلى المجموعة")} <ChevronRight size={16}/></button>}</div></motion.div></motion.div>}
 
-    {cartOpen&&<motion.div className="cart-overlay" onClick={()=>setCartOpen(false)} initial={{opacity:0}} animate={{opacity:1}}><motion.aside className="cart-drawer" onClick={e=>e.stopPropagation()} initial={{x:isArabic?"-100%":"100%"}} animate={{x:0}} transition={{type:"spring",stiffness:260,damping:30}}><div className="cart-header"><div><span className="eyebrow">{tr("YOUR BAG","Ø³Ù„ØªÙƒ")}</span><h2>{tr("Shopping Bag","Ø³Ù„Ø© Ø§Ù„ØªØ³ÙˆÙ‚")}</h2></div><button onClick={()=>setCartOpen(false)}><X size={22}/></button></div>{cart.length===0?<div className="empty-cart"><ShoppingBag size={42}/><h3>{tr("Your bag is empty","Ø³Ù„ØªÙƒ ÙØ§Ø±ØºØ©")}</h3><button onClick={()=>setCartOpen(false)} className="primary-button">{tr("Continue Shopping","Ù…ØªØ§Ø¨Ø¹Ø© Ø§Ù„ØªØ³ÙˆÙ‚")}</button></div>:<><div className="cart-items">{cart.map(item=><div className="cart-item" key={item.id}>{item.image?<img src={item.image} alt={item.name}/>:<div className="cart-thumb-placeholder">Tamraya</div>}<div className="cart-item-info"><h4>{isArabic?item.name_ar||item.name:item.name_en||item.name}</h4><span>{formatIQD(item.price)}</span><div className="quantity"><button onClick={()=>updateQuantity(item.id,-1)}><Minus size={14}/></button><span>{item.quantity}</span><button onClick={()=>updateQuantity(item.id,1)}><Plus size={14}/></button></div></div><button className="remove-item" onClick={()=>removeFromCart(item.id)}><Trash2 size={17}/></button></div>)}</div><div className="cart-summary"><div><span>{tr("Subtotal","Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹ Ø§Ù„ÙØ±Ø¹ÙŠ")}</span><strong>{formatIQD(cartSubtotal)}</strong></div><div><span>{tr("Delivery","Ø§Ù„ØªÙˆØµÙŠÙ„")}</span><strong>{delivery===0?tr("FREE","Ù…Ø¬Ø§Ù†ÙŠ"):formatIQD(delivery)}</strong></div><div className="cart-total"><span>{tr("Total","Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹")}</span><strong>{formatIQD(orderTotal)}</strong></div><button className="checkout-button" onClick={()=>{setCartOpen(false);setCheckoutOpen(true)}}>{tr("Proceed to Checkout","Ø¥ÙƒÙ…Ø§Ù„ Ø§Ù„Ø·Ù„Ø¨")}<ChevronRight size={18}/></button></div></>}</motion.aside></motion.div>}
+    {cartOpen&&<motion.div className="cart-overlay" onClick={()=>setCartOpen(false)} initial={{opacity:0}} animate={{opacity:1}}><motion.aside className="cart-drawer" onClick={e=>e.stopPropagation()} initial={{x:isArabic?"-100%":"100%"}} animate={{x:0}} transition={{type:"spring",stiffness:260,damping:30}}><div className="cart-header"><div><span className="eyebrow">{tr("YOUR BAG","سلتك")}</span><h2>{tr("Shopping Bag","سلة التسوق")}</h2></div><button onClick={()=>setCartOpen(false)}><X size={22}/></button></div>{cart.length===0?<div className="empty-cart"><ShoppingBag size={42}/><h3>{tr("Your bag is empty","سلتك فارغة")}</h3><button onClick={()=>setCartOpen(false)} className="primary-button">{tr("Continue Shopping","متابعة التسوق")}</button></div>:<><div className="cart-items">{cart.map(item=><div className="cart-item" key={item.id}>{item.image?<img src={item.image} alt={item.name}/>:<div className="cart-thumb-placeholder">Tamraya</div>}<div className="cart-item-info"><h4>{isArabic?item.name_ar||item.name:item.name_en||item.name}</h4><span>{formatIQD(item.price)}</span><div className="quantity"><button onClick={()=>updateQuantity(item.id,-1)}><Minus size={14}/></button><span>{item.quantity}</span><button onClick={()=>updateQuantity(item.id,1)}><Plus size={14}/></button></div></div><button className="remove-item" onClick={()=>removeFromCart(item.id)}><Trash2 size={17}/></button></div>)}</div><div className="cart-summary"><div><span>{tr("Subtotal","المجموع الفرعي")}</span><strong>{formatIQD(cartSubtotal)}</strong></div><div><span>{tr("Delivery","التوصيل")}</span><strong>{delivery===0?tr("FREE","مجاني"):formatIQD(delivery)}</strong></div><div className="cart-total"><span>{tr("Total","المجموع")}</span><strong>{formatIQD(orderTotal)}</strong></div><button className="checkout-button" onClick={()=>{setCartOpen(false);setCheckoutOpen(true)}}>{tr("Proceed to Checkout","إكمال الطلب")}<ChevronRight size={18}/></button></div></>}</motion.aside></motion.div>}
 
-    {checkoutOpen&&<motion.div className="modal-overlay" onClick={()=>setCheckoutOpen(false)} initial={{opacity:0}} animate={{opacity:1}}><motion.div className="checkout-modal" onClick={e=>e.stopPropagation()} initial={{opacity:0,y:35,scale:.96}} animate={{opacity:1,y:0,scale:1}}><button className="modal-close" onClick={()=>setCheckoutOpen(false)}><X size={22}/></button><h2>{tr("Checkout","Ø¥ÙƒÙ…Ø§Ù„ Ø§Ù„Ø·Ù„Ø¨")}</h2><input type="text" placeholder={tr("Full Name","Ø§Ù„Ø§Ø³Ù… Ø§Ù„ÙƒØ§Ù…Ù„")} value={customerName} onChange={e=>setCustomerName(e.target.value)}/><input type="tel" inputMode="tel" placeholder={tr("Phone Number","Ø±Ù‚Ù… Ø§Ù„Ù‡Ø§ØªÙ")} value={customerPhone} onChange={e=>setCustomerPhone(e.target.value)}/><input type="text" placeholder={tr("Governorate","Ø§Ù„Ù…Ø­Ø§ÙØ¸Ø©")} value={customerGovernorate} onChange={e=>setCustomerGovernorate(e.target.value)}/><textarea placeholder={tr("Full Address","Ø§Ù„Ø¹Ù†ÙˆØ§Ù† Ø§Ù„ÙƒØ§Ù…Ù„")} value={customerAddress} onChange={e=>setCustomerAddress(e.target.value)}/><div className="checkout-summary"><span>{tr("Items","Ø§Ù„Ù‚Ø·Ø¹")}: {cartCount}</span><strong>{formatIQD(orderTotal)}</strong></div><button className="checkout-button" disabled={placingOrder} onClick={placeOrder}>{placingOrder?tr("Sending...","Ø¬Ø§Ø± Ø§Ù„Ø¥Ø±Ø³Ø§Ù„..."):tr("Place Order","Ø¥Ø±Ø³Ø§Ù„ Ø§Ù„Ø·Ù„Ø¨")}</button></motion.div></motion.div>}
+    {checkoutOpen&&<motion.div className="modal-overlay" onClick={()=>setCheckoutOpen(false)} initial={{opacity:0}} animate={{opacity:1}}><motion.div className="checkout-modal" onClick={e=>e.stopPropagation()} initial={{opacity:0,y:35,scale:.96}} animate={{opacity:1,y:0,scale:1}}><button className="modal-close" onClick={()=>setCheckoutOpen(false)}><X size={22}/></button><h2>{tr("Checkout","إكمال الطلب")}</h2><input type="text" placeholder={tr("Full Name","الاسم الكامل")} value={customerName} onChange={e=>setCustomerName(e.target.value)}/><input type="tel" inputMode="tel" placeholder={tr("Phone Number","رقم الهاتف")} value={customerPhone} onChange={e=>setCustomerPhone(e.target.value)}/><input type="text" placeholder={tr("Governorate","المحافظة")} value={customerGovernorate} onChange={e=>setCustomerGovernorate(e.target.value)}/><textarea placeholder={tr("Full Address","العنوان الكامل")} value={customerAddress} onChange={e=>setCustomerAddress(e.target.value)}/><div className="checkout-summary"><span>{tr("Items","القطع")}: {cartCount}</span><strong>{formatIQD(orderTotal)}</strong></div><button className="checkout-button" disabled={placingOrder} onClick={placeOrder}>{placingOrder?tr("Sending...","جار الإرسال..."):tr("Place Order","إرسال الطلب")}</button></motion.div></motion.div>}
 {searchOpen && (
   <motion.div
     className="search-modal-overlay"
@@ -704,7 +705,7 @@ useEffect(() => {
       </button>
 
       <h3>
-        {tr("Search Products","Ø§Ù„Ø¨Ø­Ø« Ø¹Ù† Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª")}
+        {tr("Search Products","البحث عن المنتجات")}
       </h3>
 
       <div className="search-modal-box">
@@ -716,7 +717,7 @@ useEffect(() => {
           onChange={(e)=>setSearch(e.target.value)}
           placeholder={tr(
             "Search products...",
-            "Ø§Ø¨Ø­Ø« Ø¹Ù† Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª..."
+            "ابحث عن المنتجات..."
           )}
         />
       </div>
@@ -725,16 +726,16 @@ useEffect(() => {
 )}
     <nav className="mobile-bottom-nav" aria-label="Mobile navigation">
       <motion.a href="/#home" className={activeMobileTab==="home"?"active-nav":""} onClick={()=>{setActiveMobileTab("home");if(isProductRoute){navigate("/");window.setTimeout(()=>document.getElementById("home")?.scrollIntoView({behavior:"smooth"}),80);}}} whileTap={{scale:.86}}>
-        <span className="mobile-nav-icon"><Home size={21}/></span><span>{tr("Home","Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©")}</span>
+        <span className="mobile-nav-icon"><Home size={21}/></span><span>{tr("Home","الرئيسية")}</span>
       </motion.a>
       <motion.button className={activeMobileTab==="shop"?"active-nav":""} onClick={()=>{setActiveMobileTab("shop");if(isProductRoute){navigate("/");window.setTimeout(scrollToShop,80);}else{scrollToShop();}}} whileTap={{scale:.86}}>
-        <span className="mobile-nav-icon"><Grid2X2 size={21}/></span><span>{tr("Shop","Ø§Ù„Ù…ØªØ¬Ø±")}</span>
+        <span className="mobile-nav-icon"><Grid2X2 size={21}/></span><span>{tr("Shop","المتجر")}</span>
       </motion.button>
       <motion.button className={activeMobileTab==="wishlist"?"active-nav":""} onClick={()=>{setActiveMobileTab("wishlist");if(isProductRoute){navigate("/");window.setTimeout(scrollToShop,80);}else{scrollToShop();}}} whileTap={{scale:.86}}>
-        <span className="mobile-nav-icon"><Heart size={21}/></span><span>{tr("Wishlist","Ø§Ù„Ù…ÙØ¶Ù„Ø©")}</span>{wishlist.length>0&&<b>{wishlist.length}</b>}
+        <span className="mobile-nav-icon"><Heart size={21}/></span><span>{tr("Wishlist","المفضلة")}</span>{wishlist.length>0&&<b>{wishlist.length}</b>}
       </motion.button>
       <motion.button data-cart-target className={activeMobileTab==="cart"?"active-nav":""} onClick={()=>{setActiveMobileTab("cart");setCartOpen(true);}} whileTap={{scale:.86}}>
-        <span className="mobile-nav-icon"><ShoppingBag size={21}/></span><span>{tr("Cart","Ø§Ù„Ø³Ù„Ø©")}</span>{cartCount>0&&<b>{cartCount}</b>}
+        <span className="mobile-nav-icon"><ShoppingBag size={21}/></span><span>{tr("Cart","السلة")}</span>{cartCount>0&&<b>{cartCount}</b>}
       </motion.button>
     </nav>
   </div></MotionConfig>;
