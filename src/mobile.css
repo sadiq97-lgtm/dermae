@@ -624,3 +624,40 @@ MOBILE PRODUCT CARD - FINAL COMPACT FIX
     animation: none !important;
   }
 }
+/* TAMRAYA INTRO LOADER MOBILE FIX */
+
+@media (max-width: 768px) {
+
+  .intro-loader {
+    width: 100%;
+    min-height: 100dvh;
+    overflow: hidden;
+  }
+
+  .intro-loader-content {
+    width: 100%;
+    max-width: 100%;
+    padding: 30px 20px;
+    box-sizing: border-box;
+    overflow: visible !important;
+  }
+
+  .intro-loader-logo {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+    font-size: clamp(36px, 10vw, 58px) !important;
+    line-height: 1.3 !important;
+    white-space: nowrap;
+    overflow: visible !important;
+  }
+
+  .intro-loader-logo span {
+    display: inline-block;
+    line-height: 1.3;
+    overflow: visible !important;
+  }
+
+}
