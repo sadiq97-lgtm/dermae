@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Tajawal:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=DM+Serif+Display:ital@0;1&family=Tajawal:wght@400;500;600;700&display=swap');
 
 /* =========================
    DERMAE SKINCARE - APP CSS
@@ -2023,4 +2023,35 @@ html[lang="ar"] .app :is(p,li,blockquote) { line-height: 1.75; }
 html[lang="ar"] .app :is(.logo-main,.logo-sub,.footer-logo,.footer-wordmark)[lang="ar"],
 html[lang="ar"] .app .promise-stamp span[lang="ar"] {
   font-family: "Aref Ruqaa", serif !important;
+}
+
+/* TAMRAYA English wordmark: elegant serif, paired with Arabic Aref Ruqaa. */
+.logo-main[lang="en"],
+.footer-logo[lang="en"],
+.footer-wordmark[lang="en"] {
+  font-family: "DM Serif Display", Georgia, serif !important;
+  font-weight: 400 !important;
+  font-style: normal;
+  letter-spacing: -0.025em !important;
+  line-height: 1.15;
+  text-transform: none !important;
+}
+.logo-main[lang="en"] { font-size: 31px !important; white-space: nowrap; }
+@media (max-width: 768px) {
+  .logo-main[lang="en"] { font-size: 27px !important; }
+}
+/* Preserve brand serif when Arabic mode sets a general UI font. */
+html[lang="ar"] .app :is(.logo-main,.footer-logo,.footer-wordmark)[lang="en"] {
+  font-family: "DM Serif Display", Georgia, serif !important;
+}
+/* Intro lettering retains the existing letter-by-letter animation. */
+.intro-loader-logo {
+  font-family: "DM Serif Display", Georgia, serif !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.025em !important;
+  line-height: 1.25 !important;
+  font-size: clamp(54px, 11vw, 82px) !important;
+}
+@media (max-width: 480px) {
+  .intro-loader-logo { font-size: clamp(46px, 13vw, 62px) !important; }
 }

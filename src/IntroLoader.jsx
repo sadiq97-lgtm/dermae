@@ -48,7 +48,7 @@ export default function IntroLoader() {
           initial={false}
           animate={ready ? "show" : "hidden"}
           variants={{ hidden: {}, show: { transition: { delayChildren: 0.12, staggerChildren: 0.075 } } }}
-          style={{ display: "flex", justifyContent: "center", overflow: "visible", transformStyle: "preserve-3d", whiteSpace: "nowrap" }}
+          style={{ display: "flex", justifyContent: "center", overflow: "visible", transformStyle: "preserve-3d", whiteSpace: "nowrap", fontFamily: '"DM Serif Display", Georgia, serif', fontWeight: 400, letterSpacing: "-0.025em", lineHeight: 1.25 }}
         >
           {Array.from(brand).map((letter, index) => (
             <motion.span
