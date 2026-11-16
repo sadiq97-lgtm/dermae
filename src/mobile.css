@@ -661,3 +661,24 @@ MOBILE PRODUCT CARD - FINAL COMPACT FIX
   }
 
 }
+/* TAMRAYA Arabic Logo Horizontal Stretch */
+
+@media (max-width: 768px) {
+
+  .logo-main[lang="ar"] {
+    font-size: 22px !important;
+    line-height: 1.4 !important;
+    transform: scaleX(1.55);
+    transform-origin: center;
+    white-space: nowrap;
+  }
+
+  .logo-sub[lang="ar"] {
+    font-size: 10px !important;
+    line-height: 1.6 !important;
+    transform: scaleX(1.80);
+    transform-origin: center;
+    white-space: nowrap;
+  }
+
+}
