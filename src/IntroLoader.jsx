@@ -9,8 +9,34 @@ export default function IntroLoader() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const frame = requestAnimationFrame(() => setReady(true));
-    return () => cancelAnimationFrame(frame);
+    let cancelled = false;
+    let frame;
+    let timer;
+
+    const reveal = () => {
+      if (!cancelled) frame = requestAnimationFrame(() => setReady(true));
+    };
+
+    // Wait for both wordmark fonts before starting the existing animation.
+    // A bounded fallback prevents the intro from staying blank on slow networks.
+    if (!document.fonts?.load) {
+      reveal();
+    } else {
+      const fontsReady = Promise.all([
+        document.fonts.load('400 64px "DM Serif Display"', brand),
+        document.fonts.load('700 40px "Aref Ruqaa"', arabicBrand),
+      ]);
+      const timeout = new Promise((resolve) => {
+        timer = window.setTimeout(resolve, 1800);
+      });
+      Promise.race([fontsReady, timeout]).then(reveal, reveal);
+    }
+
+    return () => {
+      cancelled = true;
+      if (frame) cancelAnimationFrame(frame);
+      if (timer) clearTimeout(timer);
+    };
   }, []);
 
   return (
