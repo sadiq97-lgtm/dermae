@@ -48,7 +48,7 @@ export default function Admin() {
     document.head.appendChild(manifestLink);
   }
 
-  document.title = "Dermaé Admin";
+  document.title = "Tamraya Admin";
 
   let themeMeta =
     document.querySelector('meta[name="theme-color"]');
@@ -513,7 +513,7 @@ const deleteOrder = async (orderId) => {
   const statusClass = (status) => `admin-status admin-status-${(status || "Pending").toLowerCase()}`;
 
   if (authLoading) {
-    return <div className="admin-loading"><div className="admin-loader" /><span>Loading Dermaé Admin...</span></div>;
+    return <div className="admin-loading"><div className="admin-loader" /><span>Loading Tamraya Admin...</span></div>;
   }
 
   if (!session) {
@@ -521,9 +521,9 @@ const deleteOrder = async (orderId) => {
       <div className="admin-login-page" dir={isArabic ? "rtl" : "ltr"} lang={adminLang}>
         <div className="admin-login-glow" />
         <motion.form className="admin-login-card" onSubmit={loginAdmin} initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65 }}>
-          <div className="admin-login-brand"><Sparkles size={20} /><span>DERMAÉ</span></div>
+          <div className="admin-login-brand"><Sparkles size={20} /><span>TAMRAYA</span></div>
           <h1>{tr("Welcome back.", "مرحباً بعودتك.")}</h1>
-          <p>{tr("Sign in to manage products, orders and the Dermaé experience.", "سجّل الدخول لإدارة المنتجات والطلبات وتجربة Dermaé.")}</p>
+          <p>{tr("Sign in to manage products, orders and the Tamraya experience.", "سجّل الدخول لإدارة المنتجات والطلبات وتجربة Tamraya.")}</p>
           <label>{tr("Email address", "البريد الإلكتروني")}</label>
           <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="admin@example.com" autoComplete="email" required />
           <label>{tr("Password", "كلمة المرور")}</label>
@@ -546,7 +546,7 @@ const deleteOrder = async (orderId) => {
   return (
     <div className="admin-shell" dir={isArabic ? "rtl" : "ltr"} lang={adminLang}>
       <aside className="admin-sidebar">
-        <a className="admin-logo" href="/"><strong>Dermaé</strong><span>{tr("ADMINISTRATION", "الإدارة")}</span></a>
+        <a className="admin-logo" href="/"><strong>Tamraya</strong><span>{tr("ADMINISTRATION", "الإدارة")}</span></a>
         <nav>
           <a className="active" href="#overview"><BarChart3 size={18} />{tr("Overview", "نظرة عامة")}</a>
           <a href="#products"><Box size={18} />{tr("Products", "المنتجات")}</a>
@@ -560,7 +560,7 @@ const deleteOrder = async (orderId) => {
 
       <main className="admin-main">
         <header className="admin-topbar" id="overview">
-          <div><span className="admin-kicker">{tr("DERMAÉ CONTROL CENTER", "مركز تحكم DERMAÉ")}</span><h1>{tr("Dashboard overview", "نظرة عامة على لوحة التحكم")}</h1><p>{tr("Manage your catalogue and fulfil customer orders from one place.", "أدر المنتجات ونفّذ طلبات العملاء من مكان واحد.")}</p></div>
+          <div><span className="admin-kicker">{tr("TAMRAYA CONTROL CENTER", "مركز تحكم TAMRAYA")}</span><h1>{tr("Dashboard overview", "نظرة عامة على لوحة التحكم")}</h1><p>{tr("Manage your catalogue and fulfil customer orders from one place.", "أدر المنتجات ونفّذ طلبات العملاء من مكان واحد.")}</p></div>
           <div className="admin-top-actions"><button className="admin-secondary admin-language-toggle" type="button" onClick={toggleAdminLanguage}>{isArabic ? "EN" : "AR"}</button><button className="admin-secondary" type="button" onClick={refreshDashboard}><RefreshCw size={17} />{tr("Refresh", "تحديث")}</button><button className="admin-primary" type="button" onClick={startAddingProduct}><PackagePlus size={18} />{tr("New Product", "منتج جديد")}</button></div>
         </header>
 
@@ -587,7 +587,7 @@ const deleteOrder = async (orderId) => {
         <section className="admin-section" id="products">
           <div className="admin-section-title"><div><span className="admin-kicker">{tr("CATALOGUE", "المنتجات")}</span><h2>{tr("Products", "المنتجات")}</h2><p>{visibleProducts.length} {tr("of", "من")} {products.length} {tr("products", "منتج")}</p></div><button className="admin-primary" type="button" onClick={startAddingProduct}><PackagePlus size={17} />{tr("Add Product", "إضافة منتج")}</button></div>
           <div className="admin-toolbar"><div className="admin-search"><Search size={18} /><input type="search" placeholder={tr("Search products...", "ابحث عن المنتجات...")} value={productSearch} onChange={(event) => setProductSearch(event.target.value)} /></div></div>
-          {visibleProducts.length === 0 ? <div className="admin-empty"><Box size={34} /><h3>{tr("No products found", "لم يتم العثور على منتجات")}</h3><p>{tr("Try a different search or add a new product.", "جرّب بحثاً مختلفاً أو أضف منتجاً جديداً.")}</p></div> : <div className="admin-products-grid">{visibleProducts.map((product) => <motion.article className="admin-product-card" key={product.id} whileHover={{ y: -6 }}><div className="admin-product-image">{product.image_urls?.[0] ? <img src={product.image_urls[0]} alt={product.name_en || product.name_ar || "Product"} /> : <div><ImagePlus size={28} /><span>{tr("No image", "لا توجد صورة")}</span></div>}<span className="admin-product-id">#{product.id}</span></div><div className="admin-product-body"><span className="admin-product-label">{tr("DERMAÉ PRODUCT", "منتج DERMAÉ")}</span><h3>{product.name_en || product.name_ar || "Unnamed product"}</h3>{product.name_ar && <p dir="rtl">{product.name_ar}</p>}<strong>{Number(product.price_iqd || 0).toLocaleString()} IQD</strong><div className="admin-card-actions"><button className="admin-edit" type="button" onClick={() => startEditingProduct(product)} disabled={deletingProductId === product.id}><Edit3 size={16} />{tr("Edit", "تعديل")}</button><button className="admin-delete" type="button" onClick={() => deleteProduct(product)} disabled={deletingProductId === product.id}><Trash2 size={16} />{deletingProductId === product.id ? tr("Deleting...", "جارٍ الحذف...") : tr("Delete", "حذف")}</button></div></div></motion.article>)}</div>}
+          {visibleProducts.length === 0 ? <div className="admin-empty"><Box size={34} /><h3>{tr("No products found", "لم يتم العثور على منتجات")}</h3><p>{tr("Try a different search or add a new product.", "جرّب بحثاً مختلفاً أو أضف منتجاً جديداً.")}</p></div> : <div className="admin-products-grid">{visibleProducts.map((product) => <motion.article className="admin-product-card" key={product.id} whileHover={{ y: -6 }}><div className="admin-product-image">{product.image_urls?.[0] ? <img src={product.image_urls[0]} alt={product.name_en || product.name_ar || "Product"} /> : <div><ImagePlus size={28} /><span>{tr("No image", "لا توجد صورة")}</span></div>}<span className="admin-product-id">#{product.id}</span></div><div className="admin-product-body"><span className="admin-product-label">{tr("TAMRAYA PRODUCT", "منتج TAMRAYA")}</span><h3>{product.name_en || product.name_ar || "Unnamed product"}</h3>{product.name_ar && <p dir="rtl">{product.name_ar}</p>}<strong>{Number(product.price_iqd || 0).toLocaleString()} IQD</strong><div className="admin-card-actions"><button className="admin-edit" type="button" onClick={() => startEditingProduct(product)} disabled={deletingProductId === product.id}><Edit3 size={16} />{tr("Edit", "تعديل")}</button><button className="admin-delete" type="button" onClick={() => deleteProduct(product)} disabled={deletingProductId === product.id}><Trash2 size={16} />{deletingProductId === product.id ? tr("Deleting...", "جارٍ الحذف...") : tr("Delete", "حذف")}</button></div></div></motion.article>)}</div>}
         </section>
 
         <section className="admin-section" id="orders">

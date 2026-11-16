@@ -66,15 +66,15 @@ export default function ScrollStory({ tr }) {
           <motion.img
             style={{ y: imageY, scale: imageScale }}
             src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=1600&q=88"
-            alt="Dermaé skincare collection"
+            alt="Tamraya skincare collection"
             loading="lazy"
           />
           <div className="story-image-overlay" />
-          <div className="story-vertical-label">DERMAÉ · CARE THAT SHOWS</div>
+          <div className="story-vertical-label">TAMRAYA · CARE THAT SHOWS</div>
         </div>
 
         <div className="story-copy">
-          <span className="eyebrow">{tr("THE DERMAÉ RITUAL", "روتين Dermaé")}</span>
+          <span className="eyebrow">{tr("THE TAMRAYA RITUAL", "روتين Tamraya")}</span>
           <h2>{tr("From discovery to daily care.", "من الاكتشاف إلى العناية اليومية.")}</h2>
           <div className="story-progress" aria-hidden="true">
             <motion.span style={{ scaleY: progressScale }} />

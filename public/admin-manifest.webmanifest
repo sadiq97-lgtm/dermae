@@ -1,8 +1,8 @@
 {
   "id": "/admin",
-  "name": "Dermaé Admin",
-  "short_name": "Dermaé Admin",
-  "description": "Dermaé store administration dashboard",
+  "name": "Tamraya Admin",
+  "short_name": "Tamraya Admin",
+  "description": "Tamraya store administration dashboard",
   "start_url": "/admin",
   "scope": "/admin",
   "display": "standalone",

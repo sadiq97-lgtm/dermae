@@ -74,7 +74,7 @@ export default function SkinAdvisor({ open, onClose, products, isArabic, tr, for
         <motion.div className="advisor-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={close}>
           <motion.section className="advisor-panel" initial={{ opacity: 0, y: 40, scale: .96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 35, scale: .97 }} transition={{ type: "spring", stiffness: 220, damping: 24 }} onClick={(event) => event.stopPropagation()} dir={isArabic ? "rtl" : "ltr"}>
             <button className="advisor-close" type="button" onClick={close} aria-label={tr("Close advisor", "إغلاق المستشار")}><X size={20}/></button>
-            <div className="advisor-brand"><Sparkles size={17}/><span>DERMAÉ SMART ADVISOR</span></div>
+            <div className="advisor-brand"><Sparkles size={17}/><span>TAMRAYA SMART ADVISOR</span></div>
             <div className="advisor-progress" aria-label={tr("Quiz progress", "تقدم الاختبار")}><motion.span animate={{ width: `${Math.min((step + 1) / 4 * 100, 100)}%` }}/></div>
 
             {!isResult ? (
@@ -97,14 +97,14 @@ export default function SkinAdvisor({ open, onClose, products, isArabic, tr, for
               </motion.div>
             ) : (
               <motion.div className="advisor-results" initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }}>
-                <span className="advisor-step">{tr("YOUR DERMAÉ EDIT", "مختارات Dermaé لك")}</span>
+                <span className="advisor-step">{tr("YOUR TAMRAYA EDIT", "مختارات Tamraya لك")}</span>
                 <h2>{tr("A focused routine for you.", "روتين مركز يناسب اختياراتك.")}</h2>
                 <p>{tr("These suggestions are based only on your quiz answers and the information available in the product catalogue.", "هذه الاقتراحات مبنية فقط على إجاباتك والمعلومات المتاحة في كتالوج المنتجات.")}</p>
                 <div className="advisor-product-grid">
                   {recommendations.map((product, index) => (
                     <article key={product.id} className="advisor-product-card">
                       <button className="advisor-product-media" type="button" onClick={() => onViewProduct(product)}>
-                        {product.image ? <img src={product.image} alt={isArabic ? product.name_ar || product.name : product.name_en || product.name}/> : <span>Dermaé</span>}
+                        {product.image ? <img src={product.image} alt={isArabic ? product.name_ar || product.name : product.name_en || product.name}/> : <span>Tamraya</span>}
                         <b>0{index + 1}</b>
                       </button>
                       <div><small>{product.category || "Skincare"}</small><h3>{isArabic ? product.name_ar || product.name : product.name_en || product.name}</h3><strong>{formatIQD(product.price)}</strong></div>

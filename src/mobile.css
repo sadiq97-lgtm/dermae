@@ -1,4 +1,4 @@
-/* Mobile enhancements for Dermaé. Loaded after App.css. */
+/* Mobile enhancements for Tamraya. Loaded after App.css. */
 .mobile-menu-button,.mobile-nav-close,.mobile-menu-overlay,.mobile-bottom-nav{display:none}
 .sort-select{padding:10px 12px;border-radius:10px;min-height:44px}
 @media (max-width:768px){

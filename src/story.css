@@ -1,4 +1,4 @@
-/* Dermae scroll storytelling and hero parallax */
+/* Tamraya scroll storytelling and hero parallax */
 .scroll-story{position:relative;height:300vh;background:#090a0d;color:#fff}
 .story-sticky{position:sticky;top:0;height:100vh;display:grid;grid-template-columns:1.05fr .95fr;overflow:hidden}
 .story-visual{position:relative;overflow:hidden;min-width:0}

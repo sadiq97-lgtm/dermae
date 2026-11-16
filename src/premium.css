@@ -1,4 +1,4 @@
-/* Dermae Premium Storytelling Additions */
+/* Tamraya Premium Storytelling Additions */
 .premium-marquee{overflow:hidden!important;display:block!important;padding:0!important;white-space:nowrap;border-block:1px solid rgba(255,255,255,.08)}
 .marquee-track{display:flex;width:max-content;animation:dermaeMarquee 28s linear infinite}
 .marquee-group{display:flex;align-items:center;gap:34px;padding:18px 17px}
@@ -10,7 +10,7 @@
 .why-section{padding:clamp(80px,10vw,150px) 48px;background:linear-gradient(180deg,var(--bg),rgba(113,133,107,.035));position:relative;overflow:hidden}
 .why-section::before{
     animation: dermaePulse 6s ease-in-out infinite;
-  content:"Dermaé";
+  content:"Tamraya";
   position:absolute;
   left:50%;
   top:14%;

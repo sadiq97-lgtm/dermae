@@ -1,4 +1,4 @@
-/* Dermae Featured Collection */
+/* Tamraya Featured Collection */
 .featured-section{position:relative;padding:clamp(90px,11vw,160px) 48px;overflow:hidden;background:linear-gradient(180deg,#0c0d11 0%,var(--bg) 100%)}
 .featured-section::before{content:"SELECTED";position:absolute;left:50%;top:42px;transform:translateX(-50%);font-size:clamp(72px,15vw,230px);font-weight:700;letter-spacing:-.07em;color:rgba(255,255,255,.018);pointer-events:none;white-space:nowrap}
 .featured-heading{position:relative;z-index:1;max-width:1400px;margin:0 auto 58px;display:flex;justify-content:space-between;align-items:end;gap:40px}

@@ -1,4 +1,4 @@
-/* Dermae community, newsletter, cursor and premium footer */
+/* Tamraya community, newsletter, cursor and premium footer */
 .cursor-glow{position:fixed;inset:0;z-index:5;pointer-events:none;background:radial-gradient(320px circle at var(--cursor-x,-500px) var(--cursor-y,-500px),rgba(113,133,107,.10),transparent 68%);mix-blend-mode:screen}
 .testimonials-section{position:relative;padding:clamp(90px,10vw,145px) 48px;background:linear-gradient(180deg,var(--bg),#0c0d11);overflow:hidden}
 .testimonials-heading{max-width:820px;margin:0 auto 50px;text-align:center}

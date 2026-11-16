@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-const brand = "Dermaé";
+const brand = "Tamraya";
 
 export default function IntroLoader() {
   const [ready, setReady] = useState(false);
