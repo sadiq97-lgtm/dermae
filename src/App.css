@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Tajawal:wght@400;500;600;700&display=swap');
+
 /* =========================
    DERMAE SKINCARE - APP CSS
    ========================= */
@@ -1955,4 +1957,70 @@ a {
   .about-video{
     height:320px;
   }
+}
+/* TAMRAYA Arabic wordmark. English branding retains its existing typography. */
+.logo-main[lang="ar"],
+.footer-logo[lang="ar"],
+.footer-wordmark[lang="ar"],
+.promise-stamp span[lang="ar"] {
+  font-family: "Aref Ruqaa", "Noto Naskh Arabic", serif !important;
+  font-weight: 700 !important;
+  font-style: normal;
+  letter-spacing: 0 !important;
+  line-height: 1.45 !important;
+  direction: rtl;
+  unicode-bidi: isolate;
+  text-transform: none !important;
+}
+
+.logo-main[lang="ar"] {
+  font-size: clamp(23px, 2.3vw, 30px) !important;
+  white-space: nowrap;
+}
+
+.footer-logo[lang="ar"] {
+  line-height: 1.6 !important;
+}
+
+.footer-wordmark[lang="ar"] {
+  font-size: clamp(64px, 13vw, 180px) !important;
+  overflow-wrap: normal;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .logo-main[lang="ar"] { font-size: 23px !important; }
+  .footer-wordmark[lang="ar"] { font-size: clamp(46px, 15vw, 90px) !important; }
+}
+
+/* TAMRAYA bilingual tagline: Arabic only, preserve English styling. */
+.logo-sub[lang="ar"] {
+  font-family: "Aref Ruqaa", "Noto Naskh Arabic", serif !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  line-height: 1.8 !important;
+  letter-spacing: 0 !important;
+  direction: rtl;
+  unicode-bidi: isolate;
+  white-space: nowrap;
+  margin-top: 2px;
+  text-transform: none !important;
+}
+@media (max-width: 768px) {
+  .logo-sub[lang="ar"] { font-size: 11px !important; }
+}
+
+/* TAMRAYA: readable Arabic UI, decorative wordmark only. */
+html[lang="ar"] .app {
+  font-family: "Tajawal", Arial, sans-serif;
+}
+html[lang="ar"] .app :is(h1,h2,h3,h4,h5,h6,p,span,a,button,label,input,textarea,select,option,small,strong,em,blockquote,li,td,th) {
+  font-family: "Tajawal", Arial, sans-serif !important;
+  letter-spacing: 0;
+}
+html[lang="ar"] .app :is(p,li,blockquote) { line-height: 1.75; }
+/* Brand signature retains Aref Ruqaa. */
+html[lang="ar"] .app :is(.logo-main,.logo-sub,.footer-logo,.footer-wordmark)[lang="ar"],
+html[lang="ar"] .app .promise-stamp span[lang="ar"] {
+  font-family: "Aref Ruqaa", serif !important;
 }
